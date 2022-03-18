@@ -1,4 +1,4 @@
-package com.peaksoft.accounting.payload;
+package com.peaksoft.accounting.api.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

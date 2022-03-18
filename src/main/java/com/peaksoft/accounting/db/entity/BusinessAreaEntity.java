@@ -1,4 +1,4 @@
-package com.peaksoft.accounting.model;
+package com.peaksoft.accounting.db.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

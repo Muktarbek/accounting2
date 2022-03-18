@@ -1,19 +1,24 @@
-package com.peaksoft.accounting.controller;
+package com.peaksoft.accounting.api.controller;
 
-import com.peaksoft.accounting.payload.BusinessAreaResponse;
+import com.peaksoft.accounting.api.payload.BusinessAreaResponse;
+import com.peaksoft.accounting.db.entity.RoleEntity;
 import com.peaksoft.accounting.service.BusinessAreaService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/myaccount/business-area")
-public class BusinessAreaController {
+@RequestMapping("/api/accounting/business-area")
+public class BusinessAreaApi {
+
     private final BusinessAreaService businessAreaService;
+
     @GetMapping()
     public List<BusinessAreaResponse> getAllAreas(){
         return businessAreaService.getAllAreas();
