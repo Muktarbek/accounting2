@@ -20,7 +20,7 @@ public class BusinessAreaService {
     }
     public BusinessAreaResponse convert(BusinessAreaEntity areaEntity){
         return BusinessAreaResponse.builder()
-                .businessAreaId(areaEntity.getBusinessAreaId())
+                .business_area_id(areaEntity.getBusiness_area_id())
                 .area(areaEntity.getArea())
                 .build();
     }
