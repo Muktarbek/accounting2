@@ -1,8 +1,5 @@
-package com.peaksoft.accounting.model;
-
-import lombok.AllArgsConstructor;
+package com.peaksoft.accounting.db.entity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,12 +8,10 @@ import javax.persistence.*;
 @Table(name = "business_area")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BusinessAreaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "businessAreaSequences", sequenceName = "area_seq", allocationSize = 1)
-    private Long businessAreaId;
+    private Long business_area_id;
     private String area;
 }
