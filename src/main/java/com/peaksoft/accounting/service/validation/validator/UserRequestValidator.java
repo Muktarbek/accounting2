@@ -22,7 +22,7 @@ public class UserRequestValidator {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             throw new ValidationException(ValidationExceptionType.EMAIL_ALREADY_EXISTS);
         }
-        if (!request.getPassword().equals(request.getRepeatPassword())) {
+        if (!request.getPassword().equals(request.getRepeat_password())) {
             throw new ValidationException(ValidationExceptionType.PASSWORDS_DONT_MATCH);
         }
     }

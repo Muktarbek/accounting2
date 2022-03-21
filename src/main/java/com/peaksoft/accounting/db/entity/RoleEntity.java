@@ -17,7 +17,7 @@ public class RoleEntity implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
     @SequenceGenerator(name = "role_sequence", sequenceName = "role_seq", allocationSize = 1)
-    private Long id;
+    private Long role_id;
     private String name;
 
     @ManyToMany(targetEntity = UserEntity.class, mappedBy = "roles", cascade = CascadeType.ALL)

@@ -24,8 +24,8 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/public")
-public class AuthApi {
+@RequestMapping("/api/myaccount/auth")
+public class AuthController {
 
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;

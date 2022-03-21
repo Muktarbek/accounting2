@@ -1,7 +1,6 @@
 package com.peaksoft.accounting.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,21 +20,27 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_seq", allocationSize = 1)
-    private Long id;
+    private Long user_id;
     private String firstName;
     private String lastName;
     @Column(unique = true)
     private String email;
     private String password;
-    private String businessName;
     private String address;
     private boolean isActive = true;
     private boolean enabled = true;
     private boolean deleted = false;
+
+    @OneToOne(cascade = ALL)
+    @JoinColumn(name = "company_name_id")
+    private CompanyEntity companyName;
+
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "businessArea_id")
     private BusinessAreaEntity businessArea;
@@ -50,7 +55,6 @@ public class UserEntity  implements UserDetails {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<RoleEntity> roles;
-
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
@@ -88,12 +92,11 @@ public class UserEntity  implements UserDetails {
     @Override
     public String toString() {
         return "UserEntity{" +
-                "id=" + id +
+                "id=" + user_id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", businessName='" + businessName + '\'' +
                 ", address='" + address + '\'' +
                 ", isActive=" + isActive +
                 ", enabled=" + enabled +

@@ -5,8 +5,7 @@ import java.util.Set;
 
 @Data
 public class LoginResponse {
-
-  private String jwtToken;
+  private String jwt_token;
   private String message;
   private Set<String> authorities;
 

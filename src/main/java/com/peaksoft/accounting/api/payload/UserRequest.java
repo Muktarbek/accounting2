@@ -1,4 +1,5 @@
 package com.peaksoft.accounting.api.payload;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import javax.validation.constraints.Email;
@@ -11,12 +12,12 @@ public class UserRequest {
     @NotNull
     private String password;
     @NotNull
-    private String firstName;
+    private String first_name;
     @NotNull
-    private String lastName;
+    private String last_name;
     @NotNull
-    private String repeatPassword;
-    private String businessName;
-    private Long businessAreaId;
+    private String repeat_password;
+    private Long business_area_id;
+    private String company_name;
     private String address;
 }
