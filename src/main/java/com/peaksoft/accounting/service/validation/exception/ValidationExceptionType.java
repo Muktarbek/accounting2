@@ -7,4 +7,5 @@ public class ValidationExceptionType {
     public static final String PASSWORDS_DONT_MATCH = "PASSWORDS_DONT_MATCH";
     public static final String LOGIN_FAILED = "Username or password is incorrect!";
     public static final String SUCCESSFUL = "Successful!";
+    public static final String COMPANY_ALREADY_EXISTS = "COMPANY_ALREADY_EXISTS";
 }

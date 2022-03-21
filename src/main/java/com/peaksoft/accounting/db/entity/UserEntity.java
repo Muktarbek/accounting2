@@ -20,8 +20,6 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserEntity  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
