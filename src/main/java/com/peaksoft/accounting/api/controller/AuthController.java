@@ -1,9 +1,6 @@
 package com.peaksoft.accounting.api.controller;
 
-import com.peaksoft.accounting.api.payload.AuthRequest;
-import com.peaksoft.accounting.api.payload.LoginResponse;
-import com.peaksoft.accounting.api.payload.UserRequest;
-import com.peaksoft.accounting.api.payload.UserResponse;
+import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.config.jwt.JwtTokenUtil;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.mapper.LoginMapper;
@@ -15,12 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +46,19 @@ public class AuthController {
     public UserResponse create(@RequestBody @Valid UserRequest request,
                                UserEntity user) {
         return userService.create(user, request);
+    }
+    @PutMapping("reset-password")
+    public ResponseEntity<UserResponse> resetPassword(@RequestBody PasswordRequest request){
+            return new ResponseEntity<>(userService.resetPassword(request),HttpStatus.OK);
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> sendMessage(@RequestBody ForgotPasswordRequest passwordRequest,HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+     UserEntity user  = userRepository.findByEmail(passwordRequest.getEmail()).get();
+            userService.insert(user,getSiteURL(request));
+            return new ResponseEntity<>(HttpStatus.OK);
+    }
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
     }
 }
