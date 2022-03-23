@@ -120,7 +120,7 @@ public class UserService implements UserDetailsService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
         content = content.replace("[[name]]", user.getFirstName());
-        String verifyURL = siteURL + "/api/myaccount/auth/forgot_password?code=" + user.getToken();
+        String verifyURL = siteURL + "/api/myaccount/auth/forgot-password?code=" + user.getToken();
         content = content.replace("[[URL]]", verifyURL);
 
         helper.setText(content, true);
