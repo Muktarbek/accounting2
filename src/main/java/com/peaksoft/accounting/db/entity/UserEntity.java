@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -65,7 +66,8 @@ public class UserEntity  implements UserDetails {
         }
         return grantedAuthorities;
     }
-
+    private String token;
+    private Date expiryDate;
     @Override
     public String getUsername() {
         return email;
