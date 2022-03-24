@@ -5,11 +5,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessAreaResponse {
-    private Long business_area_id;
-    private String area;
+@Builder
+public class CategoryResponse {
+    private Long category_id;
+    private String category_title;
+    private String category_description;
 }
-

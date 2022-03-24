@@ -12,7 +12,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/myaccount/business-area")
-public class BuisnessAreaController {
+
+public class BusinessAreaController {
 
     private final BusinessAreaService businessAreaService;
 
