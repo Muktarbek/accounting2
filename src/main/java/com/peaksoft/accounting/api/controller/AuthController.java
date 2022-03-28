@@ -7,6 +7,7 @@ import com.peaksoft.accounting.db.mapper.LoginMapper;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.service.UserService;
 import com.peaksoft.accounting.service.validation.exception.ValidationExceptionType;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("login")
+    @Operation(summary = "Request to get a token", description = "Token generation")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid AuthRequest request) {
         try {
             UsernamePasswordAuthenticationToken passwordAuthenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(),
