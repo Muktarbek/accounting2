@@ -53,21 +53,21 @@ public class ProductService {
     public ProductEntity mapToEntity(ProductRequest request,Long id){
         return ProductEntity.builder()
                 .id(id)
-                .title(request.getProduct_title())
-                .price(request.getProduct_price())
-                .description(request.getProduct_description())
-                .serviceType(serviceTypeRepository.findById(request.getService_type_id()).get())
-                .category(categoryRepository.findById(request.getCategory_id()).get())
+                .title(request.getProductTitle())
+                .price(request.getProductPrice())
+                .description(request.getProductDescription())
+                .serviceType(serviceTypeRepository.findById(request.getServiceTypeId()).get())
+                .category(categoryRepository.findById(request.getCategoryId()).get())
                 .build();
     }
     public ProductResponse mapToResponse(ProductEntity product){
         return ProductResponse.builder()
-                .product_id(product.getId())
-                .product_title(product.getTitle())
-                .product_price(product.getPrice())
-                .service_type(mapToServiceResponse(product.getServiceType()))
+                .productId(product.getId())
+                .productTitle(product.getTitle())
+                .productPrice(product.getPrice())
+                .serviceType(mapToServiceResponse(product.getServiceType()))
                 .category(categoryService.mapToResponse(product.getCategory()))
-                .product_description(product.getDescription())
+                .productDescription(product.getDescription())
                 .build();
     }
     public List<ProductResponse> mapToResponse(List<ProductEntity> products){

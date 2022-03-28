@@ -1,16 +1,18 @@
 package com.peaksoft.accounting.api.payload;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProductRequest {
-    private String product_title;
-    private Double product_price;
-    private Long   service_type_id;
-    private Long   category_id;
-    private String product_description;
+    private String productTitle;
+    private Double productPrice;
+    private Long   serviceTypeId;
+    private Long   categoryId;
+    private String productDescription;
 
 }

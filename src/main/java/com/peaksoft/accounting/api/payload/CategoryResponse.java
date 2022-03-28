@@ -1,6 +1,7 @@
 package com.peaksoft.accounting.api.payload;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 @Getter
@@ -8,8 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class CategoryResponse {
-    private Long category_id;
-    private String category_title;
-    private String category_description;
+    private Long categoryId;
+    private String categoryTitle;
+    private String categoryDescription;
 }

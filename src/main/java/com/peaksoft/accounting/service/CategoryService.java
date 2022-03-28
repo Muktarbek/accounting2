@@ -41,15 +41,15 @@ public class CategoryService {
     public CategoryEntity mapToEntity(CategoryRequest request,Long id){
         return CategoryEntity.builder()
                 .id(id)
-                .title(request.getCategory_title())
-                .description(request.getCategory_description())
+                .title(request.getCategoryTitle())
+                .description(request.getCategoryDescription())
                 .build();
     }
     public CategoryResponse mapToResponse(CategoryEntity category){
         return CategoryResponse.builder()
-                .category_id(category.getId())
-                .category_title(category.getTitle())
-                .category_description(category.getDescription())
+                .categoryId(category.getId())
+                .categoryTitle(category.getTitle())
+                .categoryDescription(category.getDescription())
                 .build();
     }
     public List<CategoryResponse> mapToResponse(List<CategoryEntity> categories){
