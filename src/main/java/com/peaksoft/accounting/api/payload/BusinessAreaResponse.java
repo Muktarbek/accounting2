@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessAreaResponse {
-    @JsonProperty("business_area_id")
     private Long business_area_id;
     private String area;
 }
