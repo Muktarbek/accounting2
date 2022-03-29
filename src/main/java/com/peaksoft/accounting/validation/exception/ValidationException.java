@@ -1,4 +1,4 @@
-package com.peaksoft.accounting.service.validation.exception;
+package com.peaksoft.accounting.validation.exception;
 
 public class ValidationException extends RuntimeException {
 

@@ -8,7 +8,7 @@ import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.BusinessAreaRepository;
 import com.peaksoft.accounting.db.repository.UserRepository;
-import com.peaksoft.accounting.service.validation.validator.UserRequestValidator;
+import com.peaksoft.accounting.validation.validator.UserRequestValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final BusinessAreaRepository businessRepository;
     private final JavaMailSender mailSender;
+
     public UserResponse create(UserEntity registeredUser, UserRequest request){
         userRequestValidator.validate(registeredUser,request);
         UserEntity user = mapToEntity(request);
@@ -57,12 +58,12 @@ public class UserService implements UserDetailsService {
         CompanyEntity company = new CompanyEntity();
         user.setEmail(userRequest.getEmail());
         user.setAddress(userRequest.getAddress());
-        user.setFirstName(userRequest.getFirst_name());
-        user.setLastName(userRequest.getLast_name());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
         user.setPassword(userRequest.getPassword());
-        BusinessAreaEntity businessArea = businessRepository.findById(userRequest.getBusiness_area_id()).get();
+        BusinessAreaEntity businessArea = businessRepository.findById(userRequest.getBusinessAreaId()).get();
         user.setBusinessArea(businessArea);
-        company.setCompanyName(userRequest.getCompany_name());
+        company.setCompanyName(userRequest.getCompanyName());
         user.setCompanyName(company);
         return user;
     }
@@ -78,9 +79,9 @@ public class UserService implements UserDetailsService {
         userResponse.setEmail(user.getEmail());
         userResponse.setEnabled(user.isEnabled());
         userResponse.setAddress(user.getAddress());
-        userResponse.setCompany_name(user.getCompanyName());
-        userResponse.setFirst_name(user.getFirstName());
-        userResponse.setLast_name(user.getLastName());
+        userResponse.setCompanyName(user.getCompanyName());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
         userResponse.setBusiness_area(user.getBusinessArea());
         userResponse.setDeleted(user.isDeleted());
         userResponse.setEnabled(user.isEnabled());

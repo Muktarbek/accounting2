@@ -19,7 +19,7 @@ public class LoginMapper {
             setAuthority(loginResponse, user.getRoles());
         }
 
-        loginResponse.setJwt_token(token);
+        loginResponse.setJwtToken(token);
         loginResponse.setMessage(message);
 
         return loginResponse;
