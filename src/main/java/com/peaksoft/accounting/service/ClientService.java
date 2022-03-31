@@ -55,7 +55,7 @@ public class ClientService {
         return mapToResponse(clientRepository.findById(id).get());
     }
 
-    public ClientResponseView getAll(String name, Integer page, Integer size){
+    public ClientResponseView getAllClients(String name, Integer page, Integer size){
         ClientResponseView responseView = new ClientResponseView();
         Pageable pageable = PageRequest.of(page, size);
         responseView.setClients(map(search(name, pageable)));

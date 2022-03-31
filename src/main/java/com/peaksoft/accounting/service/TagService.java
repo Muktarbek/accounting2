@@ -2,7 +2,6 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.TagRequest;
 import com.peaksoft.accounting.api.payload.TagResponse;
-import com.peaksoft.accounting.api.payload.TagResponseView;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.TagRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
@@ -53,12 +52,8 @@ public class TagService {
                 tagRepository.findById(id).get());
     }
 
-    public TagResponseView getAllTags() {
-        TagResponseView tagResponse = new TagResponseView();
-        List<TagEntity> tags = tagRepository.findAll();
-        tagResponse.setTags(map(tags));
-        return tagResponse;
-
+    public List<TagResponse> getAllTags(){
+        return map(tagRepository.findAll());
     }
     //Request tag
     public TagEntity mapToEntity(TagRequest tagRequest) {

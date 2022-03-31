@@ -40,9 +40,9 @@ ClientController {
     }
 
     @GetMapping
-    public ClientResponseView getClients(@RequestParam(value = "name",required = false) String name,
+    public ClientResponseView getAllClients(@RequestParam(value = "name",required = false) String name,
                                          @RequestParam Integer page,
                                          @RequestParam Integer size){
-        return clientService.getAll(name,page, size);
+        return clientService.getAllClients(name,page, size);
     }
 }
