@@ -6,7 +6,7 @@ import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.mapper.LoginMapper;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.service.UserService;
-import com.peaksoft.accounting.service.validation.exception.ValidationExceptionType;
+import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
