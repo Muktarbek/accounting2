@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("api/myaccount/auth")
 public class ForgotPasswordController {
     @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+
     @GetMapping("/forgot-password")
     public String forgotPassword(@Param("code")String code, Model model){
         model.addAttribute("code",code);

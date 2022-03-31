@@ -15,7 +15,9 @@ import java.util.List;
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/products")
 public class ProductController {
+
     private final ProductService productService;
+
     @GetMapping
     @Operation(summary = "Get all products", description = "Getting all existing products in application")
     public List<ProductResponse> getAll(@RequestParam int page,@RequestParam int size){
