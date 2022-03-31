@@ -1,10 +1,13 @@
 package com.peaksoft.accounting.api.payload;
-import com.peaksoft.accounting.db.entity.CompanyEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import javax.validation.constraints.Email;
 
 @Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class UserRequest {
     @NotNull
     @Email
@@ -12,12 +15,12 @@ public class UserRequest {
     @NotNull
     private String password;
     @NotNull
-    private String first_name;
+    private String firstName;
     @NotNull
-    private String last_name;
+    private String lastName;
     @NotNull
-    private String repeat_password;
-    private Long business_area_id;
-    private String company_name;
+    private String repeatPassword;
+    private Long businessAreaId;
+    private String companyName;
     private String address;
 }

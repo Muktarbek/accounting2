@@ -1,18 +1,15 @@
 package com.peaksoft.accounting.api.payload;
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.*;;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class CompanyResponse {
+public class TagResponse {
 
-    private Long id;
-    private String companyName;
-
+    private String id;
+    private String nameTag;
+    private String description;
 }
