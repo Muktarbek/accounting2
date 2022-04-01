@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
-@RequestMapping("/api/myaccount/tag")
+@RequestMapping("/api/myaccount/tags")
 public class TagController {
 
     private final TagService tagService;

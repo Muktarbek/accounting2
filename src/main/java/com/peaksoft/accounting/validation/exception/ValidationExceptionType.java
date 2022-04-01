@@ -11,6 +11,6 @@ public class ValidationExceptionType {
     public static final String TAG_ALREADY_EXISTS = "TAG_ALREADY_EXISTS";
     public static final String CLIENT_NOT_FOUND = "ClIENT_NOT_FOUND";
     public static final String TAG_NOT_FOUND = "TAG_NOT_FOUND";
-    public static final String NOT_FOUND = "NOT_FOUND";
-    public static final String BANK_ACCOUNT_NAME_ALREADY_EXISTS = "BANK_ACCOUNT_NAME_ALREADY_EXISTS";
+    public static final String PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
+    public static final String INVOICE_NOT_FOUND = "INVOICE_NOT_FOUND";
 }
