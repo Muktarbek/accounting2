@@ -5,9 +5,11 @@ import com.peaksoft.accounting.api.payload.InvoiceResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.ProductEntity;
+import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.ProductRepository;
+import com.peaksoft.accounting.db.repository.TagRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
@@ -30,9 +32,11 @@ public class InvoiceService {
     private final ProductService productService;
     private final ProductRepository productRepository;
     private final InvoiceRequestValidator invoiceRequestValidator;
+    private final TagRepository tagRepository;
     public InvoiceResponse create(InvoiceRequest request,InvoiceEntity invoice){
         invoiceRequestValidator.validate(invoice,request);
         InvoiceEntity invoiceEntity = mapToEntity(request,null);
+        invoiceRepository.save(invoiceEntity);
         return mapToResponse(invoiceEntity);
     }
     public InvoiceResponse getById(Long id){
@@ -65,24 +69,39 @@ public class InvoiceService {
         }
         return responses;
     }
+    public InvoiceResponse sendByTags(InvoiceRequest request,Long tagId){
+        InvoiceEntity invoice = mapToEntity(request,null);
+        Optional<TagEntity> tag =  tagRepository.findById(tagId);
+        if(tag.isEmpty()){
+            throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
+        }
+        TagEntity tagEntity = tag.get();
+        for (ClientEntity client : tagEntity.getClients()) {
+            invoice.addClient(client);
+
+        }
+        invoiceRepository.save(invoice);
+        return mapToResponse(invoice);
+    }
     public InvoiceEntity mapToEntity(InvoiceRequest request,Long id){
        InvoiceEntity invoice = new InvoiceEntity();
        invoice.setId(id);
        invoice.setTitle(request.getInvoiceTitle());
+       if(request.getClientId() != null){
        Optional<ClientEntity> client = clientRepository.findById(request.getClientId());
         if (client.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.CLIENT_NOT_FOUND);
         }
-        invoice.addClient(client.get());
+        invoice.addClient(client.get());}
         for (Long productId : request.getProductsId()) {
           Optional<ProductEntity> product =  productRepository.findById(productId);
            if(product.isEmpty()){
-               throw new ValidationException((ValidationExceptionType.PRODUCT_NOT_FOUND+"  id " +productId));
+               throw new ValidationException((ValidationExceptionType.PRODUCT_NOT_FOUND));
            }
            invoice.addProduct(product.get());
         }
        invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-       invoice.setStartDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+       invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
        return invoice;
     }
     public InvoiceResponse mapToResponse(InvoiceEntity invoice){
@@ -93,6 +112,7 @@ public class InvoiceService {
                 .startDate(invoice.getStartDate())
                 .endDate(invoice.getEndDate())
                 .products(productService.mapToResponse(invoice.getProducts()))
+                .status(invoice.getStatus().getInvoiceStatus())
                 .build();
     }
 }

@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/myaccount/client")
+@RequestMapping("/api/myaccount/clients")
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 public class
 ClientController {

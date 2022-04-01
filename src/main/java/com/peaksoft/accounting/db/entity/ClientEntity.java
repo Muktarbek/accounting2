@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -29,13 +30,14 @@ public class ClientEntity {
     private boolean isActive = true;
     @CreatedDate
     private LocalDateTime created;
-
+    @JsonIgnore
     @ManyToMany(targetEntity = TagEntity.class, cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "client_tag",
             joinColumns = {@JoinColumn(name = "clients_id")},
             inverseJoinColumns = {@JoinColumn(name = "tags_id")})
     private List<TagEntity> tags;
+    @JsonIgnore
     @ManyToMany(targetEntity = InvoiceEntity.class,
             mappedBy = "clients", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<InvoiceEntity> invoices;

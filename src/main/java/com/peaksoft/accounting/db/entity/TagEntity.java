@@ -18,7 +18,7 @@ public class TagEntity {
     private Long tag_id;
     private String nameTag;
     private String description;
-    @ManyToMany(targetEntity = InvoiceEntity.class,
+    @ManyToMany(targetEntity = ClientEntity.class,
             mappedBy = "tags", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ClientEntity> clients;
 }

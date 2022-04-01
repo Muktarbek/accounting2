@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
-@RequestMapping("/api/myaccount/invoice")
+@RequestMapping("/api/myaccount/invoices")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
@@ -43,5 +44,9 @@ public class InvoiceController {
     public InvoiceResponse findById(@PathVariable Long id){
         return invoiceService.getById(id);
     }
-
+    @PostMapping("send-by-tags")
+    public InvoiceResponse sendByTags(@RequestBody InvoiceRequest invoiceRequest,
+                                      @RequestParam  Long tagId){
+        return invoiceService.sendByTags(invoiceRequest,tagId);
+    }
 }

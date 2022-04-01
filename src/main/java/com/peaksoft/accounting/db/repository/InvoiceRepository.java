@@ -1,7 +1,6 @@
 package com.peaksoft.accounting.db.repository;
 
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

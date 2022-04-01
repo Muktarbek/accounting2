@@ -14,7 +14,6 @@ import java.util.List;
 public class InvoiceRequest {
     @NotNull
     private String invoiceTitle;
-    @NotNull
     private Long clientId;
     private String startDate;
     private String endDate;

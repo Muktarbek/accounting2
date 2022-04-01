@@ -20,4 +20,5 @@ public class InvoiceResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<ProductResponse> products;
+    private String status;
 }
