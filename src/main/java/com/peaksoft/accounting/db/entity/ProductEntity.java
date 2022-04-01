@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -28,4 +30,14 @@ public class ProductEntity {
     @JsonIgnore
     private CategoryEntity category;
     private String description;
+    @ManyToMany(targetEntity = InvoiceEntity.class,
+            mappedBy = "products", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<InvoiceEntity> invoices;
+
+    public void addInvoice(InvoiceEntity invoice) {
+        if(invoices == null){
+            invoices = new ArrayList<>();
+        }
+        invoices.add(invoice);
+    }
 }
