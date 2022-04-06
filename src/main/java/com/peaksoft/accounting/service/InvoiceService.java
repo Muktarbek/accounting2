@@ -2,6 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
+import com.peaksoft.accounting.api.payload.Response;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.ProductEntity;
@@ -14,6 +15,7 @@ import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -61,27 +63,32 @@ public class InvoiceService {
         }
         return mapToResponse(invoiceRepository.save(mapToEntity(request,id)));
     }
-    public List<InvoiceResponse> findAll(int page,int size){
+    public Response<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber){
+        LocalDateTime startDate = LocalDateTime.parse(start,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
           List<InvoiceResponse> responses = new ArrayList<>();
-          List<InvoiceEntity> invoices = invoiceRepository.findAllByPagination(PageRequest.of(page - 1, size));
+          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size));
+          List<InvoiceEntity> invoices =  pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));
         }
-        return responses;
+        Response<InvoiceResponse,Integer> response = new Response<>();
+        response.setResponses(responses);
+        response.setTotalPage(pageAble.getTotalPages());
+        return response;
     }
     public InvoiceResponse sendByTags(InvoiceRequest request,Long tagId){
-        InvoiceEntity invoice = mapToEntity(request,null);
         Optional<TagEntity> tag =  tagRepository.findById(tagId);
         if(tag.isEmpty()){
             throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
         }
         TagEntity tagEntity = tag.get();
         for (ClientEntity client : tagEntity.getClients()) {
-            invoice.addClient(client);
-
+            InvoiceEntity invoiceEntity = mapToEntity(request,null);
+            invoiceEntity.addClient(client);
+            invoiceRepository.save(invoiceEntity);
         }
-        invoiceRepository.save(invoice);
-        return mapToResponse(invoice);
+        return mapToResponse(mapToEntity(request,null));
     }
     public InvoiceEntity mapToEntity(InvoiceRequest request,Long id){
        InvoiceEntity invoice = new InvoiceEntity();
@@ -108,7 +115,7 @@ public class InvoiceService {
         return InvoiceResponse.builder()
                 .invoiceId(invoice.getId())
                 .invoiceTitle(invoice.getTitle())
-                .clients(clientService.map(invoice.getClients()))
+                .client(clientService.mapToResponse(invoice.getClient()))
                 .startDate(invoice.getStartDate())
                 .endDate(invoice.getEndDate())
                 .products(productService.mapToResponse(invoice.getProducts()))

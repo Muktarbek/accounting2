@@ -38,8 +38,8 @@ public class ClientEntity {
             inverseJoinColumns = {@JoinColumn(name = "tags_id")})
     private List<TagEntity> tags;
     @JsonIgnore
-    @ManyToMany(targetEntity = InvoiceEntity.class,
-            mappedBy = "clients", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(targetEntity = InvoiceEntity.class,
+            mappedBy = "client", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<InvoiceEntity> invoices;
 
     public void addInvoice(InvoiceEntity invoice){

@@ -16,7 +16,7 @@ import java.util.List;
 public class InvoiceResponse {
     private Long invoiceId;
     private String invoiceTitle;
-    private List<ClientResponse> clients;
+    private ClientResponse client;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<ProductResponse> products;
