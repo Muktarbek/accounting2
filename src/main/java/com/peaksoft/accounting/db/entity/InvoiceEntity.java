@@ -23,13 +23,13 @@ public class InvoiceEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    private LocalDateTime dateOfCreation = LocalDateTime.now();
     @JsonIgnore
-    @ManyToMany(targetEntity = ClientEntity.class, cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+    @ManyToOne(targetEntity = ClientEntity.class, cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "invoices_clients",
-            joinColumns = {@JoinColumn(name = "invoice_id")},
-            inverseJoinColumns = {@JoinColumn(name = "client_id")})
-    private List<ClientEntity> clients;
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
+
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     @Enumerated(EnumType.STRING)
@@ -44,10 +44,7 @@ public class InvoiceEntity {
     private List<ProductEntity> products;
 
     public void addClient(ClientEntity client){
-        if(clients == null){
-            clients = new ArrayList<>();
-        }
-        clients.add(client);
+        this.client = client;
         client.addInvoice(this);
     }
     public void addProduct(ProductEntity product){
