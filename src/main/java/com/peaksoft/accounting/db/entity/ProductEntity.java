@@ -3,6 +3,8 @@ package com.peaksoft.accounting.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,8 +32,10 @@ public class ProductEntity {
     @JsonIgnore
     private CategoryEntity category;
     private String description;
+
     @ManyToMany(targetEntity = InvoiceEntity.class,
-            mappedBy = "products", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+            mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH},
+            fetch = FetchType.EAGER)
     private List<InvoiceEntity> invoices;
 
     public void addInvoice(InvoiceEntity invoice) {

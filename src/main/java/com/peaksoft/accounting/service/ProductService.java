@@ -6,8 +6,11 @@ import com.peaksoft.accounting.api.payload.ServiceTypeResponse;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.ServiceTypeEntity;
 import com.peaksoft.accounting.db.repository.CategoryRepository;
+import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.db.repository.ServiceTypeRepository;
+import com.peaksoft.accounting.validation.exception.ValidationException;
+import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -25,6 +29,7 @@ public class ProductService {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
     private final ServiceTypeRepository serviceTypeRepository;
+    private final InvoiceRepository invoiceRepository;
 
     public List<ProductResponse> getAllProducts(int page,int size){
         return mapToResponse(productRepository.findAllByPagination( PageRequest.of(page - 1, size)));
@@ -42,12 +47,15 @@ public class ProductService {
                 ));
     }
     public ProductResponse deleteById(Long id){
-        ProductResponse response = mapToResponse(productRepository.findById(id)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(format("Product with id - %s, not found", id))
-                ));
-        productRepository.deleteById(id);
-        return response;
+        Optional<ProductEntity> optionalProduct = productRepository.findById(id);
+        if(optionalProduct.isEmpty()){
+            throw new ValidationException(ValidationExceptionType.PRODUCT_NOT_FOUND);
+        }
+        ProductEntity product = optionalProduct.get();
+        product.getInvoices().forEach(u -> u.getProducts().remove(product));
+        invoiceRepository.saveAll(product.getInvoices());
+        productRepository.delete(product);
+        return mapToResponse(product);
     }
 
     public ProductEntity mapToEntity(ProductRequest request,Long id){

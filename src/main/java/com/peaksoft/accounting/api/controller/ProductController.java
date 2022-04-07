@@ -2,6 +2,7 @@ package com.peaksoft.accounting.api.controller;
 
 import com.peaksoft.accounting.api.payload.ProductRequest;
 import com.peaksoft.accounting.api.payload.ProductResponse;
+import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class ProductController {
     @DeleteMapping("{id}")
     @Operation(summary = "Delete product", description = "Delete an existing product by \"id\" in application")
     public ProductResponse deleteById(@PathVariable Long id){
+        System.out.println(id);
         return productService.deleteById(id);
     }
 }
