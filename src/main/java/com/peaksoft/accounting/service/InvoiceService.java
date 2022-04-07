@@ -26,6 +26,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class InvoiceService {
+
     private final InvoiceRepository invoiceRepository;
     private final ClientRepository clientRepository;
     private final ClientService clientService;
@@ -33,6 +34,7 @@ public class InvoiceService {
     private final ProductRepository productRepository;
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
+
     public InvoiceResponse create(InvoiceRequest request,InvoiceEntity invoice){
         invoiceRequestValidator.validate(invoice,request);
         InvoiceEntity invoiceEntity = mapToEntity(request,null);
@@ -54,6 +56,7 @@ public class InvoiceService {
         invoiceRepository.deleteById(id);
         return mapToResponse(invoice.get());
     }
+
     public InvoiceResponse update(InvoiceRequest request,Long id){
         Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
         if(invoice.isEmpty()){
@@ -61,6 +64,7 @@ public class InvoiceService {
         }
         return mapToResponse(invoiceRepository.save(mapToEntity(request,id)));
     }
+
     public List<InvoiceResponse> findAll(int page,int size){
           List<InvoiceResponse> responses = new ArrayList<>();
           List<InvoiceEntity> invoices = invoiceRepository.findAllByPagination(PageRequest.of(page - 1, size));
@@ -83,9 +87,10 @@ public class InvoiceService {
         invoiceRepository.save(invoice);
         return mapToResponse(invoice);
     }
+
     public InvoiceEntity mapToEntity(InvoiceRequest request,Long id){
        InvoiceEntity invoice = new InvoiceEntity();
-       invoice.setId(id);
+       invoice.setInvoice_id(id);
        invoice.setTitle(request.getInvoiceTitle());
        if(request.getClientId() != null){
        Optional<ClientEntity> client = clientRepository.findById(request.getClientId());
@@ -106,7 +111,7 @@ public class InvoiceService {
     }
     public InvoiceResponse mapToResponse(InvoiceEntity invoice){
         return InvoiceResponse.builder()
-                .invoiceId(invoice.getId())
+                .invoiceId(invoice.getInvoice_id())
                 .invoiceTitle(invoice.getTitle())
                 .clients(clientService.map(invoice.getClients()))
                 .startDate(invoice.getStartDate())

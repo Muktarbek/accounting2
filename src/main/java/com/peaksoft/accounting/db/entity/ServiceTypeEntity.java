@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class ServiceTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long serviceType_id;
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
 

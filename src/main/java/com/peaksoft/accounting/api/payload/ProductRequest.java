@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProductRequest {
     @NotNull
-    private String productTitle;
+    private String product_title;
     @NotNull
-    private Double productPrice;
+    private Double product_price;
     @NotNull
-    private Long   serviceTypeId;
+    private Long   service_type_id;
     @NotNull
-    private Long   categoryId;
+    private Long   category_id;
     @NotNull
-    private String productDescription;
+    private String product_description;
 
 }

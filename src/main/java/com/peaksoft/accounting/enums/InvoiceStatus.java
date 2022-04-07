@@ -9,5 +9,6 @@ public enum InvoiceStatus {
     NOT_PAID("Неоплачен"),
     PARTIALLY("Частично");
     private String invoiceStatus;
-    InvoiceStatus(String invoiceStatus){this.invoiceStatus = invoiceStatus;}
+    InvoiceStatus(String invoiceStatus){
+        this.invoiceStatus = invoiceStatus;}
 }

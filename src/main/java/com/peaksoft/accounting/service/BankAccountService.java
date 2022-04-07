@@ -46,7 +46,7 @@ public class BankAccountService {
     public BankAccountResponse getById(long id) {
         Optional<BankAccountEntity> account = bankAccountRepo.findById(id);
         if (account.isEmpty()) {
-            throw new ValidationException(ValidationExceptionType.NOT_FOUND);
+            throw new ValidationException(ValidationExceptionType.BANK_ACCOUNT_NOT_FOUND);
         }
         return mapToResponse(bankAccountRepo.findById(id).get());
     }

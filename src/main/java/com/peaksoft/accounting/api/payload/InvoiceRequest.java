@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class InvoiceRequest {
+
     @NotNull
     private String invoiceTitle;
     private Long clientId;
