@@ -19,6 +19,6 @@ public class ClientResponse {
     private String phoneNumber;
     private String address;
     private boolean isActive = true;
-    private List<TagEntity> tags;
+    private List<TagResponse> tags;
     private LocalDateTime created;
 }
