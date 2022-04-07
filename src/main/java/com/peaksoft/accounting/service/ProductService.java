@@ -2,6 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.ProductRequest;
 import com.peaksoft.accounting.api.payload.ProductResponse;
+import com.peaksoft.accounting.api.payload.Response;
 import com.peaksoft.accounting.api.payload.ServiceTypeResponse;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.ServiceTypeEntity;
@@ -12,6 +13,7 @@ import com.peaksoft.accounting.db.repository.ServiceTypeRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,14 +33,18 @@ public class ProductService {
     private final ServiceTypeRepository serviceTypeRepository;
     private final InvoiceRepository invoiceRepository;
 
-    public List<ProductResponse> getAllProducts(int page,int size){
-        return mapToResponse(productRepository.findAllByPagination( PageRequest.of(page - 1, size)));
+    public Response<ProductResponse,Integer> getAllProducts(int page, int size, boolean flag){
+     Page<ProductEntity> pages = productRepository.findAllByPagination( PageRequest.of(page - 1, size),flag);
+       Response<ProductResponse,Integer> response = new Response<>();
+       response.setResponses(mapToResponse(pages.getContent()));
+       response.setTotalPage(pages.getTotalPages());
+        return response;
     }
-    public ProductResponse save(ProductRequest request){
-        return mapToResponse(productRepository.save(mapToEntity(request,null)));
+    public ProductResponse save(ProductRequest request,boolean flag){
+        return mapToResponse(productRepository.save(mapToEntity(request,null,flag)));
     }
-    public ProductResponse update(ProductRequest request,Long id){
-        return mapToResponse(productRepository.save(mapToEntity(request,id)));
+    public ProductResponse update(ProductRequest request,Long id,boolean flag){
+        return mapToResponse(productRepository.save(mapToEntity(request,id,flag)));
     }
     public ProductResponse getById(Long id){
         return mapToResponse(productRepository.findById(id)
@@ -58,7 +64,7 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public ProductEntity mapToEntity(ProductRequest request,Long id){
+    public ProductEntity mapToEntity(ProductRequest request,Long id,boolean flag){
         return ProductEntity.builder()
                 .id(id)
                 .title(request.getProductTitle())
@@ -66,6 +72,7 @@ public class ProductService {
                 .description(request.getProductDescription())
                 .serviceType(serviceTypeRepository.findById(request.getServiceTypeId()).get())
                 .category(categoryRepository.findById(request.getCategoryId()).get())
+                .flag(flag)
                 .build();
     }
     public ProductResponse mapToResponse(ProductEntity product){

@@ -32,7 +32,7 @@ public class ProductEntity {
     @JsonIgnore
     private CategoryEntity category;
     private String description;
-
+    private Boolean flag = true;
     @ManyToMany(targetEntity = InvoiceEntity.class,
             mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH},
             fetch = FetchType.EAGER)
