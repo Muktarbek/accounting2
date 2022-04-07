@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.accounting.enums.InvoiceStatus;
 import com.peaksoft.accounting.enums.PaymentMethod;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -37,6 +39,7 @@ public class PaymentEntity {
 
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "invoice_id")
     @JsonIgnore
     private InvoiceEntity invoice;

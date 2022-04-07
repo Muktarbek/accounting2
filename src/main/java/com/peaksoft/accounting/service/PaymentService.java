@@ -2,15 +2,12 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.PaymentRequest;
 import com.peaksoft.accounting.api.payload.PaymentResponse;
-import com.peaksoft.accounting.api.payload.ProductResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.PaymentEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
-import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.enums.InvoiceStatus;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
@@ -30,25 +27,24 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final BankAccountRepository bankAccountRepository;
     private final InvoiceRepository invoiceRepository;
-    private final ProductRepository productRepository;
 
     public PaymentResponse create(long invoiceId, PaymentRequest paymentRequest) {
         PaymentEntity payment = mapToEntity(paymentRequest);
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).get();
-        payment.setInvoice(invoice);
-        double productPrice = invoice.getProducts().get(0).getPrice();
+        double productPrice = invoice.getSum();
         double paymentSum = paymentRequest.getAmount_of_money();
         if (productPrice > paymentSum) {
             double amount = productPrice - paymentSum;
-            invoice.getProducts().get(0).setPrice(amount);
+            invoice.setSum(amount);
             invoice.setStatus(InvoiceStatus.PARTIALLY);
         } else if (productPrice == paymentSum) {
             double amount = productPrice - paymentSum;
-            invoice.getProducts().get(0).setPrice(amount);
+            invoice.setSum(amount);
             invoice.setStatus(InvoiceStatus.PAID);
         } else {
             throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);
         }
+        payment.setInvoice(invoice);
         invoiceRepository.save(invoice);
         return mapToResponse(paymentRepository.save(payment));
     }
@@ -94,8 +90,10 @@ public class PaymentService {
     }
 
     private PaymentEntity mapToUpdate(PaymentEntity payment, PaymentRequest paymentRequest) {
+        payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPayment_date(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         payment.setPaymentFile(paymentRequest.getPayment_file());
         payment.setAmountOfMoney(paymentRequest.getAmount_of_money());
+        payment.setPaymentMethod(paymentRequest.getPayment_method());
         BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBank_account()).get();
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
@@ -113,7 +111,6 @@ public class PaymentService {
                 .comment(payment.getComment())
                 .created(payment.getCreated())
                 .invoice(payment.getInvoice())
-                .products(productRepository.findAll())
                 .build();
     }
 

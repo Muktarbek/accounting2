@@ -14,8 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PaymentResponse {
 
@@ -28,5 +26,4 @@ public class PaymentResponse {
     private String comment;
     private LocalDateTime created;
     private InvoiceEntity invoice;
-    private List<ProductEntity> products;
 }
