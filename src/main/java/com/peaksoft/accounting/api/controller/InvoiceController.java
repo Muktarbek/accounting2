@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
+import com.peaksoft.accounting.enums.PaymentMethod;
 import com.peaksoft.accounting.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +45,7 @@ public class InvoiceController {
     public InvoiceResponse findById(@PathVariable Long id){
         return invoiceService.getById(id);
     }
+
     @PostMapping("send-by-tags")
     public InvoiceResponse sendByTags(@RequestBody InvoiceRequest invoiceRequest,
                                       @RequestParam  Long tagId){
