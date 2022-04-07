@@ -23,6 +23,7 @@ public class BankAccountController {
     public BankAccountResponse create(@RequestBody @Valid BankAccountRequest request, BankAccountEntity account){
        return bankAccountService.create(account,request);
     }
+
     @PutMapping("{id}")
     public BankAccountResponse update(@PathVariable long id, @RequestBody @Valid BankAccountRequest request){
         return bankAccountService.update(id,request);
