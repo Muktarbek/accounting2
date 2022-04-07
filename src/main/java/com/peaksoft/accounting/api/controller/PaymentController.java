@@ -18,6 +18,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+
     @PostMapping()
     public PaymentResponse create(@RequestParam(required = false) long invoiceId, @RequestBody @Valid PaymentRequest request) {
         return paymentService.create(invoiceId, request);
