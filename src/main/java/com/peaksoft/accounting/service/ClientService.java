@@ -25,6 +25,7 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final TagRepository tagRepository;
+    private final TagService tagService;
 
     public ClientResponse create(ClientRequest request) {
         ClientEntity clientEntity = mapToEntity(request);
@@ -104,7 +105,7 @@ public class ClientService {
         client.setActive(clientEntity.isActive());
         client.setCompanyName(clientEntity.getCompanyName());
         client.setCreated(clientEntity.getCreated());
-        client.setTags(clientEntity.getTags());
+        client.setTags(tagService.map(clientEntity.getTags()));
         client.setAddress(clientEntity.getAddress());
         client.setEmail(clientEntity.getEmail());
         client.setPhoneNumber(clientEntity.getPhoneNumber());

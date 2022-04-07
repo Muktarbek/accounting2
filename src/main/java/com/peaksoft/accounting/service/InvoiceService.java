@@ -92,6 +92,7 @@ public class InvoiceService {
     }
     public InvoiceEntity mapToEntity(InvoiceRequest request,Long id){
        InvoiceEntity invoice = new InvoiceEntity();
+       Double sum = 0d;
        invoice.setId(id);
        invoice.setTitle(request.getInvoiceTitle());
        if(request.getClientId() != null){
@@ -106,9 +107,11 @@ public class InvoiceService {
                throw new ValidationException((ValidationExceptionType.PRODUCT_NOT_FOUND));
            }
            invoice.addProduct(product.get());
+           sum += product.get().getPrice();
         }
        invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
        invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+       invoice.setSum(sum);
        return invoice;
     }
     public InvoiceResponse mapToResponse(InvoiceEntity invoice){
@@ -120,6 +123,7 @@ public class InvoiceService {
                 .endDate(invoice.getEndDate())
                 .products(productService.mapToResponse(invoice.getProducts()))
                 .status(invoice.getStatus().getInvoiceStatus())
+                .sum(invoice.getSum())
                 .build();
     }
 }

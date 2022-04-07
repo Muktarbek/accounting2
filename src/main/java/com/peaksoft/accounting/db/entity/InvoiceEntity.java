@@ -21,7 +21,7 @@ import java.util.List;
 public class InvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long invoice_id;
+    private Long id;
     private String title;
     private LocalDateTime dateOfCreation = LocalDateTime.now();
     @JsonIgnore
@@ -34,7 +34,6 @@ public class InvoiceEntity {
     private LocalDateTime endDate;
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status = InvoiceStatus.NOT_PAID;
-
     @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
     @ManyToMany(targetEntity = ProductEntity.class, cascade = {CascadeType.PERSIST, CascadeType.DETACH,
@@ -43,11 +42,7 @@ public class InvoiceEntity {
             joinColumns = {@JoinColumn(name = "invoice_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private List<ProductEntity> products;
-
-    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
-    @JsonIgnore
-    private List<PaymentEntity> payment;
-
+    private Double sum;
     public void addClient(ClientEntity client){
         this.client = client;
         client.addInvoice(this);
@@ -59,4 +54,6 @@ public class InvoiceEntity {
         products.add(product);
         product.addInvoice(this);
     }
+
+
 }
