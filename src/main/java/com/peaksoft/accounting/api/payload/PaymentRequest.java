@@ -8,12 +8,11 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PaymentRequest {
-
+    @NotNull
     private String payment_date;
     private String payment_file;
     private PaymentMethod payment_method;
@@ -22,3 +21,4 @@ public class PaymentRequest {
     private String comment;
 
 }
+

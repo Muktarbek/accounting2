@@ -21,8 +21,7 @@ import java.util.List;
 @Builder
 public class PaymentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_sequence")
-    @SequenceGenerator(name = "payment_sequence", sequenceName = "payment_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long payment_id;
     private LocalDateTime paymentDate;
     private String paymentFile;
@@ -38,7 +37,7 @@ public class PaymentEntity {
     private LocalDateTime created;
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH,CascadeType.MERGE})
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "invoice_id")
     @JsonIgnore

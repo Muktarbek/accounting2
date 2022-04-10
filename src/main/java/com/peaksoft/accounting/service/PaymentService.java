@@ -52,7 +52,7 @@ public class PaymentService {
     public PaymentResponse update(long id, PaymentRequest paymentRequest) {
         Optional<PaymentEntity> payment = paymentRepository.findById(id);
         if (payment.isEmpty()) {
-            throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
+            throw new ValidationException(ValidationExceptionType.NOT_FOUND);
         }
         mapToUpdate(payment.get(), paymentRequest);
         return mapToResponse(paymentRepository.save(payment.get()));

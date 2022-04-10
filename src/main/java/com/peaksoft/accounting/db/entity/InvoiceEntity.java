@@ -54,6 +54,4 @@ public class InvoiceEntity {
         products.add(product);
         product.addInvoice(this);
     }
-
-
 }
