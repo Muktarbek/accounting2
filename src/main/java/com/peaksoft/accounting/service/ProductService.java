@@ -25,6 +25,7 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
@@ -43,7 +44,7 @@ public class ProductService {
     public ProductResponse getById(Long id){
         return mapToResponse(productRepository.findById(id)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(format("Category with id - %s, not found", id))
+                        () -> new UsernameNotFoundException(format("Product with id - %s, not found", id))
                 ));
     }
     public ProductResponse deleteById(Long id){
@@ -60,17 +61,17 @@ public class ProductService {
 
     public ProductEntity mapToEntity(ProductRequest request,Long id){
         return ProductEntity.builder()
-                .id(id)
-                .title(request.getProductTitle())
-                .price(request.getProductPrice())
-                .description(request.getProductDescription())
-                .serviceType(serviceTypeRepository.findById(request.getServiceTypeId()).get())
-                .category(categoryRepository.findById(request.getCategoryId()).get())
+                .product_id(id)
+                .title(request.getProduct_title())
+                .price(request.getProduct_price())
+                .description(request.getProduct_description())
+                .serviceType(serviceTypeRepository.findById(request.getService_type_id()).get())
+                .category(categoryRepository.findById(request.getCategory_id()).get())
                 .build();
     }
     public ProductResponse mapToResponse(ProductEntity product){
         return ProductResponse.builder()
-                .productId(product.getId())
+                .productId(product.getProduct_id())
                 .productTitle(product.getTitle())
                 .productPrice(product.getPrice())
                 .serviceType(mapToServiceResponse(product.getServiceType()))
@@ -87,7 +88,7 @@ public class ProductService {
     }
     public ServiceTypeResponse mapToServiceResponse(ServiceTypeEntity serviceType){
         return ServiceTypeResponse.builder()
-                .service_type_id(serviceType.getId())
+                .service_type_id(serviceType.getServiceType_id())
                 .service_type(serviceType.getServiceType().getServiceType())
                 .build();
     }

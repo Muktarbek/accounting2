@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ProductResponse {
     private Long productId;
     private String productTitle;
-    private Double productPrice;
+    private double productPrice;
     private ServiceTypeResponse serviceType;
     private CategoryResponse category;
     private String productDescription;

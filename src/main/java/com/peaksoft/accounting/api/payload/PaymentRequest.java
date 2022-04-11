@@ -2,6 +2,7 @@ package com.peaksoft.accounting.api.payload;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.peaksoft.accounting.enums.PaymentMethod;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,16 +11,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class ProductRequest {
+public class PaymentRequest {
     @NotNull
-    private String product_title;
-    @NotNull
-    private Double product_price;
-    @NotNull
-    private Long   service_type_id;
-    @NotNull
-    private Long   category_id;
-    @NotNull
-    private String product_description;
+    private String payment_date;
+    private String payment_file;
+    private PaymentMethod payment_method;
+    private Long bank_account;
+    private double amount_of_money;
+    private String comment;
 
 }
+
