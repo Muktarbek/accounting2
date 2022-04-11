@@ -1,10 +1,7 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,7 +16,8 @@ import java.util.List;
 @Builder
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
+    @SequenceGenerator(name = "product_sequence", sequenceName = "product_seq", allocationSize = 1)
     private Long id;
     private String title;
     private Double price;
@@ -32,9 +30,9 @@ public class ProductEntity {
     @JsonIgnore
     private CategoryEntity category;
     private String description;
-    private Boolean flag = true;
+    private Boolean isIncome = true;
     @ManyToMany(targetEntity = InvoiceEntity.class,
-            mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH},
+            mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH},
             fetch = FetchType.EAGER)
     private List<InvoiceEntity> invoices;
 

@@ -19,7 +19,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<CategoryResponse> getAllCategories(boolean flag){
-         return mapToResponse(categoryRepository.findAllByFlag(flag));
+         return mapToResponse(categoryRepository.findAllByIsIncomeCategory(flag));
     }
     public CategoryResponse save(CategoryRequest request){
         return mapToResponse(categoryRepository.save(mapToEntity(request,null)));
@@ -43,7 +43,7 @@ public class CategoryService {
                 .id(id)
                 .title(request.getCategoryTitle())
                 .description(request.getCategoryDescription())
-                .flag(request.getFlag())
+                .isIncomeCategory(request.getFlag())
                 .build();
     }
     public CategoryResponse mapToResponse(CategoryEntity category){

@@ -72,7 +72,7 @@ public class ProductService {
                 .description(request.getProductDescription())
                 .serviceType(serviceTypeRepository.findById(request.getServiceTypeId()).get())
                 .category(categoryRepository.findById(request.getCategoryId()).get())
-                .flag(flag)
+                .isIncome(flag)
                 .build();
     }
     public ProductResponse mapToResponse(ProductEntity product){

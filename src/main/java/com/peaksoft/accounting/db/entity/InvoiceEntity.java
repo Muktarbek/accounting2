@@ -3,6 +3,7 @@ package com.peaksoft.accounting.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.accounting.enums.InvoiceStatus;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -20,7 +21,8 @@ import java.util.List;
 @Builder
 public class InvoiceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_sequence")
+    @SequenceGenerator(name = "invoice_sequence", sequenceName = "invoice_seq", allocationSize = 1)
     private Long id;
     private String title;
     private LocalDateTime dateOfCreation = LocalDateTime.now();
