@@ -61,7 +61,7 @@ public class PaymentService {
     public PaymentResponse delete(long id) {
         PaymentEntity payment = paymentRepository.findById(id).get();
         paymentRepository.delete(payment);
-        return mapToResponse(paymentRepository.save(payment));
+        return mapToResponse(payment);
     }
 
     public PaymentResponse findById(long id) {
