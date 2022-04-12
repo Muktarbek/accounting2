@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
+
     @Query("select p from ProductEntity p")
     List<ProductEntity> findAllByPagination(Pageable pageable);
 }
