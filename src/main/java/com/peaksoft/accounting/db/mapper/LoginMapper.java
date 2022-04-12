@@ -24,6 +24,7 @@ public class LoginMapper {
 
         return loginResponse;
     }
+
     private void setAuthority(LoginResponse loginView, List<RoleEntity> roles){
         Set<String> authorities = new HashSet<>();
         for(RoleEntity role: roles){
