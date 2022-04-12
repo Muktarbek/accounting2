@@ -27,6 +27,7 @@ public class SellerService {
     public SellerResponse create(ClientEntity seller, SellerRequest sellerRequest) {
         validator.validate(seller, sellerRequest);
         ClientEntity sellers = mapToEntity(sellerRequest);
+        sellers.setIncome(false);
         sellerRepo.save(sellers);
         return mapToResponse(sellers);
     }
@@ -99,6 +100,7 @@ public class SellerService {
                 .created(seller.getCreated())
                 .email(seller.getEmail())
                 .phoneNumber(seller.getPhoneNumber())
+                .income(seller.isIncome())
                 .build();
     }
 

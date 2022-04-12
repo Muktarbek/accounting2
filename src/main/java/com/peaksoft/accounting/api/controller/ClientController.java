@@ -3,6 +3,7 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.ClientRequest;
 import com.peaksoft.accounting.api.payload.ClientResponse;
 import com.peaksoft.accounting.api.payload.ClientResponseView;
+import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +16,14 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/myaccount/clients")
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
-public class
-ClientController {
+public class ClientController {
 
     private final ClientService clientService;
 
     @PostMapping
     @Operation(summary = "Create client", description = "Creating a new client")
-    public ClientResponse create(@RequestBody @Valid ClientRequest request) {
-        return clientService.create(request);
+    public ClientResponse create(@RequestBody @Valid ClientRequest request, ClientEntity client) {
+        return clientService.create(client,request);
     }
 
     @PutMapping("{id}")

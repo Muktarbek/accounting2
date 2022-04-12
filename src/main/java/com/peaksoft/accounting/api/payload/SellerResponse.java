@@ -20,4 +20,5 @@ public class SellerResponse {
     private String phoneNumber;
     private String address;
     private LocalDateTime created;
+    private boolean income;
 }

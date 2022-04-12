@@ -72,6 +72,7 @@ public class ClientService {
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
+        client.setIncome(client.isIncome());
         client.setCreated(LocalDateTime.now());
         client.setEmail(clientRequest.getEmail());
         client.setAddress(clientRequest.getAddress());
@@ -106,6 +107,7 @@ public class ClientService {
         client.setClientName(clientEntity.getClientName());
         client.setCompanyName(clientEntity.getCompanyName());
         client.setCreated(clientEntity.getCreated());
+        client.setIncome(clientEntity.isIncome());
         client.setTags(tagService.map(clientEntity.getTags()));
         client.setAddress(clientEntity.getAddress());
         client.setEmail(clientEntity.getEmail());
