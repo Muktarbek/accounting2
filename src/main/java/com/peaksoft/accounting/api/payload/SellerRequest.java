@@ -5,13 +5,19 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class Response<T,K> {
-    List<T> responses;
-    K totalPage;
-}
+public class SellerRequest {
 
+    @NotNull
+    private String companyName;
+    private String sellerName;
+    private String sellerSurname;
+    private String email;
+    @NotNull
+    private String phoneNumber;
+    private String address;
+}

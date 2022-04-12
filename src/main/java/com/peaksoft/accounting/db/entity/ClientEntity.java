@@ -1,9 +1,7 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -13,9 +11,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "clients")
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ClientEntity {
 
     @Id
@@ -24,10 +24,10 @@ public class ClientEntity {
     private Long client_id;
     private String companyName;
     private String clientName;
+    private String sellerSurname;
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean isActive = true;
     @CreatedDate
     private LocalDateTime created;
     @JsonIgnore

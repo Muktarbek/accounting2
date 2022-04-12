@@ -15,7 +15,7 @@ public class ValidationExceptionType {
     public static final String PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
     public static final String INVOICE_NOT_FOUND = "INVOICE_NOT_FOUND";
     public static final String NOT_FOUND = "NOT_FOUND";
-    public static final String BANK_ACCOUNT_NAME_ALREADY_EXISTS = "BANK_ACCOUNT_NAME_ALREADY_EXISTS";
+    public static final String THIS_NAME_ALREADY_EXISTS = "THIS_NAME_ALREADY_EXISTS";
     public static final String EXCEEDS_THE_AMOUNT_PER_PRODUCT = "EXCEEDS_THE_AMOUNT_PER_PRODUCT";
 
 }

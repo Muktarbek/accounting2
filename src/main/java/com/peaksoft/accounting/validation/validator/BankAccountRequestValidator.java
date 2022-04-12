@@ -20,7 +20,7 @@ public class BankAccountRequestValidator {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
         if (bankAccountRepository.findByBankAccountName(accountRequest.getBank_account_name()).isPresent()){
-            throw new ValidationException(ValidationExceptionType.BANK_ACCOUNT_NAME_ALREADY_EXISTS);
+            throw new ValidationException(ValidationExceptionType.THIS_NAME_ALREADY_EXISTS);
         }
     }
 }

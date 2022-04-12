@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.enums.PaymentMethod;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,12 +15,12 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PaymentResponse {
 
-    private Long id;
-    private LocalDateTime payment_date;
-    private String payment_file;
-    private PaymentMethod payment_method;
-    private BankAccountEntity bank_account;
-    private Double amount_of_money;
+    private Long paymentId;
+    private LocalDateTime paymentDate;
+    private String paymentFile;
+    private PaymentMethod paymentMethod;
+    private BankAccountEntity bankAccount;
+    private Double amountOfMoney;
     private String comment;
     private LocalDateTime created;
     private InvoiceEntity invoice;

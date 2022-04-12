@@ -25,21 +25,25 @@ public class ProductController {
     public List<ProductResponse> getAll(@RequestParam int page,@RequestParam int size){
         return productService.getAllProducts(page,size);
     }
+
     @PostMapping
     @Operation(summary = "Create product", description = "Creating a new product to the existing company in application")
     public ProductResponse save(@RequestBody ProductRequest request){
         return productService.save(request);
     }
+
     @PutMapping("{id}")
     @Operation(summary = "Update product", description = "Updating an existing product by \"id\" in application")
     public ProductResponse update(@PathVariable Long id,@RequestBody ProductRequest request){
         return productService.update(request,id);
     }
+
     @GetMapping("{id}")
     @Operation(summary = "Get product", description = "Get an existing product by \"id\" in application")
     public ProductResponse getById(@PathVariable Long id){
         return productService.getById(id);
     }
+
     @DeleteMapping("{id}")
     @Operation(summary = "Delete product", description = "Delete an existing product by \"id\" in application")
     public ProductResponse deleteById(@PathVariable Long id){
