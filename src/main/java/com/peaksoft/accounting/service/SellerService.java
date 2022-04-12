@@ -73,7 +73,6 @@ public class SellerService {
         client.setCompanyName(sellerRequest.getCompanyName());
         client.setPhoneNumber(sellerRequest.getPhoneNumber());
         client.setCreated(LocalDateTime.now());
-        client.setActive(client.isActive());
         client.setEmail(sellerRequest.getEmail());
         client.setAddress(sellerRequest.getAddress());
         return client;
@@ -84,7 +83,6 @@ public class SellerService {
         client.setCompanyName(sellerRequest.getCompanyName());
         client.setAddress(sellerRequest.getAddress());
         client.setEmail(sellerRequest.getEmail());
-        client.setActive(client.isActive());
         client.setPhoneNumber(sellerRequest.getPhoneNumber());
         client.setSellerSurname(sellerRequest.getSellerSurname());
         validator.validate(client,sellerRequest);
@@ -93,7 +91,7 @@ public class SellerService {
 
     public SellerResponse mapToResponse(ClientEntity seller) {
         return SellerResponse.builder()
-                .id(seller.getClient_id())
+                .sellerId(seller.getClient_id())
                 .sellerName(seller.getClientName())
                 .sellerSurname(seller.getSellerSurname())
                 .address(seller.getAddress())
@@ -101,7 +99,6 @@ public class SellerService {
                 .created(seller.getCreated())
                 .email(seller.getEmail())
                 .phoneNumber(seller.getPhoneNumber())
-                .isActive(seller.isActive())
                 .build();
     }
 

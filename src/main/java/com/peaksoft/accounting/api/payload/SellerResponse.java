@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class SellerResponse {
 
-    private Long id;
+    private Long sellerId;
     private String companyName;
     private String sellerName;
     private String sellerSurname;
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean isActive;
     private LocalDateTime created;
 }

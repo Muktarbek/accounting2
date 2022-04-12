@@ -28,7 +28,6 @@ public class ClientEntity {
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean isActive = true;
     @CreatedDate
     private LocalDateTime created;
     @JsonIgnore

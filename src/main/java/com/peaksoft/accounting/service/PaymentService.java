@@ -102,12 +102,12 @@ public class PaymentService {
 
     private PaymentResponse mapToResponse(PaymentEntity payment) {
         return PaymentResponse.builder()
-                .id(payment.getPayment_id())
-                .bank_account(payment.getBankAccount())
-                .payment_date(payment.getPaymentDate())
-                .payment_file(payment.getPaymentFile())
-                .payment_method(payment.getPaymentMethod())
-                .amount_of_money(payment.getAmountOfMoney())
+                .paymentId(payment.getPayment_id())
+                .bankAccount(payment.getBankAccount())
+                .paymentDate(payment.getPaymentDate())
+                .paymentFile(payment.getPaymentFile())
+                .paymentMethod(payment.getPaymentMethod())
+                .amountOfMoney(payment.getAmountOfMoney())
                 .comment(payment.getComment())
                 .created(payment.getCreated())
                 .invoice(payment.getInvoice())

@@ -18,7 +18,6 @@ public class ClientResponse {
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean isActive;
     private List<TagResponse> tags;
     private LocalDateTime created;
 }

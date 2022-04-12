@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PaymentResponse {
 
-    private Long id;
-    private LocalDateTime payment_date;
-    private String payment_file;
-    private PaymentMethod payment_method;
-    private BankAccountEntity bank_account;
-    private Double amount_of_money;
+    private Long paymentId;
+    private LocalDateTime paymentDate;
+    private String paymentFile;
+    private PaymentMethod paymentMethod;
+    private BankAccountEntity bankAccount;
+    private Double amountOfMoney;
     private String comment;
     private LocalDateTime created;
     private InvoiceEntity invoice;

@@ -87,7 +87,6 @@ public class ClientService {
         client.setCompanyName(clientRequest.getCompanyName());
         client.setAddress(clientRequest.getAddress());
         client.setEmail(clientRequest.getEmail());
-        client.setActive(client.isActive());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
         TagEntity tags = tagRepository.findById(clientRequest.getTags()).get();
         tagsList.add(tags);
@@ -105,14 +104,12 @@ public class ClientService {
             client.setClientId(String.valueOf(clientEntity.getClient_id()));
         }
         client.setClientName(clientEntity.getClientName());
-        client.setActive(clientEntity.isActive());
         client.setCompanyName(clientEntity.getCompanyName());
         client.setCreated(clientEntity.getCreated());
         client.setTags(tagService.map(clientEntity.getTags()));
         client.setAddress(clientEntity.getAddress());
         client.setEmail(clientEntity.getEmail());
         client.setPhoneNumber(clientEntity.getPhoneNumber());
-        client.setActive(clientEntity.isActive());
         return client;
     }
 
