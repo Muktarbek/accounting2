@@ -2,6 +2,8 @@ package com.peaksoft.accounting.db.repository;
 
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
+import com.peaksoft.accounting.db.entity.UserEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +19,10 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     @Override
     <S extends ClientEntity> S save(S entity);
 
+    Optional<ClientEntity> findByCompanyName(String tagName);
+
+    Optional<UserEntity> findByEmail(String email);
+
     @Override
     Optional<ClientEntity> findById(Long aLong);
 
@@ -30,5 +36,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
             "or upper(c.companyName) like concat ('%',:name,'%')or upper(c.email) like concat ('%',:name,'%')or upper(t.nameTag) like concat('%',:name,'%') )")
     List<ClientEntity> search(@Param("name") String name, Pageable pageable);
 
+    @Query("select s from ClientEntity s")
+    Page<ClientEntity> findAllByPagination(Pageable pageable);
 
 }

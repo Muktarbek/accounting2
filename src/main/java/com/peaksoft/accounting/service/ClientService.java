@@ -9,6 +9,7 @@ import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.TagRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
+import com.peaksoft.accounting.validation.validator.SellerAndClientRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +27,10 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final TagRepository tagRepository;
     private final TagService tagService;
+    private final SellerAndClientRequestValidator validator;
 
-    public ClientResponse create(ClientRequest request) {
+    public ClientResponse create(ClientEntity client, ClientRequest request) {
+        validator.validate(client,request);
         ClientEntity clientEntity = mapToEntity(request);
         clientRepository.save(clientEntity);
         return mapToResponse(clientEntity);
@@ -113,9 +116,9 @@ public class ClientService {
         return client;
     }
 
-    public List<ClientResponse> map(List<ClientEntity> orderEntities) {
+    public List<ClientResponse> map(List<ClientEntity> clients) {
         List<ClientResponse> clientResponses = new ArrayList<>();
-        for (ClientEntity client : orderEntities) {
+        for (ClientEntity client : clients) {
             clientResponses.add(mapToResponse(client));
         }
         return clientResponses;

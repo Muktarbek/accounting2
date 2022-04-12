@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.enums.PaymentMethod;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
