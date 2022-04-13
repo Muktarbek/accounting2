@@ -64,11 +64,11 @@ public class InvoiceService {
         }
         return mapToResponse(invoiceRepository.save(mapToEntity(request,id)));
     }
-    public PagedResponse<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber){
+    public PagedResponse<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber,Boolean isIncome){
         LocalDateTime startDate = LocalDateTime.parse(start,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
           List<InvoiceResponse> responses = new ArrayList<>();
-          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size));
+          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size),isIncome);
           List<InvoiceEntity> invoices =  pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));

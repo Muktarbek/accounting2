@@ -24,16 +24,26 @@ public class InvoiceController {
         return invoiceService.create(invoiceRequest,invoice);
     }
 
-    @GetMapping
-    public PagedResponse<InvoiceResponse,Integer> getAllInvoices(@RequestParam int page,
+    @GetMapping("/client")
+    public PagedResponse<InvoiceResponse,Integer> getAllClientInvoices(@RequestParam int page,
+                                                                 @RequestParam int size,
+                                                                 @RequestParam(required = false) Long clientId,
+                                                                 @RequestParam(required = false) String status,
+                                                                 @RequestParam(required = false,defaultValue = "2000-01-01 00:00:00") String startDate,
+                                                                 @RequestParam(required = false,defaultValue = "2100-01-01 00:00:00") String endDate,
+                                                                 @RequestParam(required = false) Long  invoiceNumber){
+        return invoiceService.findAll(page,size,clientId,status,startDate,endDate,invoiceNumber,true);
+    }
+    @GetMapping("/seller")
+    public PagedResponse<InvoiceResponse,Integer> getAllSellersInvoices(@RequestParam int page,
                                                                  @RequestParam int size,
                                                                  @RequestParam(required = false) Long clientId,
                                                                  @RequestParam(required = false) String status,
                                                                  @RequestParam(required = false,defaultValue = "2000-01-01 00:00:00") String startDate,
                                                                  @RequestParam(required = false,defaultValue = "2100-01-01 00:00:00") String endDate,
                                                                  @RequestParam(required = false) Long  invoiceNumber
-                                                            ){
-        return invoiceService.findAll(page,size,clientId,status,startDate,endDate,invoiceNumber);
+    ){
+        return invoiceService.findAll(page,size,clientId,status,startDate,endDate,invoiceNumber,false);
     }
 
     @PutMapping("{id}")
