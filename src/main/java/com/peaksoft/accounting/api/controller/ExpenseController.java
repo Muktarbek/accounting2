@@ -1,15 +1,13 @@
 package com.peaksoft.accounting.api.controller;
 
+import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.ProductRequest;
 import com.peaksoft.accounting.api.payload.ProductResponse;
-import com.peaksoft.accounting.api.payload.Response;
 import com.peaksoft.accounting.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class ExpenseController {
 
     @GetMapping
     @Operation(summary = "Get all expense", description = "Getting all existing expenses in application")
-    public Response<ProductResponse, Integer> getAll(@RequestParam int page, @RequestParam int size){
+    public PagedResponse<ProductResponse, Integer> getAll(@RequestParam int page, @RequestParam int size){
         return productService.getAllProducts(page,size,false);
     }
     @PostMapping

@@ -32,7 +32,7 @@ public class PaymentService {
         PaymentEntity payment = mapToEntity(paymentRequest);
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).get();
         double productPrice = invoice.getSum();
-        double paymentSum = paymentRequest.getAmount_of_money();
+        double paymentSum = paymentRequest.getAmountOfMoney();
         if (productPrice > paymentSum) {
             double amount = productPrice - paymentSum;
             invoice.setSum(amount);
@@ -78,11 +78,11 @@ public class PaymentService {
 
     private PaymentEntity mapToEntity(PaymentRequest paymentRequest) {
         PaymentEntity payment = new PaymentEntity();
-        payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPayment_date(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        payment.setPaymentFile(paymentRequest.getPayment_file());
-        payment.setAmountOfMoney(paymentRequest.getAmount_of_money());
-        BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBank_account()).get();
-        payment.setPaymentMethod(paymentRequest.getPayment_method());
+        payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        payment.setPaymentFile(paymentRequest.getPaymentFile());
+        payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
+        BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
+        payment.setPaymentMethod(paymentRequest.getPaymentMethod());
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
         payment.setCreated(LocalDateTime.now());
@@ -90,11 +90,11 @@ public class PaymentService {
     }
 
     private PaymentEntity mapToUpdate(PaymentEntity payment, PaymentRequest paymentRequest) {
-        payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPayment_date(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        payment.setPaymentFile(paymentRequest.getPayment_file());
-        payment.setAmountOfMoney(paymentRequest.getAmount_of_money());
-        payment.setPaymentMethod(paymentRequest.getPayment_method());
-        BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBank_account()).get();
+        payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        payment.setPaymentFile(paymentRequest.getPaymentFile());
+        payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
+        payment.setPaymentMethod(paymentRequest.getPaymentMethod());
+        BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
         return payment;

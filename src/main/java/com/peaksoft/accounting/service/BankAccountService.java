@@ -58,14 +58,14 @@ public class BankAccountService {
 
     public BankAccountEntity mapToEntity(BankAccountRequest request) {
         BankAccountEntity bankAccount = new BankAccountEntity();
-        bankAccount.setBankAccountName(request.getBank_account_name());
-        bankAccount.setBankAccountNumber(request.getBank_account_number());
+        bankAccount.setBankAccountName(request.getBankAccountName());
+        bankAccount.setBankAccountNumber(request.getBankAccountNumber());
         return bankAccount;
     }
 
     public BankAccountEntity mapToUpdate(BankAccountEntity bankAccount, BankAccountRequest request) {
-        bankAccount.setBankAccountName(request.getBank_account_name());
-        bankAccount.setBankAccountNumber(request.getBank_account_number());
+        bankAccount.setBankAccountName(request.getBankAccountName());
+        bankAccount.setBankAccountNumber(request.getBankAccountNumber());
         accountValidator.validate(bankAccount, request);
         return bankAccount;
     }
@@ -78,8 +78,8 @@ public class BankAccountService {
         if (bankAccount.getId() != null) {
             accountResponse.setId(String.valueOf(bankAccount.getId()));
         }
-        accountResponse.setBank_account_name(bankAccount.getBankAccountName());
-        accountResponse.setBank_account_number(bankAccount.getBankAccountNumber());
+        accountResponse.setBankAccountName(bankAccount.getBankAccountName());
+        accountResponse.setBankAccountNumber(bankAccount.getBankAccountNumber());
         return accountResponse;
     }
 

@@ -82,7 +82,7 @@ public class UserService implements UserDetailsService {
         userResponse.setCompanyName(user.getCompanyName());
         userResponse.setFirstName(user.getFirstName());
         userResponse.setLastName(user.getLastName());
-        userResponse.setBusiness_area(user.getBusinessArea());
+        userResponse.setBusinessArea(user.getBusinessArea());
         userResponse.setDeleted(user.isDeleted());
         userResponse.setEnabled(user.isEnabled());
         userResponse.setActive(user.isActive());
@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(
                 () -> new UsernameNotFoundException(format("User with token - %s, not found", request.getToken()))
         );
-     user.setPassword(passwordEncoder.encode(request.getNew_password()));
+     user.setPassword(passwordEncoder.encode(request.getNewPassword()));
      user.setToken(null);
      UserEntity userEntity = userRepository.save(user);
      return mapToResponse(userEntity);

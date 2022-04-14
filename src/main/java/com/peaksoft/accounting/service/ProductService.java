@@ -1,8 +1,8 @@
 package com.peaksoft.accounting.service;
 
+import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.ProductRequest;
 import com.peaksoft.accounting.api.payload.ProductResponse;
-import com.peaksoft.accounting.api.payload.Response;
 import com.peaksoft.accounting.api.payload.ServiceTypeResponse;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.ServiceTypeEntity;
@@ -34,9 +34,9 @@ public class ProductService {
     private final ServiceTypeRepository serviceTypeRepository;
     private final InvoiceRepository invoiceRepository;
 
-    public Response<ProductResponse,Integer> getAllProducts(int page, int size, boolean flag){
+    public PagedResponse<ProductResponse,Integer> getAllProducts(int page, int size, boolean flag){
      Page<ProductEntity> pages = productRepository.findAllByPagination( PageRequest.of(page - 1, size),flag);
-       Response<ProductResponse,Integer> response = new Response<>();
+       PagedResponse<ProductResponse,Integer> response = new PagedResponse<>();
        response.setResponses(mapToResponse(pages.getContent()));
        response.setTotalPage(pages.getTotalPages());
         return response;
@@ -95,8 +95,8 @@ public class ProductService {
     }
     public ServiceTypeResponse mapToServiceResponse(ServiceTypeEntity serviceType){
         return ServiceTypeResponse.builder()
-                .service_type_id(serviceType.getId())
-                .service_type(serviceType.getServiceType().getServiceType())
+                .serviceTypeId(serviceType.getId())
+                .serviceType(serviceType.getServiceType().getServiceType())
                 .build();
     }
 }
