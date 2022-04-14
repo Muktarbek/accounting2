@@ -49,6 +49,7 @@ public class AuthController {
                                UserEntity user) {
         return userService.create(user, request);
     }
+
     @PutMapping("reset-password")
     public ResponseEntity<UserResponse> resetPassword(@RequestBody PasswordRequest request){
             return new ResponseEntity<>(userService.resetPassword(request),HttpStatus.OK);

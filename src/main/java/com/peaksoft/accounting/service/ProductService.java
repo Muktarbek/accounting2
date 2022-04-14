@@ -27,6 +27,7 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
@@ -49,7 +50,7 @@ public class ProductService {
     public ProductResponse getById(Long id){
         return mapToResponse(productRepository.findById(id)
                 .orElseThrow(
-                        () -> new UsernameNotFoundException(format("Category with id - %s, not found", id))
+                        () -> new UsernameNotFoundException(format("Product with id - %s, not found", id))
                 ));
     }
     public ProductResponse deleteById(Long id){

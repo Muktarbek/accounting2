@@ -7,5 +7,7 @@ public enum ServiceType {
     SERVICE("Сервис"),
     PRODUCT("Продукт");
     private String serviceType;
-    ServiceType(String serviceType){this.serviceType = serviceType;}
+
+    ServiceType(String serviceType){
+        this.serviceType = serviceType;}
 }

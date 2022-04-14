@@ -1,7 +1,10 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ public class ProductEntity {
     @SequenceGenerator(name = "product_sequence", sequenceName = "product_seq", allocationSize = 1)
     private Long id;
     private String title;
-    private Double price;
+    private double price;
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "service_type_id")
     @JsonIgnore

@@ -2,7 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
-import com.peaksoft.accounting.api.payload.Response;
+import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.ProductEntity;
@@ -35,6 +35,7 @@ public class InvoiceService {
     private final ProductRepository productRepository;
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
+
     public InvoiceResponse create(InvoiceRequest request,InvoiceEntity invoice){
         invoiceRequestValidator.validate(invoice,request);
         InvoiceEntity invoiceEntity = mapToEntity(request,null);
@@ -63,16 +64,16 @@ public class InvoiceService {
         }
         return mapToResponse(invoiceRepository.save(mapToEntity(request,id)));
     }
-    public Response<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber){
+    public PagedResponse<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber,Boolean isIncome){
         LocalDateTime startDate = LocalDateTime.parse(start,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
           List<InvoiceResponse> responses = new ArrayList<>();
-          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size));
+          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size),isIncome);
           List<InvoiceEntity> invoices =  pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));
         }
-        Response<InvoiceResponse,Integer> response = new Response<>();
+        PagedResponse<InvoiceResponse,Integer> response = new PagedResponse<>();
         response.setResponses(responses);
         response.setTotalPage(pageAble.getTotalPages());
         return response;

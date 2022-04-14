@@ -1,4 +1,5 @@
 package com.peaksoft.accounting.db.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class TagEntity {
     private Long tag_id;
     private String nameTag;
     private String description;
+    @JsonIgnore
     @ManyToMany(targetEntity = ClientEntity.class,
             mappedBy = "tags", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ClientEntity> clients;

@@ -45,6 +45,7 @@ public class InvoiceEntity {
             inverseJoinColumns = {@JoinColumn(name = "product_id")})
     private List<ProductEntity> products;
     private Double sum;
+
     public void addClient(ClientEntity client){
         this.client = client;
         client.addInvoice(this);
@@ -56,6 +57,4 @@ public class InvoiceEntity {
         products.add(product);
         product.addInvoice(this);
     }
-
-
 }

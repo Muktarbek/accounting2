@@ -15,7 +15,9 @@ import java.util.List;
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/categories")
 public class CategoryController {
+
     private final CategoryService categoryService;
+
     @GetMapping("/income")
     @Operation(summary = "Get all categories", description = "Getting all existing categories")
     public List<CategoryResponse> getAllCategories(){

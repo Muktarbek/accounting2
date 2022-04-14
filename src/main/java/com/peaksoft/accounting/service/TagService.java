@@ -66,6 +66,7 @@ public class TagService {
     public TagEntity mapToUpdate(TagEntity tag, TagRequest tagRequest) {
         tag.setNameTag(tagRequest.getNameTag());
         tag.setDescription(tagRequest.getDescription());
+        tagRequestValidator.validate(tag,tagRequest);
         return tag;
     }
      //Response tag
