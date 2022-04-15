@@ -48,6 +48,7 @@ public class InvoiceController {
 
     @PutMapping("{id}")
     public InvoiceResponse update(@PathVariable Long id, @RequestBody @Valid InvoiceRequest invoiceRequest){
+        System.out.println(id);
         return invoiceService.update(invoiceRequest,id);
     }
 

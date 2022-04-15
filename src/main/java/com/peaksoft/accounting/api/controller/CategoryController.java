@@ -18,10 +18,14 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping("/income")
     @Operation(summary = "Get all categories", description = "Getting all existing categories")
     public List<CategoryResponse> getAllCategories(){
-        return categoryService.getAllCategories();
+        return categoryService.getAllCategories(true);
+    }
+    @GetMapping("/expense")
+    public List<CategoryResponse> getAllExpenseCategories(){
+        return categoryService.getAllCategories(false);
     }
     @GetMapping("{id}")
     @Operation(summary = "Get category", description = "Getting an existing category by \"id\" in application ")
