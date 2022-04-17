@@ -15,7 +15,8 @@ import java.util.List;
 public class TagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_sequence")
+    @SequenceGenerator(name = "tag_sequence", sequenceName = "tag_seq", allocationSize = 1)
     private Long tag_id;
     private String nameTag;
     private String description;

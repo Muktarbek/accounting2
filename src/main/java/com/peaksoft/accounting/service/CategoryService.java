@@ -18,8 +18,8 @@ import static java.lang.String.format;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryResponse> getAllCategories(){
-         return mapToResponse(categoryRepository.findAll());
+    public List<CategoryResponse> getAllCategories(boolean flag){
+         return mapToResponse(categoryRepository.findAllByIsIncomeCategory(flag));
     }
     public CategoryResponse save(CategoryRequest request){
         return mapToResponse(categoryRepository.save(mapToEntity(request,null)));
@@ -43,6 +43,7 @@ public class CategoryService {
                 .id(id)
                 .title(request.getCategoryTitle())
                 .description(request.getCategoryDescription())
+                .isIncomeCategory(request.getFlag())
                 .build();
     }
     public CategoryResponse mapToResponse(CategoryEntity category){

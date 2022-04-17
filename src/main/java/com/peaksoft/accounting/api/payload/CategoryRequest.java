@@ -15,4 +15,6 @@ public class CategoryRequest {
     private String categoryTitle;
     @NotNull
     private String categoryDescription;
+    @NotNull
+    private Boolean flag;
 }

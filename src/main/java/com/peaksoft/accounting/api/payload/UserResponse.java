@@ -20,7 +20,7 @@ public class UserResponse {
     private String address;
     private boolean enabled;
     private boolean deleted;
-    private BusinessAreaEntity business_area;
+    private BusinessAreaEntity businessArea;
     private CompanyEntity companyName;
     private LocalDateTime created;
     private boolean isActive;

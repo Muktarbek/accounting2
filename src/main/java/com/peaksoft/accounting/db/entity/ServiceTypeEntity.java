@@ -16,8 +16,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class ServiceTypeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long serviceType_id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_sequence")
+    @SequenceGenerator(name = "service_sequence", sequenceName = "service_seq", allocationSize = 1)
+    private Long id;
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
 

@@ -8,6 +8,6 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class BankAccountResponse {
     private String id;
-    private String bank_account_name;
-    private String bank_account_number;
+    private String bankAccountName;
+    private String bankAccountNumber;
 }
