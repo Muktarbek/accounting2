@@ -8,19 +8,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<InvoiceEntity,Long> {
+public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
     @Query("select i from InvoiceEntity i where (i.client.client_id =: clientId or :clientId is null)" +
             "and(i.dateOfCreation between :startDate and :endDate)" +
-            "and(i.status = :status or :status is null)" +
+            "and upper(i.status) like concat ('%',:status,'%')" +
             "and(i.id = :invoiceNumber or :invoiceNumber is null)" +
             "and i.client.income = :isIncome")
-    Page<InvoiceEntity> findAllByPagination(Long clientId, String status, LocalDateTime startDate, LocalDateTime endDate, Long invoiceNumber, Pageable pageable,Boolean isIncome);
-    @Query("select i from InvoiceEntity i where i.status = :status and i.endDate < :date")
+    Page<InvoiceEntity> findAllByPagination(Long clientId, @Param("status") String status, LocalDateTime startDate, LocalDateTime endDate, Long invoiceNumber, Pageable pageable,  Boolean isIncome);
 
-    List<InvoiceEntity> getAllByStatusAndDate(InvoiceStatus status,LocalDateTime date);
+    @Query("select i from InvoiceEntity i where i.status = :status and i.endDate < :date")
+    List<InvoiceEntity> getAllByStatusAndDate(InvoiceStatus status, LocalDateTime date);
 }
