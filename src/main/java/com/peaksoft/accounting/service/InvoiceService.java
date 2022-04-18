@@ -17,6 +17,7 @@ import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,86 +37,94 @@ public class InvoiceService {
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
 
-    public InvoiceResponse create(InvoiceRequest request,InvoiceEntity invoice){
-        invoiceRequestValidator.validate(invoice,request);
-        InvoiceEntity invoiceEntity = mapToEntity(request,null);
+    public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice) {
+        invoiceRequestValidator.validate(invoice, request);
+        InvoiceEntity invoiceEntity = mapToEntity(request, null);
         invoiceRepository.save(invoiceEntity);
         return mapToResponse(invoiceEntity);
     }
-    public InvoiceResponse getById(Long id){
-          Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
-          if(invoice.isEmpty()){
-              throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
-          }
-          return mapToResponse(invoice.get());
-    }
-    public InvoiceResponse deleteById(Long id){
+
+    public InvoiceResponse getById(Long id) {
         Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
-        if(invoice.isEmpty()){
+        if (invoice.isEmpty()) {
+            throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
+        }
+        return mapToResponse(invoice.get());
+    }
+
+    public InvoiceResponse deleteById(Long id) {
+        Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
+        if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
         invoiceRepository.deleteById(id);
         return mapToResponse(invoice.get());
     }
-    public InvoiceResponse update(InvoiceRequest request,Long id){
+
+    public InvoiceResponse update(InvoiceRequest request, Long id) {
         Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
-        if(invoice.isEmpty()){
+        if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
-        return mapToResponse(invoiceRepository.save(mapToEntity(request,id)));
+        return mapToResponse(invoiceRepository.save(mapToEntity(request, id)));
     }
-    public PagedResponse<InvoiceResponse,Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber,Boolean isIncome){
-        LocalDateTime startDate = LocalDateTime.parse(start,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endDate = LocalDateTime.parse(end,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-          List<InvoiceResponse> responses = new ArrayList<>();
-          Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId,status,startDate,endDate,invoiceNumber,PageRequest.of(page - 1, size),isIncome);
-          List<InvoiceEntity> invoices =  pageAble.getContent();
+
+    public PagedResponse<InvoiceResponse, Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber, Boolean isIncome) {
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        List<InvoiceResponse> responses = new ArrayList<>();
+        Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size), isIncome);
+        List<InvoiceEntity> invoices = pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));
         }
-        PagedResponse<InvoiceResponse,Integer> response = new PagedResponse<>();
+        PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
         response.setResponses(responses);
         response.setTotalPage(pageAble.getTotalPages());
         return response;
     }
-    public InvoiceResponse sendByTags(InvoiceRequest request,Long tagId){
-        Optional<TagEntity> tag =  tagRepository.findById(tagId);
-        if(tag.isEmpty()){
+
+    public InvoiceResponse sendByTags(InvoiceRequest request, Long tagId) {
+        Optional<TagEntity> tag = tagRepository.findById(tagId);
+        if (tag.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
         }
         TagEntity tagEntity = tag.get();
         for (ClientEntity client : tagEntity.getClients()) {
-            InvoiceEntity invoiceEntity = mapToEntity(request,null);
+            InvoiceEntity invoiceEntity = mapToEntity(request, null);
             invoiceEntity.addClient(client);
             invoiceRepository.save(invoiceEntity);
         }
-        return mapToResponse(mapToEntity(request,null));
+        return mapToResponse(mapToEntity(request, null));
     }
-    public InvoiceEntity mapToEntity(InvoiceRequest request,Long id){
-       InvoiceEntity invoice = new InvoiceEntity();
-       Double sum = 0d;
-       invoice.setId(id);
-       invoice.setTitle(request.getInvoiceTitle());
-       if(request.getClientId() != null){
-       Optional<ClientEntity> client = clientRepository.findById(request.getClientId());
-        if (client.isEmpty()) {
-            throw new ValidationException(ValidationExceptionType.CLIENT_NOT_FOUND);
+
+    public InvoiceEntity mapToEntity(InvoiceRequest request, Long id) {
+        InvoiceEntity invoice = new InvoiceEntity();
+        Double sum = 0d;
+        invoice.setId(id);
+        invoice.setTitle(request.getInvoiceTitle());
+        if (request.getClientId() != null) {
+            Optional<ClientEntity> client = clientRepository.findById(request.getClientId());
+            if (client.isEmpty()) {
+                throw new ValidationException(ValidationExceptionType.CLIENT_NOT_FOUND);
+            }
+            invoice.addClient(client.get());
         }
-        invoice.addClient(client.get());}
         for (Long productId : request.getProductsId()) {
-          Optional<ProductEntity> product =  productRepository.findById(productId);
-           if(product.isEmpty()){
-               throw new ValidationException((ValidationExceptionType.PRODUCT_NOT_FOUND));
-           }
-           invoice.addProduct(product.get());
-           sum += product.get().getPrice();
+            Optional<ProductEntity> product = productRepository.findById(productId);
+            if (product.isEmpty()) {
+                throw new ValidationException((ValidationExceptionType.PRODUCT_NOT_FOUND));
+            }
+            invoice.addProduct(product.get());
+            sum += product.get().getPrice();
         }
-       invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-       invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-       invoice.setSum(sum);
-       return invoice;
+        invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        invoice.setSum(sum);
+        return invoice;
     }
-    public InvoiceResponse mapToResponse(InvoiceEntity invoice){
+
+    public InvoiceResponse mapToResponse(InvoiceEntity invoice) {
         return InvoiceResponse.builder()
                 .invoiceId(invoice.getId())
                 .invoiceTitle(invoice.getTitle())
