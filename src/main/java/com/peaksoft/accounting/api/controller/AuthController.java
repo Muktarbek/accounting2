@@ -3,7 +3,7 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.config.jwt.JwtTokenUtil;
 import com.peaksoft.accounting.db.entity.UserEntity;
-import com.peaksoft.accounting.db.mapper.LoginMapper;
+import com.peaksoft.accounting.api.payload.LoginMapper;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.service.UserService;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;

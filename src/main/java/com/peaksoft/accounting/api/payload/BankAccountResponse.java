@@ -10,4 +10,5 @@ public class BankAccountResponse {
     private String id;
     private String bankAccountName;
     private String bankAccountNumber;
+    private String description;
 }

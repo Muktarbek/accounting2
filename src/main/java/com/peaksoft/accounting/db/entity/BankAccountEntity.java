@@ -17,4 +17,5 @@ public class BankAccountEntity {
     private Long id;
     private String bankAccountName;
     private String bankAccountNumber;
+    private String description;
 }
