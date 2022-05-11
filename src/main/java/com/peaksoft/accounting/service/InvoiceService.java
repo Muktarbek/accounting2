@@ -11,13 +11,13 @@ import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.db.repository.TagRepository;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -74,6 +74,21 @@ public class InvoiceService {
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<InvoiceResponse> responses = new ArrayList<>();
         Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size), isIncome);
+        List<InvoiceEntity> invoices = pageAble.getContent();
+        for (InvoiceEntity invoice : invoices) {
+            responses.add(mapToResponse(invoice));
+        }
+        PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
+        response.setResponses(responses);
+        response.setTotalPage(pageAble.getTotalPages());
+        return response;
+    }
+
+        public PagedResponse<InvoiceResponse, Integer> findAllTransaction(int page, int size, String start, String end, TypeOfPay typeOfPay, Boolean isIncome) {
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        List<InvoiceResponse> responses = new ArrayList<>();
+        Page<InvoiceEntity> pageAble = invoiceRepository.findAllTransaction(startDate,endDate,typeOfPay,PageRequest.of(page-1,size),isIncome);
         List<InvoiceEntity> invoices = pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));

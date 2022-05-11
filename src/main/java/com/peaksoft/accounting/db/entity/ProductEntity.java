@@ -28,10 +28,12 @@ public class ProductEntity {
     @JoinColumn(name = "service_type_id")
     @JsonIgnore
     private ServiceTypeEntity serviceType;
+
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private CategoryEntity category;
+
     private String description;
     private Boolean isIncome = true;
     @ManyToMany(targetEntity = InvoiceEntity.class,
