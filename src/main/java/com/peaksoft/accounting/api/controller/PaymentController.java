@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/payments")
+@CrossOrigin
 public class PaymentController {
 
     private final PaymentService paymentService;

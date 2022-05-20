@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/tags")
+@CrossOrigin
 public class TagController {
 
     private final TagService tagService;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/products")
+@CrossOrigin
 public class ProductController {
 
     private final ProductService productService;

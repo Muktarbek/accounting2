@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/categories")
+@CrossOrigin
 public class CategoryController {
 
     private final CategoryService categoryService;
