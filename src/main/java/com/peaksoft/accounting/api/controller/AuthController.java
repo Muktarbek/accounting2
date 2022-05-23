@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/myaccount/auth")
+@CrossOrigin
 public class AuthController {
 
     private final UserService userService;

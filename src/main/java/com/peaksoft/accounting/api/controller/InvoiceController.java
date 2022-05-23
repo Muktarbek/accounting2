@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/invoices")
+@CrossOrigin
 public class InvoiceController {
 
     private final InvoiceService invoiceService;

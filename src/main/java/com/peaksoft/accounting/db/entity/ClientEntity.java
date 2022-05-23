@@ -32,6 +32,7 @@ public class ClientEntity {
     private boolean income = true;
     @CreatedDate
     private LocalDateTime created;
+
     @JsonIgnore
     @ManyToMany(targetEntity = TagEntity.class, cascade = {CascadeType.PERSIST, CascadeType.DETACH,
             CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
@@ -39,6 +40,7 @@ public class ClientEntity {
             joinColumns = {@JoinColumn(name = "clients_id")},
             inverseJoinColumns = {@JoinColumn(name = "tags_id")})
     private List<TagEntity> tags;
+
     @JsonIgnore
     @OneToMany(targetEntity = InvoiceEntity.class,
             mappedBy = "client", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})

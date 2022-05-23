@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/myaccount/sellers")
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@CrossOrigin
 public class SellerController {
 
 

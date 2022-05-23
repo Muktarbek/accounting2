@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/api/myaccount/clients")
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@CrossOrigin
 public class ClientController {
 
     private final ClientService clientService;
