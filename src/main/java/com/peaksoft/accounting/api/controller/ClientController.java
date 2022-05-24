@@ -3,6 +3,7 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.ClientRequest;
 import com.peaksoft.accounting.api.payload.ClientResponse;
 import com.peaksoft.accounting.api.payload.ClientResponseView;
+import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ public class ClientController {
     @PostMapping
     @Operation(summary = "Create client", description = "Creating a new client")
     public ClientResponse create(@RequestBody @Valid ClientRequest request, ClientEntity client) {
-        return clientService.create(client,request);
+        return clientService.create(client, request);
     }
 
     @PutMapping("{id}")
@@ -47,9 +48,9 @@ public class ClientController {
 
     @GetMapping
     @Operation(summary = "Get all Clients", description = "Getting all existing clients and search ")
-    public ClientResponseView getAllClients(@RequestParam(value = "name",required = false) String name,
-                                         @RequestParam Integer page,
-                                         @RequestParam Integer size){
-        return clientService.getAllClients(name,page, size);
+    public PagedResponse<ClientResponse, Integer> getAllClients(@RequestParam(value = "name", required = false) String name,
+                                                                @RequestParam Integer page,
+                                                                @RequestParam Integer size) {
+        return clientService.getAllClients(name, page, size);
     }
 }
