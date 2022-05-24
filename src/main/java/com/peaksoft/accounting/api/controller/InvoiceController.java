@@ -55,9 +55,10 @@ public class InvoiceController {
             @RequestParam int size,
             @RequestParam(required = false, defaultValue = "2000-01-01 00:00:00") String startDate,
             @RequestParam(required = false, defaultValue = "2100-01-01 00:00:00") String endDate,
-            @RequestParam(value = "typeOfPay", required = false) TypeOfPay typeOfPay,
+            @RequestParam(value = "typeOfPay",required = false) TypeOfPay typeOfPay,
+            @RequestParam(value = "category", required = false) String category,
             @RequestParam(required = false) Boolean isIncome) {
-        return invoiceService.findAllTransaction(page, size, startDate, endDate,typeOfPay ,isIncome);
+        return invoiceService.findAllTransaction(page, size,startDate,endDate,category,typeOfPay,isIncome);
     }
 
     @PutMapping("{id}")

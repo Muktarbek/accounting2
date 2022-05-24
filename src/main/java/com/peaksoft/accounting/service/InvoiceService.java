@@ -34,6 +34,7 @@ public class InvoiceService {
     private final ClientService clientService;
     private final ProductService productService;
     private final ProductRepository productRepository;
+    private final PaymentService paymentService;
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
 
@@ -84,11 +85,11 @@ public class InvoiceService {
         return response;
     }
 
-        public PagedResponse<InvoiceResponse, Integer> findAllTransaction(int page, int size, String start, String end, TypeOfPay typeOfPay, Boolean isIncome) {
+        public PagedResponse<InvoiceResponse, Integer> findAllTransaction(int page, int size, String start, String end,String category, TypeOfPay typeOfPay, Boolean isIncome) {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<InvoiceResponse> responses = new ArrayList<>();
-        Page<InvoiceEntity> pageAble = invoiceRepository.findAllTransaction(startDate,endDate,typeOfPay,PageRequest.of(page-1,size),isIncome);
+        Page<InvoiceEntity> pageAble = invoiceRepository.findAllTransaction(startDate,endDate,typeOfPay,category.toUpperCase(),PageRequest.of(page-1,size),isIncome);
         List<InvoiceEntity> invoices = pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));

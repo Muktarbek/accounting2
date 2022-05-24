@@ -2,9 +2,11 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.PaymentRequest;
 import com.peaksoft.accounting.api.payload.PaymentResponse;
+import com.peaksoft.accounting.api.payload.ProductResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.PaymentEntity;
+import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
