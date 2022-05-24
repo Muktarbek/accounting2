@@ -1,8 +1,6 @@
 package com.peaksoft.accounting.service;
 
-import com.peaksoft.accounting.api.payload.ClientRequest;
-import com.peaksoft.accounting.api.payload.ClientResponse;
-import com.peaksoft.accounting.api.payload.ClientResponseView;
+import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
@@ -11,6 +9,7 @@ import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.SellerAndClientRequestValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,11 +58,13 @@ public class ClientService {
         return mapToResponse(clientRepository.findById(id).get());
     }
 
-    public ClientResponseView getAllClients(String name, Integer page, Integer size){
-        ClientResponseView responseView = new ClientResponseView();
-        Pageable pageable = PageRequest.of(page, size);
-        responseView.setClients(map(search(name, pageable)));
-        return responseView;
+    public PagedResponse<ClientResponse,Integer> getAllClients(String name, int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable);
+        PagedResponse<ClientResponse,Integer> response = new PagedResponse<>();
+        response.setResponses((map(search(name,pageable))));
+        response.setTotalPage(pages.getTotalPages());
+        return response;
     }
 
     public ClientEntity mapToEntity(ClientRequest clientRequest) {
