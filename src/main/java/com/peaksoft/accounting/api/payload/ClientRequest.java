@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
-@Getter@Setter
+@Getter
+@Setter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ClientRequest {
     @NotNull
@@ -17,5 +19,5 @@ public class ClientRequest {
     private String email;
     private String phoneNumber;
     private String address;
-    private Long tags;
+    private List<Long> tagsId;
 }
