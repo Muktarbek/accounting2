@@ -21,7 +21,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     Optional<ClientEntity> findByCompanyName(String tagName);
 
-    Optional<UserEntity> findByEmail(String email);
+    Optional<ClientEntity> findByEmail(String email);
 
     @Override
     Optional<ClientEntity> findById(Long aLong);

@@ -1,8 +1,7 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.peaksoft.accounting.enums.InvoiceStatus;
-import com.peaksoft.accounting.enums.PaymentMethod;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -10,7 +9,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "payment")
@@ -26,7 +24,7 @@ public class PaymentEntity {
     private LocalDateTime paymentDate;
     private String paymentFile;
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private TypeOfPay typeOfPay;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bank_account_id")
     private BankAccountEntity bankAccount;

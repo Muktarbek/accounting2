@@ -2,9 +2,11 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.PaymentRequest;
 import com.peaksoft.accounting.api.payload.PaymentResponse;
+import com.peaksoft.accounting.api.payload.ProductResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.PaymentEntity;
+import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
@@ -82,7 +84,7 @@ public class PaymentService {
         payment.setPaymentFile(paymentRequest.getPaymentFile());
         payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
         BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
-        payment.setPaymentMethod(paymentRequest.getPaymentMethod());
+        payment.setTypeOfPay(paymentRequest.getTypeOfPay());
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
         payment.setCreated(LocalDateTime.now());
@@ -93,7 +95,7 @@ public class PaymentService {
         payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         payment.setPaymentFile(paymentRequest.getPaymentFile());
         payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
-        payment.setPaymentMethod(paymentRequest.getPaymentMethod());
+        payment.setTypeOfPay(paymentRequest.getTypeOfPay());
         BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
@@ -106,7 +108,7 @@ public class PaymentService {
                 .bankAccount(payment.getBankAccount())
                 .paymentDate(payment.getPaymentDate())
                 .paymentFile(payment.getPaymentFile())
-                .paymentMethod(payment.getPaymentMethod())
+                .typeOfPay(payment.getTypeOfPay())
                 .amountOfMoney(payment.getAmountOfMoney())
                 .comment(payment.getComment())
                 .created(payment.getCreated())

@@ -47,12 +47,14 @@ public class ProductService {
     public ProductResponse update(ProductRequest request,Long id,boolean flag){
         return mapToResponse(productRepository.save(mapToEntity(request,id,flag)));
     }
+
     public ProductResponse getById(Long id){
         return mapToResponse(productRepository.findById(id)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(format("Product with id - %s, not found", id))
                 ));
     }
+
     public ProductResponse deleteById(Long id){
         Optional<ProductEntity> optionalProduct = productRepository.findById(id);
         if(optionalProduct.isEmpty()){

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.enums.PaymentMethod;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class PaymentResponse {
     private Long paymentId;
     private LocalDateTime paymentDate;
     private String paymentFile;
-    private PaymentMethod paymentMethod;
+    private TypeOfPay typeOfPay;
     private BankAccountEntity bankAccount;
     private Double amountOfMoney;
     private String comment;

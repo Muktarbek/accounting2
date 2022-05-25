@@ -10,4 +10,5 @@ import lombok.Data;
 public class BankAccountRequest {
     private String bankAccountName;
     private String bankAccountNumber;
+    private String description;
 }

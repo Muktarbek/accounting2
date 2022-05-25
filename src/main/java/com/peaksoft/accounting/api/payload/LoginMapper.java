@@ -1,4 +1,4 @@
-package com.peaksoft.accounting.db.mapper;
+package com.peaksoft.accounting.api.payload;
 
 import com.peaksoft.accounting.api.payload.LoginResponse;
 import com.peaksoft.accounting.db.entity.RoleEntity;
