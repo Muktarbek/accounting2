@@ -2,6 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.ClientEntity;
+import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.TagRepository;
@@ -29,7 +30,7 @@ public class ClientService {
     private final SellerAndClientRequestValidator validator;
 
     public ClientResponse create(ClientEntity client, ClientRequest request) {
-        validator.validate(client,request);
+        validator.validate(client, request);
         ClientEntity clientEntity = mapToEntity(request);
         clientRepository.save(clientEntity);
         return mapToResponse(clientEntity);
@@ -58,18 +59,20 @@ public class ClientService {
         return mapToResponse(clientRepository.findById(id).get());
     }
 
-    public PagedResponse<ClientResponse,Integer> getAllClients(String name, int page, int size){
-        Pageable pageable = PageRequest.of(page,size);
+    public PagedResponse<ClientResponse, Integer> getAllClients(String name, Long tagId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable);
-        PagedResponse<ClientResponse,Integer> response = new PagedResponse<>();
-        response.setResponses((map(search(name,pageable))));
+        PagedResponse<ClientResponse, Integer> response = new PagedResponse<>();
+        response.setResponses((map(search(name, tagId, pageable))));
         response.setTotalPage(pages.getTotalPages());
         return response;
     }
 
     public ClientEntity mapToEntity(ClientRequest clientRequest) {
         ClientEntity client = new ClientEntity();
-        List<TagEntity> tagsList = new ArrayList<>();
+        List<TagEntity> tags = new ArrayList<>();
+        tagRepository.findAll().forEach(tags::add);
+        client.setTags(tags);
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
@@ -77,22 +80,19 @@ public class ClientService {
         client.setCreated(LocalDateTime.now());
         client.setEmail(clientRequest.getEmail());
         client.setAddress(clientRequest.getAddress());
-        TagEntity tags = tagRepository.findById(clientRequest.getTags()).get();
-        tagsList.add(tags);
-        client.setTags(tagsList);
+
         return client;
     }
 
     public ClientEntity mapToUpdate(ClientEntity client, ClientRequest clientRequest) {
-        List<TagEntity> tagsList = new ArrayList<>();
+        List<TagEntity> tags = new ArrayList<>();
+        tagRepository.findAll().forEach(tags::add);
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setAddress(clientRequest.getAddress());
         client.setEmail(clientRequest.getEmail());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
-        TagEntity tags = tagRepository.findById(clientRequest.getTags()).get();
-        tagsList.add(tags);
-        client.setTags(tagsList);
+        client.setTags(tags);
         return client;
     }
 
@@ -124,8 +124,8 @@ public class ClientService {
         return clientResponses;
     }
 
-    public List<ClientEntity> search(String name, Pageable pageable) {
+    public List<ClientEntity> search(String name, Long tagId, Pageable pageable) {
         String text = name == null ? "" : name;
-        return clientRepository.search(text.toUpperCase(), pageable);
+        return clientRepository.search(text.toUpperCase(), tagId, pageable);
     }
 }

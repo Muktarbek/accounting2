@@ -49,8 +49,9 @@ public class ClientController {
     @GetMapping
     @Operation(summary = "Get all Clients", description = "Getting all existing clients and search ")
     public PagedResponse<ClientResponse, Integer> getAllClients(@RequestParam(value = "name", required = false) String name,
+                                                                @RequestParam(required = false ) Long tagId,
                                                                 @RequestParam Integer page,
                                                                 @RequestParam Integer size) {
-        return clientService.getAllClients(name, page, size);
+        return clientService.getAllClients(name, tagId, page, size);
     }
 }

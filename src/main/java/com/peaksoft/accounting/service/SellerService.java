@@ -1,4 +1,5 @@
 package com.peaksoft.accounting.service;
+
 import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
@@ -57,11 +58,11 @@ public class SellerService {
 
     public PagedResponse<SellerResponse, Integer> findAll(int page, int size) {
         List<SellerResponse> responses = new ArrayList<>();
-        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page-1,size));
+        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page - 1, size));
         for (ClientEntity seller : pagination) {
             responses.add(mapToResponse(seller));
         }
-        PagedResponse<SellerResponse,Integer> response = new PagedResponse<>();
+        PagedResponse<SellerResponse, Integer> response = new PagedResponse<>();
         response.setResponses(responses);
         response.setTotalPage(pagination.getTotalPages());
         return response;
@@ -86,7 +87,7 @@ public class SellerService {
         client.setEmail(sellerRequest.getEmail());
         client.setPhoneNumber(sellerRequest.getPhoneNumber());
         client.setSellerSurname(sellerRequest.getSellerSurname());
-        validator.validate(client,sellerRequest);
+        validator.validate(client, sellerRequest);
         return client;
     }
 
