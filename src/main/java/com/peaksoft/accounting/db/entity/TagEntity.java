@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,4 +25,13 @@ public class TagEntity {
     @ManyToMany(targetEntity = ClientEntity.class,
             mappedBy = "tags", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<ClientEntity> clients;
+
+
+    public void addClient(ClientEntity client) {
+        if(clients == null){
+            clients = new ArrayList<>();
+        }
+        clients.add(client);
+        client.addTags(this);
+    }
 }

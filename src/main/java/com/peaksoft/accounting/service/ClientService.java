@@ -70,9 +70,6 @@ public class ClientService {
 
     public ClientEntity mapToEntity(ClientRequest clientRequest) {
         ClientEntity client = new ClientEntity();
-        List<TagEntity> tags = new ArrayList<>();
-        tagRepository.findAll().forEach(tags::add);
-        client.setTags(tags);
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
@@ -80,19 +77,29 @@ public class ClientService {
         client.setCreated(LocalDateTime.now());
         client.setEmail(clientRequest.getEmail());
         client.setAddress(clientRequest.getAddress());
-
+        for (Long tagsId : clientRequest.getTagsId()) {
+            Optional<TagEntity> tags = tagRepository.findById(tagsId);
+            if (tags.isEmpty()) {
+                throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
+            }
+            client.addTags(tags.get());
+        }
         return client;
     }
 
     public ClientEntity mapToUpdate(ClientEntity client, ClientRequest clientRequest) {
-        List<TagEntity> tags = new ArrayList<>();
-        tagRepository.findAll().forEach(tags::add);
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setAddress(clientRequest.getAddress());
         client.setEmail(clientRequest.getEmail());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
-        client.setTags(tags);
+        for (Long tagsId : clientRequest.getTagsId()) {
+            Optional<TagEntity> tags = tagRepository.findById(tagsId);
+            if (tags.isEmpty()) {
+                throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
+            }
+            client.addTags(tags.get());
+        }
         return client;
     }
 

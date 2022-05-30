@@ -46,6 +46,13 @@ public class ClientEntity {
             mappedBy = "client", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private List<InvoiceEntity> invoices;
 
+    public void addTags(TagEntity tag) {
+        if(tags == null){
+            tags = new ArrayList<>();
+        }
+        tags.add(tag);
+    }
+
     public void addInvoice(InvoiceEntity invoice){
         if(invoices == null) {
             invoices = new ArrayList<>();
