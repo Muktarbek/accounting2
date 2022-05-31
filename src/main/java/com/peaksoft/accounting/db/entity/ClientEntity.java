@@ -43,22 +43,29 @@ public class ClientEntity {
 
     @JsonIgnore
     @OneToMany(targetEntity = InvoiceEntity.class,
-            mappedBy = "client", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+            mappedBy = "client", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<InvoiceEntity> invoices;
 
     public void addTags(TagEntity tag) {
-        if(tags == null){
+        if (tags == null) {
             tags = new ArrayList<>();
         }
         tags.add(tag);
     }
 
-    public void addInvoice(InvoiceEntity invoice){
-        if(invoices == null) {
+    public void removeTags(TagEntity tag) {
+        if (tag.getTag_id().equals(tag.getTag_id())) {
+            tags.remove(tag);
+        }
+    }
+
+    public void addInvoice(InvoiceEntity invoice) {
+        if (invoices == null) {
             invoices = new ArrayList<>();
         }
         invoices.add(invoice);
-        }
+    }
+
     public Long getClient_id() {
         return client_id;
     }

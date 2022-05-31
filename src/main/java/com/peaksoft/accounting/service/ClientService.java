@@ -95,9 +95,7 @@ public class ClientService {
         client.setPhoneNumber(clientRequest.getPhoneNumber());
         for (Long tagsId : clientRequest.getTagsId()) {
             Optional<TagEntity> tags = tagRepository.findById(tagsId);
-            if (tags.isEmpty()) {
-                throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
-            }
+            client.removeTags(tags.get());
             client.addTags(tags.get());
         }
         return client;
