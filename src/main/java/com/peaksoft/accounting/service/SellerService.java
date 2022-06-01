@@ -87,7 +87,6 @@ public class SellerService {
         client.setEmail(sellerRequest.getEmail());
         client.setPhoneNumber(sellerRequest.getPhoneNumber());
         client.setSellerSurname(sellerRequest.getSellerSurname());
-        validator.validate(client, sellerRequest);
         return client;
     }
 
