@@ -18,5 +18,6 @@ public class InvoiceRequest {
     private Long clientId;
     private String startDate;
     private String endDate;
+    private String description;
     private List<Long> productsId;
 }

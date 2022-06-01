@@ -117,6 +117,7 @@ public class InvoiceService {
     public InvoiceEntity mapToEntity(InvoiceRequest request, Long id) {
         InvoiceEntity invoice = new InvoiceEntity();
         Double sum = 0d;
+        invoice.setDescription(request.getDescription());
         invoice.setId(id);
         invoice.setTitle(request.getInvoiceTitle());
         if (request.getClientId() != null) {
@@ -143,6 +144,7 @@ public class InvoiceService {
     public InvoiceResponse mapToResponse(InvoiceEntity invoice) {
         return InvoiceResponse.builder()
                 .invoiceId(invoice.getId())
+                .description(invoice.getDescription())
                 .invoiceTitle(invoice.getTitle())
                 .client(clientService.mapToResponse(invoice.getClient()))
                 .startDate(invoice.getStartDate())

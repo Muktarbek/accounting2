@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @OpenAPIDefinition
 @EnableScheduling
 public class AccountingApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(AccountingApplication.class, args);
     }
