@@ -35,6 +35,8 @@ public class InvoiceEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status = InvoiceStatus.NOT_PAID;
     @Fetch(FetchMode.SUBSELECT)
@@ -73,16 +75,17 @@ public class InvoiceEntity {
         this.sum = sum;
     }
 
-    public InvoiceEntity(Long id, String title, LocalDateTime dateOfCreation, ClientEntity client, LocalDateTime startDate, LocalDateTime endDate, InvoiceStatus status, Collection<ProductEntity> products, Collection<PaymentEntity> payments, Double sum) {
+    public InvoiceEntity(Long id, String title, LocalDateTime dateOfCreation, ClientEntity client, LocalDateTime startDate, LocalDateTime endDate, String description, InvoiceStatus status, List<ProductEntity> products, List<PaymentEntity> payments, Double sum) {
         this.id = id;
         this.title = title;
         this.dateOfCreation = dateOfCreation;
         this.client = client;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.description = description;
         this.status = status;
-        this.products = (List<ProductEntity>) products;
-        this.payments = (List<PaymentEntity>) payments;
+        this.products = products;
+        this.payments = payments;
         this.sum = sum;
     }
 }

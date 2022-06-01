@@ -22,5 +22,6 @@ public class InvoiceResponse {
     private LocalDateTime endDate;
     private List<ProductResponse> products;
     private String status;
+    private String description;
     private Double sum;
 }
