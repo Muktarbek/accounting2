@@ -16,5 +16,5 @@ public class ProductResponse {
     private ServiceTypeResponse serviceType;
     private CategoryResponse category;
     private String productDescription;
-    private int remindDay;
+    private ReminderResponse reminderResponse;
 }

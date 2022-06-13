@@ -1,6 +1,7 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.peaksoft.accounting.enums.ReminderType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,6 +52,8 @@ public class ProductEntity {
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "reminderId")
     private ReminderEntity reminder;
+
+    private ReminderType reminderType;
 
     public void addInvoice(InvoiceEntity invoice) {
         if (invoices == null) {

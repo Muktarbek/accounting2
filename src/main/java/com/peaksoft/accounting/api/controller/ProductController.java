@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
@@ -47,5 +49,11 @@ public class ProductController {
     public ProductResponse deleteById(@PathVariable Long id){
         System.out.println(id);
         return productService.deleteById(id);
+    }
+
+    @Operation(summary = "Notification", description = " ")
+    @GetMapping("notification")
+    public List<ProductResponse> getNotification(){
+        return productService.getNotification();
     }
 }
