@@ -30,7 +30,7 @@ public class InvoiceController {
     public PagedResponse<InvoiceResponse, Integer> getAllClientInvoices(@RequestParam int page,
                                                                         @RequestParam int size,
                                                                         @RequestParam(required = false) Long clientId,
-                                                                        @RequestParam(value = "status", required = false,defaultValue = "") String status,
+                                                                        @RequestParam(value = "status", required = false, defaultValue = "") String status,
                                                                         @RequestParam(required = false, defaultValue = "2000-01-01 00:00:00") String startDate,
                                                                         @RequestParam(required = false, defaultValue = "2100-01-01 00:00:00") String endDate,
                                                                         @RequestParam(required = false) Long invoiceNumber) {
@@ -47,18 +47,6 @@ public class InvoiceController {
             @RequestParam(required = false, defaultValue = "2100-01-01 00:00:00") String endDate,
             @RequestParam(required = false) Long invoiceNumber) {
         return invoiceService.findAll(page, size, clientId, status, startDate, endDate, invoiceNumber, false);
-    }
-
-    @GetMapping("/transaction")
-    public PagedResponse<InvoiceResponse, Integer> getAllTransaction(
-            @RequestParam int page,
-            @RequestParam int size,
-            @RequestParam(required = false, defaultValue = "2000-01-01 00:00:00") String startDate,
-            @RequestParam(required = false, defaultValue = "2100-01-01 00:00:00") String endDate,
-            @RequestParam(value = "typeOfPay",required = false) TypeOfPay typeOfPay,
-            @RequestParam(value = "category", required = false) String category,
-            @RequestParam(required = false) Boolean isIncome) {
-        return invoiceService.findAllTransaction(page, size,startDate,endDate,category,typeOfPay,isIncome);
     }
 
     @PutMapping("{id}")

@@ -84,22 +84,6 @@ public class InvoiceService {
         response.setTotalPage(pageAble.getTotalPages());
         return response;
     }
-
-        public PagedResponse<InvoiceResponse, Integer> findAllTransaction(int page, int size, String start, String end,String category, TypeOfPay typeOfPay, Boolean isIncome) {
-        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        List<InvoiceResponse> responses = new ArrayList<>();
-        Page<InvoiceEntity> pageAble = invoiceRepository.findAllTransaction(startDate,endDate,typeOfPay,category.toUpperCase(),PageRequest.of(page-1,size),isIncome);
-        List<InvoiceEntity> invoices = pageAble.getContent();
-        for (InvoiceEntity invoice : invoices) {
-            responses.add(mapToResponse(invoice));
-        }
-        PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
-        response.setResponses(responses);
-        response.setTotalPage(pageAble.getTotalPages());
-        return response;
-    }
-
     public InvoiceResponse sendByTags(InvoiceRequest request, Long tagId) {
         Optional<TagEntity> tag = tagRepository.findById(tagId);
         if (tag.isEmpty()) {
