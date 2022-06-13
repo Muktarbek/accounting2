@@ -21,8 +21,8 @@ import java.util.List;
 @Builder
 public class InvoiceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_sequence")
-    @SequenceGenerator(name = "invoice_sequence", sequenceName = "invoice_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoices_id_seq")
+    @SequenceGenerator(name = "invoices_id_seq", sequenceName = "invoices_id_seq", allocationSize = 1)
     private Long id;
     private String title;
     private LocalDateTime dateOfCreation = LocalDateTime.now();

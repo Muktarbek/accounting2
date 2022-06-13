@@ -18,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,14 +82,19 @@ public class ProductService {
                 .build();
     }
     public ProductResponse mapToResponse(ProductEntity product){
-        return ProductResponse.builder()
-                .productId(product.getId())
-                .productTitle(product.getTitle())
-                .productPrice(product.getPrice())
-                .serviceType(mapToServiceResponse(product.getServiceType()))
-                .category(categoryService.mapToResponse(product.getCategory()))
-                .productDescription(product.getDescription())
-                .build();
+        ProductResponse productResponse= new ProductResponse();
+        productResponse.setProductId(product.getId());
+        productResponse.setProductDescription(product.getDescription());
+        productResponse.setProductPrice(product.getPrice());
+        productResponse.setProductTitle(product.getTitle());
+        productResponse.setServiceType(mapToServiceResponse(product.getServiceType()));
+        productResponse.setCategory(categoryService.mapToResponse(product.getCategory()));
+        if (product.getReminder() != null){
+            if (product.getReminder().getDateOfPayment().plus(product.getReminder().getDay(), ChronoUnit.DAYS).isEqual(LocalDateTime.now())){
+
+            }
+        }
+        return null;
     }
     public List<ProductResponse> mapToResponse(List<ProductEntity> products){
         List<ProductResponse> responses = new ArrayList<>();
