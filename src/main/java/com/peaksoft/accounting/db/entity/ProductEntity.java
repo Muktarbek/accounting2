@@ -36,6 +36,7 @@ public class ProductEntity {
 
     private String description;
     private Boolean isIncome = true;
+
     @ManyToMany(targetEntity = InvoiceEntity.class,
             mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH},
             fetch = FetchType.EAGER)
