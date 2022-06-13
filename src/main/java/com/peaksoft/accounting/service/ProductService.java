@@ -88,7 +88,9 @@ public class ProductService {
         productResponse.setProductTitle(product.getTitle());
         productResponse.setServiceType(mapToServiceResponse(product.getServiceType()));
         productResponse.setCategory(categoryService.mapToResponse(product.getCategory()));
-        productResponse.setReminderResponse(reminderService.mapToResponse(product.getReminder()));
+        if (product.getReminder() != null) {
+            productResponse.setReminderResponse(reminderService.mapToResponse(product.getReminder()));
+        }
         return null;
     }
 
@@ -109,7 +111,7 @@ public class ProductService {
 
     public List<ProductResponse> getNotification() {
         List<ProductResponse> getNotification = new ArrayList<>();
-        for (ProductEntity p : productRepository.findAll()) {
+        for (ProductEntity p : productRepository.findAllByIsIncome(false)) {
             if (p.getReminder() != null){
                 if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED){
                     getNotification.add(mapToResponse(p));

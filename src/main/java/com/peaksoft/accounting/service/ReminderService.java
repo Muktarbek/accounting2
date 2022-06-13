@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ReminderService {
-    private ReminderRepository reminderRepository;
-    private ProductRepository productRepository;
+    private final ReminderRepository reminderRepository;
+    private final ProductRepository productRepository;
 
     public ReminderResponse createReminder(ReminderRequest reminderRequest){
         ProductEntity product = productRepository.getById(reminderRequest.getProductId());
@@ -26,12 +26,12 @@ public class ReminderService {
         return ReminderResponse.builder()
                 .id(reminderEntity.getId())
                 .day(reminderEntity.getDay())
-                .localDateTime(reminderEntity.getDateOfPayment()).build();
+                .localDate(reminderEntity.getDateOfPayment()).build();
     }
 
     public ReminderEntity mapToEntity(ReminderRequest reminderRequest){
         return ReminderEntity.builder()
-                .dateOfPayment(reminderRequest.getLocalDateTime())
+                .dateOfPayment(reminderRequest.getLocalDate())
                 .day(reminderRequest.getDay()).build();
     }
 

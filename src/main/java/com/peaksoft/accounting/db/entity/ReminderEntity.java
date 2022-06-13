@@ -3,6 +3,7 @@ package com.peaksoft.accounting.db.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +17,6 @@ public class ReminderEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reminder_id_seq")
     @SequenceGenerator(name = "reminder_id_seq", sequenceName = "reminder_id_seq", allocationSize = 1)
     private Long id;
-    private LocalDateTime dateOfPayment;
+    private LocalDate dateOfPayment;
     private int day;
 }

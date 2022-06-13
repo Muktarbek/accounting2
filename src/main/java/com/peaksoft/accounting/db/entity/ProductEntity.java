@@ -53,7 +53,7 @@ public class ProductEntity {
     @JoinColumn(name = "reminderId")
     private ReminderEntity reminder;
 
-    private ReminderType reminderType;
+    private ReminderType reminderType = ReminderType.PAID;
 
     public void addInvoice(InvoiceEntity invoice) {
         if (invoices == null) {

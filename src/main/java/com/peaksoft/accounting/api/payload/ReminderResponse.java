@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,6 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ReminderResponse {
     private Long id;
-    private LocalDateTime localDateTime;
+    private LocalDate localDate;
     private int day;
 }
