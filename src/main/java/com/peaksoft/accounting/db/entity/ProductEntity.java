@@ -22,18 +22,12 @@ public class ProductEntity {
     private Long id;
     private String title;
     private double price;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "service_type_id")
     @JsonIgnore
     private ServiceTypeEntity serviceType;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private CategoryEntity category;
@@ -42,10 +36,7 @@ public class ProductEntity {
     private Boolean isIncome = true;
 
     @ManyToMany(targetEntity = InvoiceEntity.class,
-            mappedBy = "products", cascade = {CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.DETACH},
+            mappedBy = "products", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH},
             fetch = FetchType.EAGER)
     private List<InvoiceEntity> invoices;
 
