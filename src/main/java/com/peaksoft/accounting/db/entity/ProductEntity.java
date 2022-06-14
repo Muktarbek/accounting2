@@ -17,8 +17,8 @@ import java.util.List;
 @Builder
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_id_seq")
-    @SequenceGenerator(name = "products_id_seq", sequenceName = "products_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq")
+    @SequenceGenerator(name = "products_gen", sequenceName = "products_seq", allocationSize = 1)
     private Long id;
     private String title;
     private double price;

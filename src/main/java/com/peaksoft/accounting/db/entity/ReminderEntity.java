@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReminderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reminder_id_seq")
-    @SequenceGenerator(name = "reminder_id_seq", sequenceName = "reminder_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reminder_seq")
+    @SequenceGenerator(name = "reminder_gen", sequenceName = "reminder_seq", allocationSize = 1)
     private Long id;
     private LocalDate dateOfPayment;
     private int day;
