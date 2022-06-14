@@ -91,7 +91,7 @@ public class ProductService {
         if (product.getReminder() != null) {
             productResponse.setReminderResponse(reminderService.mapToResponse(product.getReminder()));
         }
-        return null;
+        return productResponse;
     }
 
     public List<ProductResponse> mapToResponse(List<ProductEntity> products) {

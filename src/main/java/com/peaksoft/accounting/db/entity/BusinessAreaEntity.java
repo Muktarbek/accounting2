@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Setter
 public class BusinessAreaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "business_area_business_area_id_seq")
-    @SequenceGenerator(name = "business_area_business_area_id_seq", sequenceName = "business_area_business_area_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "business_area_seq")
+    @SequenceGenerator(name = "business_area_gen", sequenceName = "business_area_seq", allocationSize = 1)
     private Long business_area_id;
     private String area;
 }
