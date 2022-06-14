@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ProductResponse {
     private Long productId;
@@ -17,5 +16,5 @@ public class ProductResponse {
     private ServiceTypeResponse serviceType;
     private CategoryResponse category;
     private String productDescription;
-
+    private ReminderResponse reminderResponse;
 }

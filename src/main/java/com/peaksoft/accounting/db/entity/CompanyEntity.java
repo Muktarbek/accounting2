@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Setter
 public class CompanyEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_sequence")
-    @SequenceGenerator(name = "company_sequence", sequenceName = "company_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companies_company_id_seq")
+    @SequenceGenerator(name = "companies_company_id_seq", sequenceName = "companies_company_id_seq", allocationSize = 1)
     private Long company_id;
     private String companyName;
 }

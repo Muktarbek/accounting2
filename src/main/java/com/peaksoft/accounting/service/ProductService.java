@@ -1,15 +1,13 @@
 package com.peaksoft.accounting.service;
 
-import com.peaksoft.accounting.api.payload.PagedResponse;
-import com.peaksoft.accounting.api.payload.ProductRequest;
-import com.peaksoft.accounting.api.payload.ProductResponse;
-import com.peaksoft.accounting.api.payload.ServiceTypeResponse;
+import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.ServiceTypeEntity;
 import com.peaksoft.accounting.db.repository.CategoryRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.db.repository.ServiceTypeRepository;
+import com.peaksoft.accounting.enums.ReminderType;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import lombok.RequiredArgsConstructor;
@@ -33,31 +31,34 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ServiceTypeRepository serviceTypeRepository;
     private final InvoiceRepository invoiceRepository;
+    private final ReminderService reminderService;
 
-    public PagedResponse<ProductResponse,Integer> getAllProducts(int page, int size, boolean flag){
-     Page<ProductEntity> pages = productRepository.findAllByPagination( PageRequest.of(page - 1, size),flag);
-       PagedResponse<ProductResponse,Integer> response = new PagedResponse<>();
-       response.setResponses(mapToResponse(pages.getContent()));
-       response.setTotalPage(pages.getTotalPages());
+    public PagedResponse<ProductResponse, Integer> getAllProducts(int page, int size, boolean flag) {
+        Page<ProductEntity> pages = productRepository.findAllByPagination(PageRequest.of(page - 1, size), flag);
+        PagedResponse<ProductResponse, Integer> response = new PagedResponse<>();
+        response.setResponses(mapToResponse(pages.getContent()));
+        response.setTotalPage(pages.getTotalPages());
         return response;
     }
-    public ProductResponse save(ProductRequest request,boolean flag){
-        return mapToResponse(productRepository.save(mapToEntity(request,null,flag)));
-    }
-    public ProductResponse update(ProductRequest request,Long id,boolean flag){
-        return mapToResponse(productRepository.save(mapToEntity(request,id,flag)));
+
+    public ProductResponse save(ProductRequest request, boolean flag) {
+        return mapToResponse(productRepository.save(mapToEntity(request, null, flag)));
     }
 
-    public ProductResponse getById(Long id){
+    public ProductResponse update(ProductRequest request, Long id, boolean flag) {
+        return mapToResponse(productRepository.save(mapToEntity(request, id, flag)));
+    }
+
+    public ProductResponse getById(Long id) {
         return mapToResponse(productRepository.findById(id)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(format("Product with id - %s, not found", id))
                 ));
     }
 
-    public ProductResponse deleteById(Long id){
+    public ProductResponse deleteById(Long id) {
         Optional<ProductEntity> optionalProduct = productRepository.findById(id);
-        if(optionalProduct.isEmpty()){
+        if (optionalProduct.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.PRODUCT_NOT_FOUND);
         }
         ProductEntity product = optionalProduct.get();
@@ -67,7 +68,7 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public ProductEntity mapToEntity(ProductRequest request,Long id,boolean flag){
+    public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag) {
         return ProductEntity.builder()
                 .id(id)
                 .title(request.getProductTitle())
@@ -78,27 +79,45 @@ public class ProductService {
                 .isIncome(flag)
                 .build();
     }
-    public ProductResponse mapToResponse(ProductEntity product){
-        return ProductResponse.builder()
-                .productId(product.getId())
-                .productTitle(product.getTitle())
-                .productPrice(product.getPrice())
-                .serviceType(mapToServiceResponse(product.getServiceType()))
-                .category(categoryService.mapToResponse(product.getCategory()))
-                .productDescription(product.getDescription())
-                .build();
+
+    public ProductResponse mapToResponse(ProductEntity product) {
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductId(product.getId());
+        productResponse.setProductDescription(product.getDescription());
+        productResponse.setProductPrice(product.getPrice());
+        productResponse.setProductTitle(product.getTitle());
+        productResponse.setServiceType(mapToServiceResponse(product.getServiceType()));
+        productResponse.setCategory(categoryService.mapToResponse(product.getCategory()));
+        if (product.getReminder() != null) {
+            productResponse.setReminderResponse(reminderService.mapToResponse(product.getReminder()));
+        }
+        return null;
     }
-    public List<ProductResponse> mapToResponse(List<ProductEntity> products){
+
+    public List<ProductResponse> mapToResponse(List<ProductEntity> products) {
         List<ProductResponse> responses = new ArrayList<>();
         for (ProductEntity product : products) {
             responses.add(mapToResponse(product));
         }
         return responses;
     }
-    public ServiceTypeResponse mapToServiceResponse(ServiceTypeEntity serviceType){
+
+    public ServiceTypeResponse mapToServiceResponse(ServiceTypeEntity serviceType) {
         return ServiceTypeResponse.builder()
                 .serviceTypeId(serviceType.getId())
                 .serviceType(serviceType.getServiceType().getServiceType())
                 .build();
+    }
+
+    public List<ProductResponse> getNotification() {
+        List<ProductResponse> getNotification = new ArrayList<>();
+        for (ProductEntity p : productRepository.findAllByIsIncome(false)) {
+            if (p.getReminder() != null){
+                if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED){
+                    getNotification.add(mapToResponse(p));
+                }
+            }
+        }
+        return getNotification;
     }
 }

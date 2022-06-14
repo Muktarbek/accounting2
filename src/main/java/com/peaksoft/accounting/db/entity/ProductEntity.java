@@ -1,7 +1,9 @@
 package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.peaksoft.accounting.enums.ReminderType;
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,8 @@ import java.util.List;
 @Builder
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
-    @SequenceGenerator(name = "product_sequence", sequenceName = "product_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_id_seq")
+    @SequenceGenerator(name = "products_id_seq", sequenceName = "products_id_seq", allocationSize = 1)
     private Long id;
     private String title;
     private double price;
@@ -38,8 +40,14 @@ public class ProductEntity {
             fetch = FetchType.EAGER)
     private List<InvoiceEntity> invoices;
 
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "reminderId")
+    private ReminderEntity reminder;
+
+    private ReminderType reminderType = ReminderType.PAID;
+
     public void addInvoice(InvoiceEntity invoice) {
-        if(invoices == null){
+        if (invoices == null) {
             invoices = new ArrayList<>();
         }
         invoices.add(invoice);

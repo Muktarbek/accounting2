@@ -18,8 +18,6 @@ import javax.validation.Valid;
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @CrossOrigin
 public class SellerController {
-
-
     private final SellerService sellerService;
 
     @PostMapping
@@ -51,6 +49,5 @@ public class SellerController {
     public PagedResponse<SellerResponse, Integer> getAllSeller(@RequestParam int page,int size) {
         return sellerService.findAll(page,size);
     }
-
 
 }
