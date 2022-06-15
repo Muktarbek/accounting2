@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/file")
+@CrossOrigin
 public class FileS3Controller {
 
     @Autowired
