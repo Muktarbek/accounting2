@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+//@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
 @RequestMapping("/api/myaccount/file")
 @CrossOrigin
 public class FileS3Controller {
@@ -22,7 +22,10 @@ public class FileS3Controller {
     @Autowired
     private  FileService fileService;
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file){
         String URL = fileService.uploadFile(file);
         Map<String,String> response = new HashMap<>();
