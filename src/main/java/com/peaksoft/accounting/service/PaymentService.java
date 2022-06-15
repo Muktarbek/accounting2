@@ -10,6 +10,7 @@ import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
+import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.enums.InvoiceStatus;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
@@ -29,23 +30,37 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final BankAccountRepository bankAccountRepository;
     private final InvoiceRepository invoiceRepository;
-
+    private final ProductRepository productRepository;
+    public PaymentResponse createForProduct(Long productId, PaymentRequest request) {
+        ProductEntity product = productRepository.findById(productId).orElseThrow(()->new ValidationException("not found product  "+productId));
+        InvoiceEntity invoice = new InvoiceEntity();
+        invoice.setSum(product.getPrice());
+        invoice.addProduct(product);
+        PaymentEntity payment = paymentRepository.save(mapToEntity(request));
+        invoice.setLastDateOfPayment(payment.getPaymentDate());
+        invoice.setStatus(InvoiceStatus.PAID);
+        invoice.setSum(payment.getAmountOfMoney());
+        invoice.addPayment(payment);
+        invoiceRepository.save(invoice);
+        return mapToResponse(payment);
+    }
     public PaymentResponse create(long invoiceId, PaymentRequest paymentRequest) {
         PaymentEntity payment = mapToEntity(paymentRequest);
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).get();
         double productPrice = invoice.getSum();
         double paymentSum = paymentRequest.getAmountOfMoney();
-        if (productPrice > paymentSum) {
+        if (productPrice > paymentSum && paymentSum > 0) {
             double amount = productPrice - paymentSum;
             invoice.setSum(amount);
             invoice.setStatus(InvoiceStatus.PARTIALLY);
-        } else if (productPrice == paymentSum) {
+        } else if (productPrice == paymentSum || productPrice < paymentSum) {
             double amount = productPrice - paymentSum;
             invoice.setSum(amount);
             invoice.setStatus(InvoiceStatus.PAID);
         } else {
             throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);
         }
+        invoice.setLastDateOfPayment(payment.getPaymentDate());
         payment.setInvoice(invoice);
         invoiceRepository.save(invoice);
         return mapToResponse(paymentRepository.save(payment));
@@ -123,4 +138,6 @@ public class PaymentService {
         }
         return paymentResponses;
     }
+
+
 }

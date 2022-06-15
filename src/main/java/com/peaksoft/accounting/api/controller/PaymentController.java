@@ -19,7 +19,11 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-
+    @PostMapping("/payment-for-product")
+    @Operation(summary = "Create payment with product",description = "Creating a new payment")
+    public PaymentResponse create(@RequestParam Long productId,@RequestBody PaymentRequest request){
+       return paymentService.createForProduct(productId,request);
+    }
     @PostMapping()
     @Operation(summary = "Create payment", description = "Creating a new payment")
     public PaymentResponse create(@RequestParam(required = false) long invoiceId, @RequestBody @Valid PaymentRequest request) {

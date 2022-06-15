@@ -20,4 +20,5 @@ public class InvoiceRequest {
     private String endDate;
     private String description;
     private List<Long> productsId;
+    private Double sum;
 }

@@ -121,7 +121,7 @@ public class InvoiceService {
         }
         invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        invoice.setSum(sum);
+        invoice.setSum(request.getSum());
         return invoice;
     }
 

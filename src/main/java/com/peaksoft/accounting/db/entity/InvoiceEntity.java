@@ -2,15 +2,15 @@ package com.peaksoft.accounting.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.accounting.enums.InvoiceStatus;
-import com.peaksoft.accounting.enums.TypeOfPay;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @Getter
 //@NoArgsConstructor
-@Builder
+//@Builder
 public class InvoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoices_seq")
@@ -36,6 +36,7 @@ public class InvoiceEntity {
     private LocalDateTime endDate;
 
     private String description;
+    private LocalDateTime lastDateOfPayment;
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status = InvoiceStatus.NOT_PAID;
@@ -65,6 +66,13 @@ public class InvoiceEntity {
         }
         products.add(product);
         product.addInvoice(this);
+    }
+
+    public void addPayment(PaymentEntity payment){
+        if(this.payments == null){
+            this.products = new ArrayList<>();
+        }
+        payment.setInvoice(this);
     }
 
     public InvoiceEntity() {
