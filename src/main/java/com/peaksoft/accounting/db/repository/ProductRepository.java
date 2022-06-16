@@ -15,6 +15,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     @Query("select p from ProductEntity p where p.isIncome = :flag")
     Page<ProductEntity> findAllByPagination(Pageable pageable, boolean flag);
 
+    @Query("select p from ProductEntity p where p.isIncome = :flag")
+    List<ProductEntity> findAllByPagination(boolean flag);
+
     List<ProductEntity> findAllByIsIncome(boolean isIncome);
 
     @Query("select p from ProductEntity p")

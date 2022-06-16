@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
@@ -23,6 +25,12 @@ public class ExpenseController {
     public PagedResponse<ProductResponse, Integer> getAll(@RequestParam int page, @RequestParam int size){
         return productService.getAllProducts(page,size,false);
     }
+
+    @GetMapping("/all")
+    public List<ProductResponse> getAllProducts(){
+        return productService.getAllProducts(false);
+    }
+
     @PostMapping
     @Operation(summary = "Create expense", description = "Creating a new expense to the existing company in application")
     public ProductResponse save(@RequestBody ProductRequest request){

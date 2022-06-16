@@ -41,6 +41,11 @@ public class ProductService {
         return response;
     }
 
+    public List<ProductResponse> getAllProducts(boolean flag) {
+        List<ProductEntity> product = productRepository.findAllByPagination(flag);
+        return mapToResponse(product);
+    }
+
     public ProductResponse save(ProductRequest request, boolean flag) {
         return mapToResponse(productRepository.save(mapToEntity(request, null, flag)));
     }
@@ -62,8 +67,8 @@ public class ProductService {
             throw new ValidationException(ValidationExceptionType.PRODUCT_NOT_FOUND);
         }
         ProductEntity product = optionalProduct.get();
-//        product.getInvoices().forEach(u -> u.getProducts().remove(product));
-//        invoiceRepository.saveAll(product.getInvoices());
+        product.getInvoices().forEach(u -> u.getProducts().remove(product));
+        invoiceRepository.saveAll(product.getInvoices());
         productRepository.delete(product);
         return mapToResponse(product);
     }
@@ -112,8 +117,8 @@ public class ProductService {
     public List<ProductResponse> getNotification() {
         List<ProductResponse> getNotification = new ArrayList<>();
         for (ProductEntity p : productRepository.findAllByIsIncome(false)) {
-            if (p.getReminder() != null){
-                if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED){
+            if (p.getReminder() != null) {
+                if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED) {
                     getNotification.add(mapToResponse(p));
                 }
             }

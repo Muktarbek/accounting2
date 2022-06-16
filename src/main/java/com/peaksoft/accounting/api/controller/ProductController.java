@@ -26,6 +26,11 @@ public class ProductController {
         return productService.getAllProducts(page,size,true);
     }
 
+    @GetMapping("/all")
+    public List<ProductResponse> getAllProducts(){
+        return productService.getAllProducts(true);
+    }
+
     @PostMapping
     @Operation(summary = "Create product", description = "Creating a new product to the existing company in application")
     public ProductResponse save(@RequestBody ProductRequest request){
@@ -47,7 +52,6 @@ public class ProductController {
     @DeleteMapping("{id}")
     @Operation(summary = "Delete product", description = "Delete an existing product by \"id\" in application")
     public ProductResponse deleteById(@PathVariable Long id){
-        System.out.println(id);
         return productService.deleteById(id);
     }
 
