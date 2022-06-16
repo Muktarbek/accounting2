@@ -3,14 +3,9 @@ package com.peaksoft.accounting.service;
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
 import com.peaksoft.accounting.api.payload.PagedResponse;
-import com.peaksoft.accounting.db.entity.ClientEntity;
-import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
-import com.peaksoft.accounting.db.entity.TagEntity;
-import com.peaksoft.accounting.db.repository.ClientRepository;
-import com.peaksoft.accounting.db.repository.InvoiceRepository;
-import com.peaksoft.accounting.db.repository.ProductRepository;
-import com.peaksoft.accounting.db.repository.TagRepository;
+import com.peaksoft.accounting.db.entity.*;
+import com.peaksoft.accounting.db.repository.*;
+import com.peaksoft.accounting.enums.InvoiceStatus;
 import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
@@ -18,6 +13,7 @@ import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class InvoiceService {
     private final ClientService clientService;
     private final ProductService productService;
     private final ProductRepository productRepository;
-    private final PaymentService paymentService;
+    private final CategoryRepository categoryRepository;
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
 
@@ -97,6 +94,22 @@ public class InvoiceService {
         }
         return mapToResponse(mapToEntity(request, null));
     }
+    public List<InvoiceResponse> transaction(String start,
+                                             String end,
+                                             Boolean status,
+                                             TypeOfPay typeOfPay,
+                                             Long categoryId,
+                                             int size,int page) {
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        List<InvoiceResponse> invoices = mapToResponse(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getContent());
+        for (int i = 0; i < invoices.size(); i++) {
+            invoices.get(i).setTypeOfPay(typeOfPay.toString());
+            invoices.get(i).setClient(null);
+        }
+        return invoices;
+    }
+
 
     public InvoiceEntity mapToEntity(InvoiceRequest request, Long id) {
         InvoiceEntity invoice = new InvoiceEntity();
@@ -131,6 +144,7 @@ public class InvoiceService {
                 .description(invoice.getDescription())
                 .invoiceTitle(invoice.getTitle())
                 .client(clientService.mapToResponse(invoice.getClient()))
+                .lastDateOfPayment(invoice.getLastDateOfPayment())
                 .startDate(invoice.getStartDate())
                 .endDate(invoice.getEndDate())
                 .products(productService.mapToResponse(invoice.getProducts()))
@@ -138,4 +152,7 @@ public class InvoiceService {
                 .sum(invoice.getSum())
                 .build();
     }
+   public List<InvoiceResponse> mapToResponse(List<InvoiceEntity> invoices){
+        return invoices.stream().map(this::mapToResponse).collect(Collectors.toList());
+   }
 }

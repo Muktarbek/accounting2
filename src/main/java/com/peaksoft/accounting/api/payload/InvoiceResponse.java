@@ -25,4 +25,6 @@ public class InvoiceResponse {
     private String description;
     private Double sum;
     private LocalDateTime lastDateOfPayment;
+    private String typeOfPay;
+    private String categoryName;
 }
