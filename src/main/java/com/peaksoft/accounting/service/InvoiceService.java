@@ -37,7 +37,7 @@ public class InvoiceService {
 
     public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice) {
         invoiceRequestValidator.validate(invoice, request);
-        InvoiceEntity invoiceEntity = mapToEntity(request, null);
+        InvoiceEntity invoiceEntity = mapToEntity(request, invoice,null);
         invoiceRepository.save(invoiceEntity);
         return mapToResponse(invoiceEntity);
     }
@@ -64,7 +64,7 @@ public class InvoiceService {
         if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
-        return mapToResponse(invoiceRepository.save(mapToEntity(request, id)));
+        return mapToResponse(invoiceRepository.save(mapToEntity(request,invoice.get(), id)));
     }
 
     public PagedResponse<InvoiceResponse, Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber, Boolean isIncome) {
@@ -82,17 +82,18 @@ public class InvoiceService {
         return response;
     }
     public InvoiceResponse sendByTags(InvoiceRequest request, Long tagId) {
+        InvoiceEntity invoice = new InvoiceEntity();
         Optional<TagEntity> tag = tagRepository.findById(tagId);
         if (tag.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.TAG_NOT_FOUND);
         }
         TagEntity tagEntity = tag.get();
         for (ClientEntity client : tagEntity.getClients()) {
-            InvoiceEntity invoiceEntity = mapToEntity(request, null);
+            InvoiceEntity invoiceEntity = mapToEntity(request, invoice,null);
             invoiceEntity.addClient(client);
             invoiceRepository.save(invoiceEntity);
         }
-        return mapToResponse(mapToEntity(request, null));
+        return mapToResponse(mapToEntity(request, invoice,null));
     }
     public List<InvoiceResponse> transaction(String start,
                                              String end,
@@ -111,12 +112,12 @@ public class InvoiceService {
     }
 
 
-    public InvoiceEntity mapToEntity(InvoiceRequest request, Long id) {
-        InvoiceEntity invoice = new InvoiceEntity();
+    public InvoiceEntity mapToEntity(InvoiceRequest request,InvoiceEntity invoice, Long id) {
         Double sum = 0d;
         invoice.setDescription(request.getDescription());
         invoice.setId(id);
         invoice.setTitle(request.getInvoiceTitle());
+        invoice.setProducts(null);
         if (request.getClientId() != null) {
             Optional<ClientEntity> client = clientRepository.findById(request.getClientId());
             if (client.isEmpty()) {
