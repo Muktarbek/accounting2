@@ -72,12 +72,12 @@ public class InvoiceController {
         return invoiceService.sendByTags(invoiceRequest, tagId);
     }
     @GetMapping("/transaction")
-    public List<InvoiceResponse> getTransaction(@RequestParam(required = false,defaultValue = "2000-01-01 01:01:01") String startDate,
-                                                @RequestParam(required = false,defaultValue = "2030-01-01 01:01:01") String endDate,
-                                                @RequestParam(required = false) Boolean  status,
-                                                @RequestParam(required = false) TypeOfPay typeOfPay,
-                                                @RequestParam(required = false) Long categoryId,
-                                                @RequestParam int page,@RequestParam int size){
+    public PagedResponse<InvoiceResponse, Integer> getTransaction(@RequestParam(required = false,defaultValue = "2000-01-01 01:01:01") String startDate,
+                                                                  @RequestParam(required = false,defaultValue = "2030-01-01 01:01:01") String endDate,
+                                                                  @RequestParam(required = false) Boolean  status,
+                                                                  @RequestParam(required = false) TypeOfPay typeOfPay,
+                                                                  @RequestParam(required = false) Long categoryId,
+                                                                  @RequestParam int page, @RequestParam int size){
         return invoiceService.transaction(startDate,endDate,status,typeOfPay,categoryId,size,page);
     }
 }

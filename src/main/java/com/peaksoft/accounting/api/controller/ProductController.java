@@ -3,6 +3,7 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.ProductRequest;
 import com.peaksoft.accounting.api.payload.ProductResponse;
+import com.peaksoft.accounting.api.payload.TagResponse;
 import com.peaksoft.accounting.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +60,10 @@ public class ProductController {
     @GetMapping("notification")
     public List<ProductResponse> getNotification(){
         return productService.getNotification();
+    }
+
+    @GetMapping("/search/by/name")
+    public List<ProductResponse> searchByName(@RequestParam String tagName){
+        return productService.searchByName(tagName);
     }
 }

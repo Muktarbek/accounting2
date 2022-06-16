@@ -55,6 +55,9 @@ public class TagService {
     public List<TagResponse> getAllTags(){
         return map(tagRepository.findAll());
     }
+    public List<TagResponse> searchByName(String tagName){
+        return map(tagRepository.searchAllByNameTag(tagName));
+    }
     //Request tag
     public TagEntity mapToEntity(TagRequest tagRequest) {
         TagEntity tag = new TagEntity();
@@ -62,6 +65,7 @@ public class TagService {
         tag.setDescription(tagRequest.getDescription());
         return tag;
     }
+
     //update tag
     public TagEntity mapToUpdate(TagEntity tag, TagRequest tagRequest) {
         tag.setNameTag(tagRequest.getNameTag());
@@ -91,5 +95,4 @@ public class TagService {
         }
         return tagResponses;
     }
-
 }

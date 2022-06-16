@@ -1,6 +1,7 @@
 package com.peaksoft.accounting.db.repository;
 
 import com.peaksoft.accounting.db.entity.ProductEntity;
+import com.peaksoft.accounting.db.entity.TagEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
 
     @Query("select p from ProductEntity p")
     List<ProductEntity> findAllByPagination(Pageable pageable);
+
+    @Query("select p from ProductEntity p where p.title like concat(:title,'%') ")
+    List<ProductEntity> searchAllByTitle(String title);
+
 }

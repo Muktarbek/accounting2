@@ -51,4 +51,8 @@ public class TagController {
         return tagService.findById(id);
     }
 
+    @GetMapping("/search/by/name")
+    public List<TagResponse> searchByName(@RequestParam String tagName){
+     return tagService.searchByName(tagName);
+    }
 }

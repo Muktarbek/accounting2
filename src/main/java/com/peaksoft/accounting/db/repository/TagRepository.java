@@ -2,6 +2,7 @@ package com.peaksoft.accounting.db.repository;
 
 import com.peaksoft.accounting.db.entity.TagEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface TagRepository extends JpaRepository<TagEntity, Long> {
 
     @Override
     void deleteById(Long aLong);
+    @Query("select t from TagEntity t where t.nameTag like concat(:tagName,'%') ")
+    List<TagEntity> searchAllByNameTag(String tagName);
 
 
 }

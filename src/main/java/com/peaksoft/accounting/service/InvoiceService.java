@@ -95,7 +95,7 @@ public class InvoiceService {
         }
         return mapToResponse(mapToEntity(request, invoice,null));
     }
-    public List<InvoiceResponse> transaction(String start,
+    public PagedResponse<InvoiceResponse,Integer>transaction(String start,
                                              String end,
                                              Boolean status,
                                              TypeOfPay typeOfPay,
@@ -108,7 +108,10 @@ public class InvoiceService {
             invoices.get(i).setTypeOfPay(typeOfPay.toString());
             invoices.get(i).setClient(null);
         }
-        return invoices;
+        PagedResponse<InvoiceResponse,Integer> pages= new PagedResponse<>();
+        pages.setResponses(invoices);
+        pages.setTotalPage(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getTotalPages());
+        return pages;
     }
 
 

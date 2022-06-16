@@ -73,6 +73,10 @@ public class ProductService {
         return mapToResponse(product);
     }
 
+    public List<ProductResponse> searchByName(String title) {
+        return mapToResponse(productRepository.searchAllByTitle(title));
+    }
+
     public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag) {
         return ProductEntity.builder()
                 .id(id)
@@ -125,4 +129,6 @@ public class ProductService {
         }
         return getNotification;
     }
+
+
 }
