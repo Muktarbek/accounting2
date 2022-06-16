@@ -42,7 +42,7 @@ public class AwsFileService implements FileService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error uploading the file");
         }
         s3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
-        return "File upload : " + s3Client.getResourceUrl(bucketName, key);
+        return  s3Client.getResourceUrl(bucketName, key);
     }
 
     @Override

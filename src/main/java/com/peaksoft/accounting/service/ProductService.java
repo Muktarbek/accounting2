@@ -62,8 +62,8 @@ public class ProductService {
             throw new ValidationException(ValidationExceptionType.PRODUCT_NOT_FOUND);
         }
         ProductEntity product = optionalProduct.get();
-        product.getInvoices().forEach(u -> u.getProducts().remove(product));
-        invoiceRepository.saveAll(product.getInvoices());
+//        product.getInvoices().forEach(u -> u.getProducts().remove(product));
+//        invoiceRepository.saveAll(product.getInvoices());
         productRepository.delete(product);
         return mapToResponse(product);
     }

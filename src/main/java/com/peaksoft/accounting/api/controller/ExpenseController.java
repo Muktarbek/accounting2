@@ -38,10 +38,10 @@ public class ExpenseController {
     public ProductResponse getById(@PathVariable Long id){
         return productService.getById(id);
     }
+
     @DeleteMapping("{id}")
     @Operation(summary = "Delete expense", description = "Delete an existing expense by \"id\" in application")
     public ProductResponse deleteById(@PathVariable Long id){
-        System.out.println(id);
         return productService.deleteById(id);
     }
 }
