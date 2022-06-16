@@ -1,37 +1,44 @@
 package com.peaksoft.accounting.config;
 
 import com.peaksoft.accounting.config.jwt.JwtTokenFilter;
-import com.peaksoft.accounting.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.peaksoft.accounting.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final JwtTokenFilter jwtTokenFilter;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(UserService userService, JwtTokenFilter jwtTokenFilter) {
-        this.userService = userService;
+    public SecurityConfig(UserServiceImpl userServiceImpl, JwtTokenFilter jwtTokenFilter) {
+        this.userServiceImpl = userServiceImpl;
         this.jwtTokenFilter = jwtTokenFilter;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userServiceImpl).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -47,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .antMatchers("/api/myaccount/auth/forgot_password/**").permitAll()
                 .antMatchers("/api/myaccount/business-area/**").permitAll()
+                .antMatchers("/api/myaccount/file/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

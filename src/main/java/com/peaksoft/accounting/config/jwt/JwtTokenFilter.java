@@ -1,6 +1,6 @@
 package com.peaksoft.accounting.config.jwt;
 
-import com.peaksoft.accounting.service.UserService;
+import com.peaksoft.accounting.service.UserServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,11 +18,11 @@ import java.io.IOException;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtTokenFilter(UserService userService, JwtTokenUtil jwtTokenUtil) {
-        this.userService = userService;
+    public JwtTokenFilter(UserServiceImpl userServiceImpl, JwtTokenUtil jwtTokenUtil) {
+        this.userServiceImpl = userServiceImpl;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -38,7 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             username = jwtTokenUtil.getUsernameFromToken(jwt);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userService.loadUserByUsername(username);
+            UserDetails userDetails = this.userServiceImpl.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

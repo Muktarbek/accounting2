@@ -9,13 +9,13 @@ import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.BusinessAreaRepository;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.validation.validator.UserRequestValidator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -27,12 +27,12 @@ import java.util.UUID;
 import static java.lang.String.format;
 
 @Service
-@AllArgsConstructor
-public class UserService implements UserDetailsService {
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserRequestValidator userRequestValidator;
-    private final PasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
     private final BusinessAreaRepository businessRepository;
     private final JavaMailSender mailSender;
 
