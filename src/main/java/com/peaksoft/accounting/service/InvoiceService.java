@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.service;
 
+import com.peaksoft.accounting.api.payload.ClientInvoicesResponse;
 import com.peaksoft.accounting.api.payload.InvoiceRequest;
 import com.peaksoft.accounting.api.payload.InvoiceResponse;
 import com.peaksoft.accounting.api.payload.PagedResponse;
@@ -11,9 +12,9 @@ import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.InvoiceRequestValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -117,6 +118,13 @@ public class InvoiceService {
         return pages;
     }
 
+    public ClientInvoicesResponse getAllByClientId(Long clientId, String start, String end, InvoiceStatus status) {
+        ClientInvoicesResponse response = new ClientInvoicesResponse();
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        response.setInvoices(mapToResponse(invoiceRepository.getAllByClientId(clientId,startDate,endDate,status)));
+        return response;
+    }
 
     public InvoiceEntity mapToEntity(InvoiceRequest request,InvoiceEntity invoice, Long id) {
         Double sum = 0d;
@@ -162,4 +170,6 @@ public class InvoiceService {
    public List<InvoiceResponse> mapToResponse(List<InvoiceEntity> invoices){
         return invoices.stream().map(this::mapToResponse).collect(Collectors.toList());
    }
+
+
 }

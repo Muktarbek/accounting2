@@ -40,4 +40,11 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
             "(i.status =:invoiceStatus)")
     Page<InvoiceEntity> findAllTransaction(LocalDateTime startDate,LocalDateTime endDate,Boolean status,Long categoryId,InvoiceStatus invoiceStatus,TypeOfPay typeOfPay,Pageable pageable);
 
+    @Query("select i from InvoiceEntity i where (i.dateOfCreation between :startDate and :endDate) and " +
+            "(i.status =:status or :status is null) and " +
+            "(i.client.client_id =:clientId or :clientId is null)")
+    List<InvoiceEntity> getAllByClientId(Long clientId,LocalDateTime startDate,LocalDateTime endDate,InvoiceStatus status);
+
+    @Query("select i from InvoiceEntity i where i.client.client_id =:clientId and i.status =:status ")
+    List<InvoiceEntity> getAllByClientAndStatus(Long clientId,InvoiceStatus status);
 }

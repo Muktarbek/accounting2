@@ -7,10 +7,13 @@ import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.TagRepository;
+import com.peaksoft.accounting.enums.InvoiceStatus;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.SellerAndClientRequestValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +65,9 @@ public class ClientService {
         if (client.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.CLIENT_NOT_FOUND);
         }
-        return mapToResponse(clientRepository.findById(id).get());
+       ClientResponse response = mapToResponse(clientRepository.findById(id).get());
+        response.setInvoices(invoiceRepository.getAllByClientAndStatus(id, InvoiceStatus.NOT_PAID));
+        return response;
     }
 
     public PagedResponse<ClientResponse, Integer> getAllClients(String name, Long tagId, int page, int size) {
