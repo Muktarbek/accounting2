@@ -35,9 +35,10 @@ public class InvoiceService {
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
 
-    public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice) {
+    public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice,Boolean isIncome) {
         invoiceRequestValidator.validate(invoice, request);
         InvoiceEntity invoiceEntity = mapToEntity(request, invoice,null);
+        invoiceEntity.setIsIncome(isIncome);
         invoiceRepository.save(invoiceEntity);
         return mapToResponse(invoiceEntity);
     }

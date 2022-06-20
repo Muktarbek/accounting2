@@ -37,6 +37,7 @@ public class InvoiceEntity {
 
     private String description;
     private LocalDateTime lastDateOfPayment;
+    private Boolean isIncome;
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status = InvoiceStatus.NOT_PAID;

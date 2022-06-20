@@ -25,7 +25,11 @@ public class InvoiceController {
 
     @PostMapping
     public InvoiceResponse create(@RequestBody @Valid InvoiceRequest invoiceRequest, InvoiceEntity invoice) {
-        return invoiceService.create(invoiceRequest, invoice);
+        return invoiceService.create(invoiceRequest, invoice,true);
+    }
+    @PostMapping("/expense")
+    public InvoiceResponse createExpense(@RequestBody @Valid InvoiceRequest invoiceRequest, InvoiceEntity invoice) {
+        return invoiceService.create(invoiceRequest, invoice,false);
     }
 
     @GetMapping("/client")
@@ -44,7 +48,7 @@ public class InvoiceController {
             @RequestParam int page,
             @RequestParam int size,
             @RequestParam(required = false) Long clientId,
-            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "status", required = false,defaultValue = "") String status,
             @RequestParam(required = false, defaultValue = "2000-01-01 00:00:00") String startDate,
             @RequestParam(required = false, defaultValue = "2100-01-01 00:00:00") String endDate,
             @RequestParam(required = false) Long invoiceNumber) {
