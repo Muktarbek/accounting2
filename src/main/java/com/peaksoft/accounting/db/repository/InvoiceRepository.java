@@ -19,8 +19,9 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
             "and(i.dateOfCreation between :startDate and :endDate)" +
             "and upper(i.status) like concat ('%',:status,'%')" +
             "and(i.id = :invoiceNumber or :invoiceNumber is null)" +
-            "and i.client.income = :isIncome")
-    Page<InvoiceEntity> findAllByPagination(Long clientId, @Param("status") String status, LocalDateTime startDate, LocalDateTime endDate, Long invoiceNumber, Pageable pageable, Boolean isIncome);
+            "and (i.client.income = :isIncome) " +
+            "and i.status != :paid")
+    Page<InvoiceEntity> findAllByPagination(Long clientId, @Param("status") String status, LocalDateTime startDate, LocalDateTime endDate, Long invoiceNumber, Pageable pageable,InvoiceStatus paid, Boolean isIncome);
 
     @Query("select i from InvoiceEntity i where i.status = :status and i.endDate < :date")
     List<InvoiceEntity> getAllByStatusAndDate(InvoiceStatus status, LocalDateTime date);

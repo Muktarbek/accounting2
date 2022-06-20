@@ -55,7 +55,9 @@ public class InvoiceService {
         if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
-        invoiceRepository.deleteById(id);
+        invoice.get().getProducts().forEach(p->p.getInvoices().remove(invoice));
+        productRepository.saveAll(invoice.get().getProducts());
+        invoiceRepository.delete(invoice.get());
         return mapToResponse(invoice.get());
     }
 
@@ -71,7 +73,7 @@ public class InvoiceService {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<InvoiceResponse> responses = new ArrayList<>();
-        Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size), isIncome);
+        Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size),InvoiceStatus.PAID, isIncome);
         List<InvoiceEntity> invoices = pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));

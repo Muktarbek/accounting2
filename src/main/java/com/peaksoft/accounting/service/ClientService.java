@@ -5,6 +5,7 @@ import com.peaksoft.accounting.db.entity.ClientEntity;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
+import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.TagRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
@@ -28,6 +29,7 @@ public class ClientService {
     private final TagRepository tagRepository;
     private final TagService tagService;
     private final SellerAndClientRequestValidator validator;
+    private final InvoiceRepository invoiceRepository;
 
     public ClientResponse create(ClientEntity client, ClientRequest request) {
         validator.validate(client, request);
@@ -47,6 +49,10 @@ public class ClientService {
 
     public ClientResponse deleteById(long id) {
         ClientEntity client = clientRepository.findById(id).get();
+        client.getTags().forEach(t->t.getClients().remove(client));
+        tagRepository.saveAll(client.getTags());
+        client.getInvoices().forEach(i->i.setClient(null));
+        invoiceRepository.saveAll(client.getInvoices());
         clientRepository.deleteById(id);
         return mapToResponse(client);
     }
