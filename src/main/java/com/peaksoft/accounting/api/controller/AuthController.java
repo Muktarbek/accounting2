@@ -5,6 +5,7 @@ import com.peaksoft.accounting.config.jwt.JwtTokenUtil;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.api.payload.LoginMapper;
 import com.peaksoft.accounting.db.repository.UserRepository;
+import com.peaksoft.accounting.service.UserService;
 import com.peaksoft.accounting.service.UserServiceImpl;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 public class AuthController {
 
     private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
     private final LoginMapper loginMapper;
     private final UserRepository userRepository;
@@ -48,17 +50,17 @@ public class AuthController {
     @PostMapping("registration")
     public UserResponse create(@RequestBody @Valid UserRequest request,
                                UserEntity user) {
-        return userServiceImpl.create(user, request);
+        return userService.create(user, request);
     }
 
     @PutMapping("reset-password")
     public ResponseEntity<UserResponse> resetPassword(@RequestBody PasswordRequest request){
-            return new ResponseEntity<>(userServiceImpl.resetPassword(request),HttpStatus.OK);
+            return new ResponseEntity<>(userService.resetPassword(request),HttpStatus.OK);
     }
     @PostMapping("/forgot-password")
     public ResponseEntity<?> sendMessage(@RequestBody ForgotPasswordRequest passwordRequest,HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
      UserEntity user  = userRepository.findByEmail(passwordRequest.getEmail()).get();
-            userServiceImpl.insert(user,getSiteURL(request));
+            userService.insert(user,getSiteURL(request));
             return new ResponseEntity<>(HttpStatus.OK);
     }
     private String getSiteURL(HttpServletRequest request) {
