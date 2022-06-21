@@ -108,8 +108,9 @@ public class InvoiceService {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<InvoiceResponse> invoices = mapToResponse(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getContent());
-        for (int i = 0; i < invoices.size(); i++) {
-            invoices.get(i).setTypeOfPay(typeOfPay.toString());
+        for(int i = 0; i < invoices.size(); i++) {
+            if(typeOfPay!=null){
+            invoices.get(i).setTypeOfPay(typeOfPay.toString());}
             invoices.get(i).setClient(null);
         }
         PagedResponse<InvoiceResponse,Integer> pages= new PagedResponse<>();
