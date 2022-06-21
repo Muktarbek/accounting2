@@ -148,6 +148,7 @@ public class InvoiceService {
             invoice.addProduct(product.get());
             sum += product.get().getPrice();
         }
+        invoice.setDiscount(request.getDiscount());
         invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         invoice.setSum(request.getSum());
@@ -166,6 +167,7 @@ public class InvoiceService {
                 .products(productService.mapToResponse(invoice.getProducts()))
                 .status(invoice.getStatus().getInvoiceStatus())
                 .sum(invoice.getSum())
+                .discount(invoice.getDiscount())
                 .build();
     }
    public List<InvoiceResponse> mapToResponse(List<InvoiceEntity> invoices){

@@ -21,4 +21,5 @@ public class InvoiceRequest {
     private String description;
     private List<Long> productsId;
     private Double sum;
+    private Double discount;
 }

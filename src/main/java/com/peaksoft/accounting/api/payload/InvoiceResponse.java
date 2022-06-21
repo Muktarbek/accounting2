@@ -27,4 +27,5 @@ public class InvoiceResponse {
     private LocalDateTime lastDateOfPayment;
     private String typeOfPay;
     private String categoryName;
+    private Double discount;
 }
