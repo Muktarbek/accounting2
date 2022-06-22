@@ -80,8 +80,10 @@ public class InvoiceService {
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));
         }
+        LocalDateTime starDate = LocalDateTime.now().minusDays(30);
         PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
         response.setResponses(responses);
+        response.setPaymentAmountOverdue(invoiceRepository.getSumDays(InvoiceStatus.EXPIRED));
         response.setTotalPage(pageAble.getTotalPages());
         return response;
     }
@@ -152,6 +154,7 @@ public class InvoiceService {
         invoice.setStartDate(LocalDateTime.parse(request.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         invoice.setEndDate(LocalDateTime.parse(request.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         invoice.setSum(request.getSum());
+        invoice.setRestAmount(request.getSum());
         return invoice;
     }
 

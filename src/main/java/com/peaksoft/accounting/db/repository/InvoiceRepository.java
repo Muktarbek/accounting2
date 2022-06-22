@@ -47,4 +47,6 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
     @Query("select i from InvoiceEntity i where i.client.client_id =:clientId and i.status =:status ")
     List<InvoiceEntity> getAllByClientAndStatus(Long clientId,InvoiceStatus status);
+    @Query("select sum(i.sum) from InvoiceEntity i where i.status =:status")
+    Double getSumDays(InvoiceStatus status);
 }

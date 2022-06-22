@@ -31,7 +31,7 @@ public class PaymentService {
     private final BankAccountRepository bankAccountRepository;
     private final InvoiceRepository invoiceRepository;
     private final ProductRepository productRepository;
-    public PaymentResponse createForProduct(Long productId, PaymentRequest request) {
+    public PaymentResponse createForProduct(Long productId, PaymentRequest request,Boolean isIncome) {
         ProductEntity product = productRepository.findById(productId).orElseThrow(()->new ValidationException("not found product  "+productId));
         InvoiceEntity invoice = new InvoiceEntity();
         invoice.setSum(product.getPrice());
@@ -39,7 +39,12 @@ public class PaymentService {
         PaymentEntity payment = paymentRepository.save(mapToEntity(request));
         invoice.setLastDateOfPayment(payment.getPaymentDate());
         invoice.setStatus(InvoiceStatus.PAID);
+        invoice.setRestAmount(invoice.getRestAmount()- request.getAmountOfMoney());
         invoice.setSum(payment.getAmountOfMoney());
+        invoice.setIsIncome(isIncome);
+        invoice.setTitle("Payment for Product");
+        invoice.setStartDate(LocalDateTime.now());
+        invoice.setEndDate(LocalDateTime.now());
         invoice.addPayment(payment);
         invoiceRepository.save(invoice);
         return mapToResponse(payment);
@@ -55,7 +60,7 @@ public class PaymentService {
             invoice.setStatus(InvoiceStatus.PARTIALLY);
         } else if (productPrice == paymentSum || productPrice < paymentSum) {
             double amount = productPrice - paymentSum;
-            invoice.setSum(amount);
+            invoice.setRestAmount(amount);
             invoice.setStatus(InvoiceStatus.PAID);
         } else {
             throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);

@@ -13,5 +13,7 @@ import java.util.List;
 public class PagedResponse<T,K> {
     List<T> responses;
     K totalPage;
+    private Double paymentAmountDays;
+    private Double paymentAmountOverdue;
 }
 

@@ -22,7 +22,12 @@ public class PaymentController {
     @PostMapping("/payment-for-product")
     @Operation(summary = "Create payment with product",description = "Creating a new payment")
     public PaymentResponse create(@RequestParam Long productId,@RequestBody PaymentRequest request){
-       return paymentService.createForProduct(productId,request);
+       return paymentService.createForProduct(productId,request,true);
+    }
+    @PostMapping("/expense/payment-for-product")
+    @Operation(summary = "Create payment with product",description = "Creating a new payment")
+    public PaymentResponse createExpense(@RequestParam Long productId,@RequestBody PaymentRequest request){
+        return paymentService.createForProduct(productId,request,false);
     }
     @PostMapping()
     @Operation(summary = "Create payment", description = "Creating a new payment")

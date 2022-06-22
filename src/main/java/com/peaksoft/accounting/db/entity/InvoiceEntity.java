@@ -56,6 +56,7 @@ public class InvoiceEntity {
             mappedBy = "invoice")
     private List<PaymentEntity> payments;
     private Double sum;
+    private Double restAmount;
 
     public void addClient(ClientEntity client) {
         this.client = client;
