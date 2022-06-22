@@ -20,6 +20,6 @@ public class ClientResponse {
     private String address;
     private List<TagResponse> tags;
     private LocalDateTime created;
-    private boolean income;
+    private Boolean isIncome;
     private List<InvoiceEntity> invoices;
 }

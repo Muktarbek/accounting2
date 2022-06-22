@@ -28,7 +28,7 @@ public class SellerService {
     public SellerResponse create(ClientEntity seller, SellerRequest sellerRequest) {
         validator.validate(seller, sellerRequest);
         ClientEntity sellers = mapToEntity(sellerRequest);
-        sellers.setIncome(false);
+        sellers.setIsIncome(false);
         sellerRepo.save(sellers);
         return mapToResponse(sellers);
     }
@@ -67,7 +67,9 @@ public class SellerService {
         response.setTotalPage(pagination.getTotalPages());
         return response;
     }
-
+    public List<SellerResponse> searchByName(String sellerName) {
+        return map(sellerRepo.searchByName(sellerName,false));
+    }
     public ClientEntity mapToEntity(SellerRequest sellerRequest) {
         ClientEntity client = new ClientEntity();
         client.setClientName(sellerRequest.getSellerName());
@@ -87,6 +89,7 @@ public class SellerService {
         client.setEmail(sellerRequest.getEmail());
         client.setPhoneNumber(sellerRequest.getPhoneNumber());
         client.setSellerSurname(sellerRequest.getSellerSurname());
+        client.setIsIncome(false);
         return client;
     }
 
@@ -99,8 +102,8 @@ public class SellerService {
                 .companyName(seller.getCompanyName())
                 .created(seller.getCreated())
                 .email(seller.getEmail())
+                .income(seller.getIsIncome())
                 .phoneNumber(seller.getPhoneNumber())
-                .income(seller.isIncome())
                 .build();
     }
 
@@ -111,4 +114,6 @@ public class SellerService {
         }
         return sellerList;
     }
+
+
 }
