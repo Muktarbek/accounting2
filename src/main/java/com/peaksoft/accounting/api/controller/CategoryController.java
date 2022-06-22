@@ -24,25 +24,35 @@ public class CategoryController {
     public List<CategoryResponse> getAllCategories(){
         return categoryService.getAllCategories(true);
     }
+
     @GetMapping("/expense")
     public List<CategoryResponse> getAllExpenseCategories(){
         return categoryService.getAllCategories(false);
     }
+
+    @GetMapping
+    public List<CategoryResponse> getAllExpenseCategoriesWithoutFlag(){
+        return categoryService.getAllCategoriesWithoutFlag();
+    }
+
     @GetMapping("{id}")
     @Operation(summary = "Get category", description = "Getting an existing category by \"id\" in application ")
     public CategoryResponse getById(@PathVariable Long id){
         return categoryService.getById(id);
     }
+
     @DeleteMapping("{id}")
     @Operation(summary = "Delete category", description = "Delete an existing category by \"id\" in application")
     public CategoryResponse deleteById(@PathVariable Long id){
         return categoryService.deleteById(id);
     }
+
     @PutMapping("{id}")
     @Operation(summary = "Update category", description = "Update a new category by \"id\" in application ")
     public CategoryResponse update(@PathVariable Long id, @RequestBody CategoryRequest request){
         return categoryService.update(id,request);
     }
+
     @PostMapping
     @Operation(summary = "Create category", description = "Creating a new category")
     public CategoryResponse save(@RequestBody CategoryRequest request){

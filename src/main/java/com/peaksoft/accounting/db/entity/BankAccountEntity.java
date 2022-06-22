@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 public class BankAccountEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_account_seq")
     @SequenceGenerator(name = "bank_account_gen", sequenceName = "bank_account_seq", allocationSize = 1)
