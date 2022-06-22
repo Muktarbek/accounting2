@@ -3,6 +3,7 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.BankAccountRequest;
 import com.peaksoft.accounting.api.payload.BankAccountResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.service.BankAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class BankAccountController {
     }
     @GetMapping
     @Operation(summary = "Get all bank account", description = "Getting all existing bank account ")
-    public List<BankAccountResponse> getAllBankAccount(){
-        return bankAccountService.getAllBankAccount();
+    public List<BankAccountResponse> getAllBankAccount(@RequestParam TypeOfPay typeOfPay){
+        return bankAccountService.getAllBankAccount(typeOfPay);
     }
 }

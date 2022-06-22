@@ -4,6 +4,7 @@ import com.peaksoft.accounting.api.payload.BankAccountRequest;
 import com.peaksoft.accounting.api.payload.BankAccountResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.BankAccountRequestValidator;
@@ -51,8 +52,8 @@ public class BankAccountService {
         return mapToResponse(bankAccountRepo.findById(id).get());
     }
 
-    public List<BankAccountResponse> getAllBankAccount() {
-        return map(bankAccountRepo.findAll());
+    public List<BankAccountResponse> getAllBankAccount(TypeOfPay typeOfPay) {
+        return map(bankAccountRepo.findAll(typeOfPay));
     }
 
 
@@ -60,14 +61,14 @@ public class BankAccountService {
         BankAccountEntity bankAccount = new BankAccountEntity();
         bankAccount.setDescription(request.getDescription());
         bankAccount.setBankAccountName(request.getBankAccountName());
-        bankAccount.setBankAccountNumber(request.getBankAccountNumber());
+        bankAccount.setTypeOfPay(request.getTypeOfPay());
         return bankAccount;
     }
 
     public BankAccountEntity mapToUpdate(BankAccountEntity bankAccount, BankAccountRequest request) {
         bankAccount.setBankAccountName(request.getBankAccountName());
-        bankAccount.setBankAccountNumber(request.getBankAccountNumber());
         bankAccount.setDescription(request.getDescription());
+        bankAccount.setTypeOfPay(request.getTypeOfPay());
         accountValidator.validate(bankAccount, request);
         return bankAccount;
     }
@@ -82,7 +83,7 @@ public class BankAccountService {
         }
         accountResponse.setDescription(bankAccount.getDescription());
         accountResponse.setBankAccountName(bankAccount.getBankAccountName());
-        accountResponse.setBankAccountNumber(bankAccount.getBankAccountNumber());
+        accountResponse.setTypeOfPay(bankAccount.getTypeOfPay());
         return accountResponse;
     }
 

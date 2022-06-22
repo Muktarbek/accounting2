@@ -21,13 +21,13 @@ public class PaymentController {
     private final PaymentService paymentService;
     @PostMapping("/payment-for-product")
     @Operation(summary = "Create payment with product",description = "Creating a new payment")
-    public PaymentResponse create(@RequestParam Long productId,@RequestBody PaymentRequest request){
-       return paymentService.createForProduct(productId,request,true);
+    public PaymentResponse create(@RequestBody PaymentRequest request){
+       return paymentService.createForProduct(request,true);
     }
     @PostMapping("/expense/payment-for-product")
     @Operation(summary = "Create payment with product",description = "Creating a new payment")
-    public PaymentResponse createExpense(@RequestParam Long productId,@RequestBody PaymentRequest request){
-        return paymentService.createForProduct(productId,request,false);
+    public PaymentResponse createExpense(@RequestBody PaymentRequest request){
+        return paymentService.createForProduct(request,false);
     }
     @PostMapping()
     @Operation(summary = "Create payment", description = "Creating a new payment")

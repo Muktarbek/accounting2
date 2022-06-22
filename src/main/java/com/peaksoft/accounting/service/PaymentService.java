@@ -32,8 +32,8 @@ public class PaymentService {
     private final BankAccountRepository bankAccountRepository;
     private final InvoiceRepository invoiceRepository;
     private final ProductRepository productRepository;
-    public PaymentResponse createForProduct(Long productId, PaymentRequest request,Boolean isIncome) {
-        ProductEntity product = productRepository.findById(productId).orElseThrow(()->new ValidationException("not found product  "+productId));
+    public PaymentResponse createForProduct(PaymentRequest request,Boolean isIncome) {
+        ProductEntity product = productRepository.findById(request.getProductId()).orElseThrow(()->new ValidationException("not found product  "+request.getProductId()));
         InvoiceEntity invoice = new InvoiceEntity();
         invoice.setSum(product.getPrice());
         invoice.addProduct(product);

@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PaymentRequest {
     @NotNull
+    private Long productId;
     private String paymentDate;
     private String paymentFile;
     private TypeOfPay typeOfPay;
     private Long bankAccount;
     private double amountOfMoney;
     private String comment;
-
 }
 
