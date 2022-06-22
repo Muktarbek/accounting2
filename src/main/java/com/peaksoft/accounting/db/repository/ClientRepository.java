@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.db.repository;
 
+import ch.qos.logback.core.net.server.Client;
 import com.peaksoft.accounting.db.entity.ClientEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,4 +38,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     @Query("select s from ClientEntity s ")
     Page<ClientEntity> findAllByPagination(Pageable pageable);
 
+    @Query("select s from  ClientEntity  s where s.clientName like concat(:sellerName,'%') and s.isIncome =:flag")
+    List<ClientEntity> searchByName(String sellerName,Boolean flag);
 }

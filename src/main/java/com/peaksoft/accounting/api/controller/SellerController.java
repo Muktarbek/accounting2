@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +50,10 @@ public class SellerController {
     public PagedResponse<SellerResponse, Integer> getAllSeller(@RequestParam int page,int size) {
         return sellerService.findAll(page,size);
     }
+    @GetMapping("/search-by-name")
+    public List<SellerResponse> getByName(@RequestParam String sellerName){
+        return sellerService.searchByName(sellerName);
+    }
+
 
 }

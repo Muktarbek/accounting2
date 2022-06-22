@@ -29,7 +29,7 @@ public class ClientEntity {
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean income = true;
+    private Boolean isIncome = true;
     @CreatedDate
     private LocalDateTime created;
 

@@ -2,7 +2,6 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.ClientEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
@@ -12,8 +11,6 @@ import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.SellerAndClientRequestValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -84,7 +81,6 @@ public class ClientService {
         client.setClientName(clientRequest.getClientName());
         client.setCompanyName(clientRequest.getCompanyName());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
-        client.setIncome(client.isIncome());
         client.setCreated(LocalDateTime.now());
         client.setEmail(clientRequest.getEmail());
         client.setAddress(clientRequest.getAddress());
@@ -104,6 +100,7 @@ public class ClientService {
         client.setAddress(clientRequest.getAddress());
         client.setEmail(clientRequest.getEmail());
         client.setPhoneNumber(clientRequest.getPhoneNumber());
+        client.setIsIncome(true);
         for (Long tagsId : clientRequest.getTagsId()) {
             Optional<TagEntity> tags = tagRepository.findById(tagsId);
             client.removeTags(tags.get());
@@ -124,7 +121,7 @@ public class ClientService {
         client.setClientName(clientEntity.getClientName());
         client.setCompanyName(clientEntity.getCompanyName());
         client.setCreated(clientEntity.getCreated());
-        client.setIncome(clientEntity.isIncome());
+        client.setIsIncome(clientEntity.getIsIncome());
         client.setTags(tagService.map(clientEntity.getTags()));
         client.setAddress(clientEntity.getAddress());
         client.setEmail(clientEntity.getEmail());

@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.db.entity;
 
+import com.peaksoft.accounting.enums.TypeOfPay;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class BankAccountEntity {
     @SequenceGenerator(name = "bank_account_gen", sequenceName = "bank_account_seq", allocationSize = 1)
     private Long id;
     private String bankAccountName;
-    private String bankAccountNumber;
     private String description;
+    @Enumerated(EnumType.STRING)
+    private TypeOfPay typeOfPay;
 }
