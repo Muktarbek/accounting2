@@ -12,6 +12,7 @@ import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
 import com.peaksoft.accounting.db.repository.ProductRepository;
 import com.peaksoft.accounting.enums.InvoiceStatus;
+import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ public class PaymentService {
     public PaymentResponse create(long invoiceId, PaymentRequest paymentRequest) {
         PaymentEntity payment = mapToEntity(paymentRequest);
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).get();
-        double productPrice = invoice.getSum();
+        double productPrice = invoice.getRestAmount();
         double paymentSum = paymentRequest.getAmountOfMoney();
         if (productPrice > paymentSum && paymentSum > 0) {
             double amount = productPrice - paymentSum;
@@ -103,9 +104,10 @@ public class PaymentService {
         payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         payment.setPaymentFile(paymentRequest.getPaymentFile());
         payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
+        if(paymentRequest.getTypeOfPay()!= TypeOfPay.CASH){
         BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
+        payment.setBankAccount(bankAccount);}
         payment.setTypeOfPay(paymentRequest.getTypeOfPay());
-        payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
         payment.setCreated(LocalDateTime.now());
         return payment;
