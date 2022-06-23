@@ -69,7 +69,7 @@ public class ClientService {
 
     public PagedResponse<ClientResponse, Integer> getAllClients(String name, Long tagId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable);
+        Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable,true);
         PagedResponse<ClientResponse, Integer> response = new PagedResponse<>();
         response.setResponses((map(search(name, tagId, pageable))));
         response.setTotalPage(pages.getTotalPages());

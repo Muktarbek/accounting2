@@ -35,8 +35,8 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
             "and (t.tag_id =:tagId or :tagId is null)")
     List<ClientEntity> search(@Param("name") String name, Long tagId, Pageable pageable);
 
-    @Query("select s from ClientEntity s ")
-    Page<ClientEntity> findAllByPagination(Pageable pageable);
+    @Query("select s from ClientEntity s where s.isIncome =:flag")
+    Page<ClientEntity> findAllByPagination(Pageable pageable,Boolean flag);
 
     @Query("select s from  ClientEntity  s where s.clientName like concat(:sellerName,'%') and s.isIncome =:flag")
     List<ClientEntity> searchByName(String sellerName,Boolean flag);

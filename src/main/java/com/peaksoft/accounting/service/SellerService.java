@@ -58,7 +58,7 @@ public class SellerService {
 
     public PagedResponse<SellerResponse, Integer> findAll(int page, int size) {
         List<SellerResponse> responses = new ArrayList<>();
-        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page - 1, size));
+        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page - 1, size),false);
         for (ClientEntity seller : pagination) {
             responses.add(mapToResponse(seller));
         }
