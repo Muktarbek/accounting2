@@ -41,15 +41,17 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
-
-
-
     public UserResponse create(UserEntity registeredUser, UserRequest request){
         userRequestValidator.validate(registeredUser,request);
         UserEntity user = mapToEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         return mapToResponse(user);
+    }
+
+    public String validate(String email){
+        UserEntity user = userRepository.checkByEmail(email);
+        return (user == null) ? "Unique" : "Duplicate";
     }
 
     public UserEntity mapToEntity(UserRequest userRequest) {
@@ -88,6 +90,7 @@ public class UserService {
         userResponse.setCreated(LocalDateTime.now());
         return userResponse;
     }
+
     public UserResponse resetPassword(PasswordRequest request){
         UserEntity user =  userRepository.findByToken(request.getToken())
                 .orElseThrow(
@@ -98,11 +101,13 @@ public class UserService {
         UserEntity userEntity = userRepository.save(user);
         return mapToResponse(userEntity);
     }
+
     public void insert(UserEntity user,String siteUrl) throws UnsupportedEncodingException, MessagingException {
         user.setToken(UUID.randomUUID().toString());
         userRepository.save(user);
         sendVerificationEmail(user,siteUrl);
     }
+
     public void sendVerificationEmail(UserEntity user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
