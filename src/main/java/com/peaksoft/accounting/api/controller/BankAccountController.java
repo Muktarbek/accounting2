@@ -48,7 +48,7 @@ public class BankAccountController {
 
     @GetMapping
     @Operation(summary = "Get all bank account", description = "Getting all existing bank account ")
-    public List<BankAccountResponse> getAllBankAccount(@RequestParam TypeOfPay typeOfPay){
+    public List<BankAccountResponse> getAllBankAccount(@RequestParam(required = false) TypeOfPay typeOfPay){
         return bankAccountService.getAllBankAccount(typeOfPay);
     }
 }

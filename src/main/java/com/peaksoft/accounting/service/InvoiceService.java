@@ -35,6 +35,7 @@ public class InvoiceService {
     private final CategoryRepository categoryRepository;
     private final InvoiceRequestValidator invoiceRequestValidator;
     private final TagRepository tagRepository;
+    private final PaymentRepository paymentRepository;
 
     public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice,Boolean isIncome) {
         invoiceRequestValidator.validate(invoice, request);
@@ -57,11 +58,18 @@ public class InvoiceService {
         if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
+        InvoiceResponse response = mapToResponse(invoice.get());
+        if(invoice.get().getProducts().size()>0){
         invoice.get().getProducts().forEach(p->p.getInvoices().remove(invoice));
-        System.out.println(invoice.get().getProducts().size());
-//        productRepository.saveAll(invoice.get().getProducts());
-        invoiceRepository.delete(invoice.get());
-        return mapToResponse(invoice.get());
+        productRepository.saveAll(invoice.get().getProducts());}
+        if(invoice.get().getPayments().size()>0){
+        invoice.get().getPayments().forEach(p->p.setInvoice(null));
+        paymentRepository.saveAll(invoice.get().getPayments());}
+        invoice.get().setProducts(null);
+        invoice.get().setPayments(null);
+        invoiceRepository.save(invoice.get());
+        invoiceRepository.deleteById(id);
+        return response;
     }
 
     public InvoiceResponse update(InvoiceRequest request, Long id) {
