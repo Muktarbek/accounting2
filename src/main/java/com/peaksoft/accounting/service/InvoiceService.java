@@ -83,7 +83,8 @@ public class InvoiceService {
         LocalDateTime starDate = LocalDateTime.now().minusDays(30);
         PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
         response.setResponses(responses);
-        response.setPaymentAmountOverdue(invoiceRepository.getSumDays(InvoiceStatus.EXPIRED));
+        response.setPaymentAmountOverdue(invoiceRepository.getSumDays(LocalDateTime.now().minusYears(100),LocalDateTime.now(),InvoiceStatus.EXPIRED,isIncome));
+        response.setPaymentAmountDays(invoiceRepository.getSumDays(starDate,LocalDateTime.now(),InvoiceStatus.PARTIALLY,isIncome));
         response.setTotalPage(pageAble.getTotalPages());
         return response;
     }
