@@ -47,6 +47,11 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/checkEmail")
+    public String checkEmail(@RequestParam(name = "email") String email){
+        return userService.validate(email);
+    }
+
     @PostMapping("registration")
     public UserResponse create(@RequestParam(name = "email", required = false)String email,
                                @RequestBody @Valid UserRequest request,

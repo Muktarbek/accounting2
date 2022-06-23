@@ -49,6 +49,11 @@ public class UserService {
         return mapToResponse(user);
     }
 
+    public String validate(String email){
+        UserEntity user = userRepository.checkByEmail(email);
+        return (user == null) ? "Unique" : "Duplicate";
+    }
+
     public UserEntity mapToEntity(UserRequest userRequest) {
         UserEntity user = new UserEntity();
         CompanyEntity company = new CompanyEntity();
