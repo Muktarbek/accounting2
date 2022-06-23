@@ -40,7 +40,10 @@ public class PaymentService {
         PaymentEntity payment = paymentRepository.save(mapToEntity(request));
         invoice.setLastDateOfPayment(payment.getPaymentDate());
         invoice.setStatus(InvoiceStatus.PAID);
-        invoice.setRestAmount(invoice.getRestAmount()- request.getAmountOfMoney());
+        if(product.getPrice()!= request.getAmountOfMoney()){
+            throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);
+        }
+        invoice.setRestAmount(product.getPrice()- request.getAmountOfMoney());
         invoice.setSum(payment.getAmountOfMoney());
         invoice.setIsIncome(isIncome);
         invoice.setTitle("Payment for Product");
@@ -59,7 +62,7 @@ public class PaymentService {
             double amount = productPrice - paymentSum;
             invoice.setSum(amount);
             invoice.setStatus(InvoiceStatus.PARTIALLY);
-        } else if (productPrice == paymentSum || productPrice < paymentSum) {
+        } else if (productPrice == paymentSum) {
             double amount = productPrice - paymentSum;
             invoice.setRestAmount(amount);
             invoice.setStatus(InvoiceStatus.PAID);
