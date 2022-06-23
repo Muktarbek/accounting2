@@ -64,6 +64,6 @@ public class ProductController {
 
     @GetMapping("/search/by/name")
     public List<ProductResponse> searchByName(@RequestParam String tagName){
-        return productService.searchByName(tagName);
+        return productService.searchByName(tagName,true);
     }
 }

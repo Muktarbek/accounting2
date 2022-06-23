@@ -73,8 +73,8 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public List<ProductResponse> searchByName(String title) {
-        return mapToResponse(productRepository.searchAllByTitle(title));
+    public List<ProductResponse> searchByName(String title,Boolean flag ) {
+        return mapToResponse(productRepository.searchAllByTitle(title,flag));
     }
 
     public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag) {

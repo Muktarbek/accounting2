@@ -52,4 +52,8 @@ public class ExpenseController {
     public ProductResponse deleteById(@PathVariable Long id){
         return productService.deleteById(id);
     }
+    @GetMapping("/search/by/name")
+    public List<ProductResponse> searchByName(@RequestParam String tagName){
+        return productService.searchByName(tagName,false);
+    }
 }
