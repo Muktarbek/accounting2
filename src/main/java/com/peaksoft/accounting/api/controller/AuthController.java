@@ -48,7 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("registration")
-    public UserResponse create(@RequestBody @Valid UserRequest request,
+    public UserResponse create(@RequestParam(name = "email", required = false)String email,
+                               @RequestBody @Valid UserRequest request,
                                UserEntity user) {
         return userService.create(user, request);
     }

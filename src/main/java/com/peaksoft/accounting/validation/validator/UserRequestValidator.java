@@ -21,14 +21,20 @@ public class UserRequestValidator {
         if (request == null || registeredUser == null) {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
-        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
-            throw new ValidationException(ValidationExceptionType.EMAIL_ALREADY_EXISTS);
-        }
+//        if (userRepo.findByEmail(request.getEmail()).isPresent()) {
+//            throw new ValidationException(ValidationExceptionType.EMAIL_ALREADY_EXISTS);
+//        }
         if (!request.getPassword().equals(request.getRepeatPassword())) {
             throw new ValidationException(ValidationExceptionType.PASSWORDS_DONT_MATCH);
         }
         if (companyRepo.findByCompanyName(request.getCompanyName()).isPresent()){
             throw new ValidationException(ValidationExceptionType.COMPANY_ALREADY_EXISTS);
         }
+    }
+
+    public String validate(String email){
+        UserEntity user = userRepo.checkByEmail(email);
+        return (user == null) ? "Unique" : "Duplicate";
+
     }
 }
