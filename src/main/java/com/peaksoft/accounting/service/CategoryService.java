@@ -4,6 +4,7 @@ import com.peaksoft.accounting.api.payload.CategoryRequest;
 import com.peaksoft.accounting.api.payload.CategoryResponse;
 import com.peaksoft.accounting.db.entity.CategoryEntity;
 import com.peaksoft.accounting.db.repository.CategoryRepository;
+import com.peaksoft.accounting.db.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     public List<CategoryResponse> getAllCategories(boolean flag){
          return mapToResponse(categoryRepository.findAllByIsIncomeCategory(flag));
@@ -38,7 +40,10 @@ public class CategoryService {
     }
 
     public CategoryResponse deleteById(Long id){
-        CategoryResponse response = mapToResponse(categoryRepository.findById(id).get());
+        CategoryEntity category = categoryRepository.findById(id).get();
+        CategoryResponse response = mapToResponse(category);
+        category.getProducts().forEach(p->p.setCategory(null));
+        productRepository.saveAll(category.getProducts());
         categoryRepository.deleteById(id);
         return response;
     }
