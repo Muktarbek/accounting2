@@ -33,16 +33,19 @@ public class BankAccountController {
     public BankAccountResponse update(@PathVariable long id, @RequestBody @Valid BankAccountRequest request){
         return bankAccountService.update(id,request);
     }
+
     @GetMapping("{id}")
     @Operation(summary = "Getting bank account", description = "Getting an existing bank account by \"id\" in application")
     public BankAccountResponse getById(@PathVariable long id){
         return bankAccountService.getById(id);
     }
+
     @DeleteMapping("{id}")
     @Operation(summary = "Delete bank account", description = "delete an existing bank account by \"id\" in application ")
     public BankAccountResponse delete(@PathVariable long id){
         return bankAccountService.deleteById(id);
     }
+
     @GetMapping
     @Operation(summary = "Get all bank account", description = "Getting all existing bank account ")
     public List<BankAccountResponse> getAllBankAccount(@RequestParam TypeOfPay typeOfPay){
