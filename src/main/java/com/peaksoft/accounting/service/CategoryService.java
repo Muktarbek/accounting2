@@ -66,6 +66,7 @@ public class CategoryService {
                 .categoryId(category.getId())
                 .categoryTitle(category.getTitle())
                 .categoryDescription(category.getDescription())
+                .flag(category.getIsIncomeCategory())
                 .build();
     }
 

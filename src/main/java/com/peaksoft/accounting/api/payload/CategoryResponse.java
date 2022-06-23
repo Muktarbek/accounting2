@@ -14,4 +14,5 @@ public class CategoryResponse {
     private Long categoryId;
     private String categoryTitle;
     private String categoryDescription;
+    private boolean flag;
 }
