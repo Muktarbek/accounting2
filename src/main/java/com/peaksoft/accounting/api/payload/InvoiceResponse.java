@@ -28,4 +28,5 @@ public class InvoiceResponse {
     private String typeOfPay;
     private String categoryName;
     private Double discount;
+    private Double restAmount;
 }

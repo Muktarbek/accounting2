@@ -181,6 +181,7 @@ public class InvoiceService {
                 .status(invoice.getStatus().getInvoiceStatus())
                 .sum(invoice.getSum())
                 .discount(invoice.getDiscount())
+                .restAmount(invoice.getRestAmount())
                 .build();
     }
    public List<InvoiceResponse> mapToResponse(List<InvoiceEntity> invoices){
