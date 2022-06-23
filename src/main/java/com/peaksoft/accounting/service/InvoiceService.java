@@ -58,7 +58,8 @@ public class InvoiceService {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
         }
         invoice.get().getProducts().forEach(p->p.getInvoices().remove(invoice));
-        productRepository.saveAll(invoice.get().getProducts());
+        System.out.println(invoice.get().getProducts().size());
+//        productRepository.saveAll(invoice.get().getProducts());
         invoiceRepository.delete(invoice.get());
         return mapToResponse(invoice.get());
     }
