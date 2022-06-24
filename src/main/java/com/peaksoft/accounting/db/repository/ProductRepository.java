@@ -27,4 +27,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     @Query("select p from ProductEntity p where p.title like concat(:title,'%') and p.isIncome=:flag")
     List<ProductEntity> searchAllByTitle(String title,Boolean flag);
 
+    @Query("select p from ProductEntity p where p.isIncome=:flag")
+    List<ProductEntity> getAll(Boolean flag);
 }

@@ -56,4 +56,8 @@ public class ExpenseController {
     public List<ProductResponse> searchByName(@RequestParam String tagName){
         return productService.searchByName(tagName,false);
     }
+    @GetMapping("/find/all")
+    public List<ProductResponse> findAll(){
+        return productService.getAll(false);
+    }
 }

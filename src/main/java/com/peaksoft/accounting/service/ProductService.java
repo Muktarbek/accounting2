@@ -76,7 +76,9 @@ public class ProductService {
     public List<ProductResponse> searchByName(String title,Boolean flag ) {
         return mapToResponse(productRepository.searchAllByTitle(title,flag));
     }
-
+    public List<ProductResponse> getAll(Boolean  flag) {
+        return mapToResponse(productRepository.getAll(flag));
+    }
     public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag) {
         return ProductEntity.builder()
                 .id(id)
@@ -130,6 +132,4 @@ public class ProductService {
         }
         return getNotification;
     }
-
-
 }
