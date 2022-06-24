@@ -60,13 +60,15 @@ public class PaymentService {
         double paymentSum = paymentRequest.getAmountOfMoney();
         if (productPrice > paymentSum && paymentSum > 0) {
             double amount = productPrice - paymentSum;
-            invoice.setSum(amount);
+            invoice.setRestAmount(amount);
             invoice.setStatus(InvoiceStatus.PARTIALLY);
-        } else if (productPrice == paymentSum) {
+        }
+        if (productPrice == paymentSum) {
             double amount = productPrice - paymentSum;
             invoice.setRestAmount(amount);
             invoice.setStatus(InvoiceStatus.PAID);
-        } else {
+        }
+        if(productPrice<paymentSum){
             throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);
         }
         invoice.setLastDateOfPayment(payment.getPaymentDate());
