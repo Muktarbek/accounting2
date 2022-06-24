@@ -14,12 +14,13 @@ public class BankAccountRequestValidator {
 
     private final BankAccountRepository bankAccountRepository;
 
-    public void validate(BankAccountEntity bankAccount, BankAccountRequest accountRequest){
+    public void validate(BankAccountEntity bankAccount, BankAccountRequest accountRequest,Long id){
 
         if (bankAccount == null || accountRequest == null) {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
-        if (bankAccountRepository.findByBankAccountName(accountRequest.getBankAccountName()).isPresent()){
+        if (bankAccountRepository.findByBankAccountName(accountRequest.getBankAccountName()).isPresent()
+                && bankAccountRepository.findByBankAccountName(accountRequest.getBankAccountName()).get().getId()!=id){
             throw new ValidationException(ValidationExceptionType.THIS_NAME_ALREADY_EXISTS);
         }
     }

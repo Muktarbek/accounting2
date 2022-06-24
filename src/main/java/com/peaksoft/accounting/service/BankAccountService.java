@@ -23,7 +23,7 @@ public class BankAccountService {
     private final BankAccountRequestValidator accountValidator;
 
     public BankAccountResponse create(BankAccountEntity bankAccount, BankAccountRequest accountRequest) {
-        accountValidator.validate(bankAccount, accountRequest);
+        accountValidator.validate(bankAccount, accountRequest,null);
         BankAccountEntity bankAccountEntity = mapToEntity(accountRequest);
         bankAccountRepo.save(bankAccountEntity);
         return mapToResponse(bankAccountEntity);
@@ -69,7 +69,7 @@ public class BankAccountService {
         bankAccount.setBankAccountName(request.getBankAccountName());
         bankAccount.setDescription(request.getDescription());
         bankAccount.setTypeOfPay(request.getTypeOfPay());
-        accountValidator.validate(bankAccount, request);
+        accountValidator.validate(bankAccount, request, bankAccount.getId());
         return bankAccount;
     }
 
