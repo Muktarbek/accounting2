@@ -15,10 +15,11 @@ import java.time.LocalDateTime;
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
     @Query("select p from PaymentEntity p left join p.invoice.products pr where " +
-            "(p.paymentDate between :starDate and :endDate) and " +
-            "(p.typeOfPay=:typeOfPay or :typeOfPay is null)and" +
-            "(p.invoice.isIncome=:status or :status is null)and" +
-            "(pr.category.id=:categoryId or :categoryId is null)and" +
-            "(p.invoice.status=:s1 or p.invoice.status=:s2)")
-    Page<PaymentEntity> findAllTransaction(LocalDateTime startDate,LocalDateTime endDate,Boolean status,Long categoryId,InvoiceStatus s1,InvoiceStatus s2,TypeOfPay typeOfPay,Pageable pageable);
+            "(p.paymentDate between :startDate and :endDate) and " +
+            "(p.typeOfPay =:typeOfPay or :typeOfPay is null) and " +
+            "(p.invoice.isIncome =:status or :status is null) and " +
+            "(pr.category.id =:categoryId or :categoryId is null) and " +
+            "(p.invoice.status =:s1 or p.invoice.status =:s2)")
+    Page<PaymentEntity> findAllTransaction(LocalDateTime startDate,LocalDateTime endDate,Boolean status,Long categoryId,
+                                           InvoiceStatus s1,InvoiceStatus s2,TypeOfPay typeOfPay,Pageable pageable);
 }

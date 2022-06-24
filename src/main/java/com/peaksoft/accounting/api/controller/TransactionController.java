@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
-@RequestMapping("/api/myaccount/invoices")
+@RequestMapping("/api/myaccount/transaction")
 @CrossOrigin
 public class TransactionController {
 
     private final PaymentService paymentService;
 
-    @GetMapping("/transaction")
+    @GetMapping()
     public PagedResponse<PaymentResponse, Integer> getTransaction(@RequestParam(required = false,defaultValue = "2000-01-01 01:01:01") String startDate,
                                                                   @RequestParam(required = false,defaultValue = "2030-01-01 01:01:01") String endDate,
                                                                   @RequestParam(required = false) Boolean  status,
