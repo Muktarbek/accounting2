@@ -49,7 +49,7 @@ public class InvoiceEntity {
     @JoinTable(name = "invoices_products",
             joinColumns = {@JoinColumn(name = "invoice_id")},
             inverseJoinColumns = {@JoinColumn(name = "product_id")})
-    private List<ProductEntity> products;
+    private List<ProductEntity> products = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE},
             fetch = FetchType.LAZY,

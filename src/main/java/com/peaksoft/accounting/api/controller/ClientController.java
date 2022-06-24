@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,5 +54,9 @@ public class ClientController {
                                                                 @RequestParam Integer page,
                                                                 @RequestParam Integer size) {
         return clientService.getAllClients(name, tagId, page, size);
+    }
+    @GetMapping("/find/all")
+    public List<ClientResponse> findAll(){
+        return clientService.findAll();
     }
 }

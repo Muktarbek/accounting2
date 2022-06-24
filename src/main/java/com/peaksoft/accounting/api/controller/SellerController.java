@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.api.controller;
 
+import com.peaksoft.accounting.api.payload.ClientResponse;
 import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
@@ -54,6 +55,9 @@ public class SellerController {
     public List<SellerResponse> getByName(@RequestParam String sellerName){
         return sellerService.searchByName(sellerName);
     }
-
+    @GetMapping("/find/all")
+    public List<SellerResponse> findAll(){
+        return sellerService.getAll();
+    }
 
 }

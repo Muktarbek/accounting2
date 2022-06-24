@@ -40,4 +40,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     @Query("select s from  ClientEntity  s where s.clientName like concat(:sellerName,'%') and s.isIncome =:flag")
     List<ClientEntity> searchByName(String sellerName,Boolean flag);
+
+    @Query("select c from ClientEntity c where c.isIncome=:flag")
+    List<ClientEntity> findAll(Boolean flag);
 }

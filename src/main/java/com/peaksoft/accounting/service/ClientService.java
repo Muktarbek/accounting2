@@ -75,6 +75,9 @@ public class ClientService {
         response.setTotalPage(pages.getTotalPages());
         return response;
     }
+    public List<ClientResponse> findAll() {
+        return map(clientRepository.findAll(true));
+    }
 
     public ClientEntity mapToEntity(ClientRequest clientRequest) {
         ClientEntity client = new ClientEntity();

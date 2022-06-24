@@ -1,5 +1,6 @@
 package com.peaksoft.accounting.service;
 
+import com.peaksoft.accounting.api.payload.ClientResponse;
 import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
@@ -67,6 +68,9 @@ public class SellerService {
         response.setTotalPage(pagination.getTotalPages());
         return response;
     }
+    public List<SellerResponse> getAll() {
+        return map(sellerRepo.findAll(false));
+    }
     public List<SellerResponse> searchByName(String sellerName) {
         return map(sellerRepo.searchByName(sellerName,false));
     }
@@ -114,6 +118,4 @@ public class SellerService {
         }
         return sellerList;
     }
-
-
 }

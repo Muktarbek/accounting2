@@ -96,7 +96,8 @@ public class ProductService {
         productResponse.setProductPrice(product.getPrice());
         productResponse.setProductTitle(product.getTitle());
         productResponse.setServiceType(mapToServiceResponse(product.getServiceType()));
-        productResponse.setCategory(categoryService.mapToResponse(product.getCategory()));
+        if(product.getCategory()!=null)
+            productResponse.setCategory(categoryService.mapToResponse(product.getCategory()));
         if (product.getReminder() != null) {
             productResponse.setReminderResponse(reminderService.mapToResponse(product.getReminder()));
         }

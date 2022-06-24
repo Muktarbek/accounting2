@@ -10,9 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class InvoiceResponse {
     private Long invoiceId;
@@ -29,4 +29,5 @@ public class InvoiceResponse {
     private String categoryName;
     private Double discount;
     private Double restAmount;
+    private List<PaymentResponse> payments;
 }

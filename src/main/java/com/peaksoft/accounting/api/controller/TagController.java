@@ -1,5 +1,7 @@
 package com.peaksoft.accounting.api.controller;
 
+import com.peaksoft.accounting.api.payload.ClientResponse;
+import com.peaksoft.accounting.api.payload.SellerResponse;
 import com.peaksoft.accounting.api.payload.TagRequest;
 import com.peaksoft.accounting.api.payload.TagResponse;
 import com.peaksoft.accounting.db.entity.TagEntity;
@@ -54,5 +56,9 @@ public class TagController {
     @GetMapping("/search/by/name")
     public List<TagResponse> searchByName(@RequestParam String tagName){
      return tagService.searchByName(tagName);
+    }
+    @GetMapping("/find/all")
+    public List<TagResponse> findAll(){
+        return tagService.getAll();
     }
 }

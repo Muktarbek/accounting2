@@ -55,6 +55,9 @@ public class TagService {
     public List<TagResponse> getAllTags(){
         return map(tagRepository.findAll());
     }
+    public List<TagResponse> getAll() {
+        return map(tagRepository.getAll());
+    }
     public List<TagResponse> searchByName(String tagName){
         return map(tagRepository.searchAllByNameTag(tagName));
     }
