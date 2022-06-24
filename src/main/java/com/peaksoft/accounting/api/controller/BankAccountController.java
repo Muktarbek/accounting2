@@ -30,7 +30,7 @@ public class BankAccountController {
 
     @PutMapping("{id}")
     @Operation(summary = "Update bank account ", description = "Update a new bank account by \"id\" in application")
-    public BankAccountResponse update(@PathVariable long id, @RequestBody @Valid BankAccountRequest request){
+    public BankAccountResponse update(@PathVariable long id, @RequestBody BankAccountRequest request){
         return bankAccountService.update(id,request);
     }
 
