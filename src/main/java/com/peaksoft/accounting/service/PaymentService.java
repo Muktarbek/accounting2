@@ -1,8 +1,6 @@
 package com.peaksoft.accounting.service;
 
-import com.peaksoft.accounting.api.payload.PaymentRequest;
-import com.peaksoft.accounting.api.payload.PaymentResponse;
-import com.peaksoft.accounting.api.payload.ProductResponse;
+import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
 import com.peaksoft.accounting.db.entity.InvoiceEntity;
 import com.peaksoft.accounting.db.entity.PaymentEntity;
@@ -16,6 +14,7 @@ import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -103,6 +102,20 @@ public class PaymentService {
     public List<PaymentResponse> gelAllPayments() {
         return map(paymentRepository.findAll());
     }
+    public PagedResponse<PaymentResponse, Integer> transaction(String start,
+                                                               String end,
+                                                               Boolean status,
+                                                               TypeOfPay typeOfPay,
+                                                               Long categoryId,
+                                                               int size, int page) {
+        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        List<PaymentResponse> payments = map(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size)).getContent());
+        PagedResponse<PaymentResponse,Integer> response = new PagedResponse();
+        response.setResponses(payments);
+        response.setTotalPage(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size)).getTotalPages());
+        return response;
+    }
 
     private PaymentEntity mapToEntity(PaymentRequest paymentRequest) {
         PaymentEntity payment = new PaymentEntity();
@@ -150,6 +163,4 @@ public class PaymentService {
         }
         return paymentResponses;
     }
-
-
 }
