@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -46,7 +48,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginMapper.toLoginView("", ValidationExceptionType.LOGIN_FAILED, null));
         }
     }
-
+    @PutMapping()
+    public UserResponse update(@AuthenticationPrincipal UserEntity user,@RequestBody UserRequest request){
+        return userService.update(user.getUser_id(),request);
+    }
     @PostMapping("/checkEmail")
     public String checkEmail(@RequestParam(name = "email") String email){
         return userService.validate(email);
@@ -55,8 +60,19 @@ public class AuthController {
     @PostMapping("registration")
     public UserResponse create(@RequestParam(name = "email", required = false)String email,
                                @RequestBody @Valid UserRequest request,
-                               UserEntity user) {
-        return userService.create(user, request);
+                               UserEntity userEntity) {
+      UserResponse response = userService.create(userEntity, request);
+      LoginResponse loginResponse;
+        try {
+            UsernamePasswordAuthenticationToken passwordAuthenticationToken = new UsernamePasswordAuthenticationToken(request.getEmail(),
+                    request.getPassword());
+            UserEntity user = userRepository.findByEmail(passwordAuthenticationToken.getName()).get();
+            loginResponse = loginMapper.toLoginView(jwtTokenUtil.generateToken(user), ValidationExceptionType.SUCCESSFUL, user);
+        } catch (BadCredentialsException ex) {
+             loginResponse = loginMapper.toLoginView("", ValidationExceptionType.LOGIN_FAILED, null);
+        }
+         response.setLogin(loginResponse);
+        return response;
     }
 
     @PutMapping("reset-password")

@@ -24,5 +24,6 @@ public class UserResponse {
     private CompanyEntity companyName;
     private LocalDateTime created;
     private boolean isActive;
+    private LoginResponse login;
 
 }

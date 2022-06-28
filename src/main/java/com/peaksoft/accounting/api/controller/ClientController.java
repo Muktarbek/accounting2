@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/myaccount/clients")
-@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@PreAuthorize("hasAnyAuthority('MY_ACCOUNT_ADMIN','MY_ACCOUNT_EDITOR')")
 @CrossOrigin
 public class ClientController {
 

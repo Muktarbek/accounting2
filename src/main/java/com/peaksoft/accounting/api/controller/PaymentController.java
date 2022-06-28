@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@PreAuthorize("hasAnyAuthority('MY_ACCOUNT_ADMIN','MY_ACCOUNT_EDITOR')")
 @RequestMapping("/api/myaccount/payments")
 @CrossOrigin
 public class PaymentController {

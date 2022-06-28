@@ -7,11 +7,13 @@ import com.peaksoft.accounting.db.entity.BusinessAreaEntity;
 import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.BusinessAreaRepository;
+import com.peaksoft.accounting.db.repository.CompanyRepository;
 import com.peaksoft.accounting.db.repository.RoleRepository;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.validation.validator.UserRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,7 +25,10 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -41,6 +46,7 @@ public class UserService {
     private  BusinessAreaRepository businessRepository;
     @Autowired
     private JavaMailSender mailSender;
+    private final CompanyRepository companyRepository;
     private final RoleRepository roleRepository;
 
     public UserResponse create(UserEntity registeredUser, UserRequest request){
@@ -50,12 +56,44 @@ public class UserService {
         userRepository.save(user);
         return mapToResponse(user);
     }
+    public UserResponse createEditor(Long companyId, UserRequest request) {
+        CompanyEntity company = companyRepository.findById(companyId).get();
+        return mapToResponse(userRepository.save(mapToEntity(request,company)));
+    }
+    public List<UserResponse> getAllByCompany(Long companyId) {
+        return mapToResponse(userRepository.findAllByCompany(companyId));
+    }
+
+    public UserResponse getById(Long userId) {
+      return mapToResponse(userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("not found user "+userId)));
+    }
+    public UserResponse deleteById(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("not found user "+userId));
+        userRepository.deleteById(userId);
+        return mapToResponse(user);
+    }
+
+    public UserResponse update(Long userId,UserRequest request){
+        UserEntity user = userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("not found user "+userId));
+        return mapToResponse(userRepository.save(mapToEntity(request,user)));
+    }
+
 
     public String validate(String email){
         UserEntity user = userRepository.checkByEmail(email);
         return (user == null) ? "Unique" : "Duplicate";
     }
-
+    public UserEntity mapToEntity(UserRequest userRequest,CompanyEntity company) {
+        UserEntity user = new UserEntity();
+        user.setEmail(userRequest.getEmail());
+        user.setAddress(userRequest.getAddress());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setPassword(userRequest.getPassword());
+        user.setCompanyName(company);
+        user.addRole(roleRepository.getById(2L));
+        return user;
+    }
     public UserEntity mapToEntity(UserRequest userRequest) {
         UserEntity user = new UserEntity();
         CompanyEntity company = new CompanyEntity();
@@ -70,6 +108,29 @@ public class UserService {
         user.setCompanyName(company);
         user.addRole(roleRepository.getById(1L));
         return user;
+    }
+     public UserEntity mapToEntity(UserRequest userRequest,UserEntity user) {
+              CompanyEntity company = user.getCompanyName();
+              user.setEmail(userRequest.getEmail());
+              user.setAddress(userRequest.getAddress());
+              user.setFirstName(userRequest.getFirstName());
+              user.setLastName(userRequest.getLastName());
+              user.setPassword(userRequest.getPassword());
+
+              if(userRequest.getBusinessAreaId()!=null){
+              BusinessAreaEntity businessArea = businessRepository.findById(userRequest.getBusinessAreaId()).get();
+              user.setBusinessArea(businessArea); }
+
+              if(userRequest.getCompanyName() != null){
+              company.setCompanyName(userRequest.getCompanyName());
+              user.setCompanyName(company);
+              companyRepository.save(company);
+              }
+              return user;
+          }
+
+    public List<UserResponse> mapToResponse(List<UserEntity> users){
+        return users.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
     public UserResponse mapToResponse(UserEntity user) {
@@ -139,3 +200,5 @@ public class UserService {
     }
 
 }
+
+

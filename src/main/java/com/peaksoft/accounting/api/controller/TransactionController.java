@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@PreAuthorize("hasAnyAuthority('MY_ACCOUNT_ADMIN','MY_ACCOUNT_EDITOR')")
 @RequestMapping("/api/myaccount/transaction")
 @CrossOrigin
 public class TransactionController {

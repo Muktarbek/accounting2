@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/myaccount/reminder")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('MY_ACCOUNT_ADMIN')")
+@PreAuthorize("hasAnyAuthority('MY_ACCOUNT_ADMIN','MY_ACCOUNT_EDITOR')")
 @CrossOrigin
 @Slf4j
 public class ReminderController {

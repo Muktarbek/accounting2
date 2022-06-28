@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Override
     Optional<UserEntity> findById(Long aLong);
+   @Query("select u from UserEntity u where u.companyName.company_id=:companyId")
+    List<UserEntity> findAllByCompany(Long companyId);
 }
