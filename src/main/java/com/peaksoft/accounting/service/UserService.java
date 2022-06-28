@@ -7,6 +7,7 @@ import com.peaksoft.accounting.db.entity.BusinessAreaEntity;
 import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.BusinessAreaRepository;
+import com.peaksoft.accounting.db.repository.RoleRepository;
 import com.peaksoft.accounting.db.repository.UserRepository;
 import com.peaksoft.accounting.validation.validator.UserRequestValidator;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class UserService {
     private  BusinessAreaRepository businessRepository;
     @Autowired
     private JavaMailSender mailSender;
+    private final RoleRepository roleRepository;
 
     public UserResponse create(UserEntity registeredUser, UserRequest request){
         userRequestValidator.validate(registeredUser,request);
@@ -66,6 +68,7 @@ public class UserService {
         user.setBusinessArea(businessArea);
         company.setCompanyName(userRequest.getCompanyName());
         user.setCompanyName(company);
+        user.addRole(roleRepository.getById(1L));
         return user;
     }
 

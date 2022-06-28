@@ -1,9 +1,11 @@
 package com.peaksoft.accounting.db.entity;
 
 import lombok.*;
+import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +24,12 @@ public class RoleEntity implements GrantedAuthority {
 
     @ManyToMany(targetEntity = UserEntity.class, mappedBy = "roles", cascade = CascadeType.ALL)
     private List<UserEntity> users;
-
+    public void addUser(UserEntity user){
+        if(this.users == null){
+            this.users = new ArrayList<>();
+        }
+        this.users.add(user);
+    }
     public static final String MY_ACCOUNT_ADMIN = "MY_ACCOUNT_ADMIN";
     public static final String MY_ACCOUNT_EDITOR = "MY_ACCOUNT_EDITOR";
 

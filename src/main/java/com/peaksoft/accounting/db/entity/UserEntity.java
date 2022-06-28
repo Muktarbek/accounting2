@@ -57,6 +57,14 @@ public class UserEntity  implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    public void addRole(RoleEntity role){
+        if(this.roles == null){
+            this.roles = new ArrayList<>();
+        }
+        this.roles.add(role);
+        role.addUser(this);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
