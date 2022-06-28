@@ -29,5 +29,6 @@ public class InvoiceResponse {
     private String categoryName;
     private Double discount;
     private Double restAmount;
+    private Boolean isIncome;
     private List<PaymentResponse> payments;
 }

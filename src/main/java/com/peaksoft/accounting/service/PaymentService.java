@@ -172,6 +172,7 @@ public class PaymentService {
                 .sum(invoice.getSum())
                 .discount(invoice.getDiscount())
                 .restAmount(invoice.getRestAmount())
+                .isIncome(invoice.getIsIncome())
                 .build();
     }
 
