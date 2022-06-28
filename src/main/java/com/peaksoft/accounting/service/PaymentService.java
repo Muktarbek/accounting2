@@ -31,6 +31,9 @@ public class PaymentService {
     private final BankAccountRepository bankAccountRepository;
     private final InvoiceRepository invoiceRepository;
     private final ProductRepository productRepository;
+    private final ClientService clientService;
+    private final ProductService productService;
+
     public PaymentResponse createForProduct(PaymentRequest request,Boolean isIncome) {
         ProductEntity product = productRepository.findById(request.getProductId()).orElseThrow(()->new ValidationException("not found product  "+request.getProductId()));
         InvoiceEntity invoice = new InvoiceEntity();
@@ -152,7 +155,23 @@ public class PaymentService {
                 .amountOfMoney(payment.getAmountOfMoney())
                 .comment(payment.getComment())
                 .created(payment.getCreated())
-                .invoice(payment.getInvoice())
+                .invoice(mapToResponse(payment.getInvoice()))
+                .build();
+    }
+    public InvoiceResponse mapToResponse(InvoiceEntity invoice) {
+        return InvoiceResponse.builder()
+                .invoiceId(invoice.getId())
+                .description(invoice.getDescription())
+                .invoiceTitle(invoice.getTitle())
+                .client(clientService.mapToResponse(invoice.getClient()))
+                .lastDateOfPayment(invoice.getLastDateOfPayment())
+                .startDate(invoice.getStartDate())
+                .endDate(invoice.getEndDate())
+                .products(productService.mapToResponse(invoice.getProducts()))
+                .status(invoice.getStatus().getInvoiceStatus())
+                .sum(invoice.getSum())
+                .discount(invoice.getDiscount())
+                .restAmount(invoice.getRestAmount())
                 .build();
     }
 

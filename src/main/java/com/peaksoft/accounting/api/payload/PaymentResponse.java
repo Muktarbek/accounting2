@@ -23,5 +23,5 @@ public class PaymentResponse {
     private Double amountOfMoney;
     private String comment;
     private LocalDateTime created;
-    private InvoiceEntity invoice;
+    private InvoiceResponse invoice;
 }
