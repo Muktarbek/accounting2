@@ -3,11 +3,13 @@ package com.peaksoft.accounting.api.controller;
 import com.peaksoft.accounting.api.payload.BankAccountRequest;
 import com.peaksoft.accounting.api.payload.BankAccountResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
+import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.service.BankAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,8 +26,8 @@ public class BankAccountController {
 
     @PostMapping
     @Operation(summary = "Create bank account", description = "Creating a new Bank account")
-    public BankAccountResponse create(@RequestBody @Valid BankAccountRequest request, BankAccountEntity account){
-       return bankAccountService.create(account,request);
+    public BankAccountResponse create(@AuthenticationPrincipal UserEntity user, @RequestBody @Valid BankAccountRequest request, BankAccountEntity account){
+       return bankAccountService.create(user,account,request);
     }
 
     @PutMapping("{id}")
@@ -48,7 +50,7 @@ public class BankAccountController {
 
     @GetMapping
     @Operation(summary = "Get all bank account", description = "Getting all existing bank account ")
-    public List<BankAccountResponse> getAllBankAccount(@RequestParam(required = false) TypeOfPay typeOfPay){
-        return bankAccountService.getAllBankAccount(typeOfPay);
+    public List<BankAccountResponse> getAllBankAccount(@AuthenticationPrincipal UserEntity user,@RequestParam(required = false) TypeOfPay typeOfPay){
+        return bankAccountService.getAllBankAccount(user,typeOfPay);
     }
 }

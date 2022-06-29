@@ -58,6 +58,10 @@ public class InvoiceEntity {
     private Double sum;
     private Double restAmount;
 
+    @ManyToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "company_name_id")
+    private CompanyEntity company;
+
     public void addClient(ClientEntity client) {
         this.client = client;
         client.addInvoice(this);

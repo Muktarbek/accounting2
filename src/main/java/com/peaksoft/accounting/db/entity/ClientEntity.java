@@ -45,6 +45,9 @@ public class ClientEntity {
     @OneToMany(targetEntity = InvoiceEntity.class,
             mappedBy = "client", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<InvoiceEntity> invoices;
+    @ManyToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "company_name_id")
+    private CompanyEntity company;
 
     public void addTags(TagEntity tag) {
         if (tags == null) {

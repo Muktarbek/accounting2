@@ -5,10 +5,13 @@ import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
+import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.service.SellerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,16 +51,16 @@ public class SellerController {
 
     @GetMapping
     @Operation(summary = "Get all seller", description = "Getting all existing seller")
-    public PagedResponse<SellerResponse, Integer> getAllSeller(@RequestParam int page,int size) {
-        return sellerService.findAll(page,size);
+    public PagedResponse<SellerResponse, Integer> getAllSeller(@AuthenticationPrincipal UserEntity user,@RequestParam int page, int size) {
+        return sellerService.findAll(page,size,user.getCompanyName().getCompany_id());
     }
     @GetMapping("/search-by-name")
     public List<SellerResponse> getByName(@RequestParam String sellerName){
         return sellerService.searchByName(sellerName);
     }
     @GetMapping("/find/all")
-    public List<SellerResponse> findAll(){
-        return sellerService.getAll();
+    public List<SellerResponse> findAll(@AuthenticationPrincipal UserEntity user){
+        return sellerService.getAll(user.getCompanyName().getCompany_id());
     }
 
 }

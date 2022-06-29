@@ -5,6 +5,7 @@ import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
+import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
@@ -12,6 +13,7 @@ import com.peaksoft.accounting.validation.validator.SellerAndClientRequestValida
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,9 +59,9 @@ public class SellerService {
         return mapToResponse(sellerRepo.findById(id).get());
     }
 
-    public PagedResponse<SellerResponse, Integer> findAll(int page, int size) {
+    public PagedResponse<SellerResponse, Integer> findAll(int page, int size,Long companyId) {
         List<SellerResponse> responses = new ArrayList<>();
-        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page - 1, size),false);
+        Page<ClientEntity> pagination = sellerRepo.findAllByPagination(PageRequest.of(page - 1, size),false,companyId);
         for (ClientEntity seller : pagination) {
             responses.add(mapToResponse(seller));
         }
@@ -68,8 +70,8 @@ public class SellerService {
         response.setTotalPage(pagination.getTotalPages());
         return response;
     }
-    public List<SellerResponse> getAll() {
-        return map(sellerRepo.findAll(false));
+    public List<SellerResponse> getAll(Long companyId) {
+        return map(sellerRepo.findAll(false, companyId));
     }
     public List<SellerResponse> searchByName(String sellerName) {
         return map(sellerRepo.searchByName(sellerName,false));

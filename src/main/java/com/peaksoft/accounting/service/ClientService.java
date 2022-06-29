@@ -2,6 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.*;
 import com.peaksoft.accounting.db.entity.ClientEntity;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
@@ -31,19 +32,21 @@ public class ClientService {
     private final SellerAndClientRequestValidator validator;
     private final InvoiceRepository invoiceRepository;
 
-    public ClientResponse create(ClientEntity client, ClientRequest request) {
+    public ClientResponse create(ClientEntity client, ClientRequest request, CompanyEntity company) {
         validator.validate(client, request);
         ClientEntity clientEntity = mapToEntity(request);
+        clientEntity.setCompany(company);
         clientRepository.save(clientEntity);
         return mapToResponse(clientEntity);
     }
 
-    public ClientResponse update(ClientRequest clientRequest, long id) {
+    public ClientResponse update(ClientRequest clientRequest, long id,CompanyEntity company) {
         Optional<ClientEntity> client = clientRepository.findById(id);
         if (client.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
         mapToUpdate(client.get(), clientRequest);
+        client.get().setCompany(company);
         return mapToResponse(clientRepository.save(client.get()));
     }
 
@@ -57,26 +60,26 @@ public class ClientService {
         return mapToResponse(client);
     }
 
-    public ClientResponse findById(long id) {
+    public ClientResponse findById(long id,Long companyId) {
         Optional<ClientEntity> client = clientRepository.findById(id);
         if (client.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.CLIENT_NOT_FOUND);
         }
        ClientResponse response = mapToResponse(clientRepository.findById(id).get());
-        response.setInvoices(invoiceRepository.getAllByClientAndStatus(id, InvoiceStatus.NOT_PAID));
+        response.setInvoices(invoiceRepository.getAllByClientAndStatus(id, InvoiceStatus.NOT_PAID,companyId));
         return response;
     }
 
-    public PagedResponse<ClientResponse, Integer> getAllClients(String name, Long tagId, int page, int size) {
+    public PagedResponse<ClientResponse, Integer> getAllClients(String name, Long tagId, int page, int size,CompanyEntity company) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable,true);
+        Page<ClientEntity> pages = clientRepository.findAllByPagination(pageable,true,company.getCompany_id());
         PagedResponse<ClientResponse, Integer> response = new PagedResponse<>();
-        response.setResponses((map(search(name, tagId, pageable))));
+        response.setResponses((map(search(name, tagId, pageable,company.getCompany_id()))));
         response.setTotalPage(pages.getTotalPages());
         return response;
     }
-    public List<ClientResponse> findAll() {
-        return map(clientRepository.findAll(true));
+    public List<ClientResponse> findAll(Long companyId) {
+        return map(clientRepository.findAll(true,companyId));
     }
 
     public ClientEntity mapToEntity(ClientRequest clientRequest) {
@@ -140,8 +143,8 @@ public class ClientService {
         return clientResponses;
     }
 
-    public List<ClientEntity> search(String name, Long tagId, Pageable pageable) {
+    public List<ClientEntity> search(String name, Long tagId, Pageable pageable,Long companyId) {
         String text = name == null ? "" : name;
-        return clientRepository.search(text.toUpperCase(), tagId, pageable);
+        return clientRepository.search(text.toUpperCase(), tagId, pageable,companyId);
     }
 }

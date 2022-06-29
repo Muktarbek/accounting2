@@ -2,6 +2,7 @@ package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.TagRequest;
 import com.peaksoft.accounting.api.payload.TagResponse;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.TagEntity;
 import com.peaksoft.accounting.db.repository.TagRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
@@ -21,19 +22,21 @@ public class TagService {
     private final TagRepository tagRepository;
     private final TagRequestValidator tagRequestValidator;
 
-    public TagResponse create(TagEntity tag, TagRequest tagRequest) {
+    public TagResponse create(TagEntity tag, TagRequest tagRequest, CompanyEntity company) {
         tagRequestValidator.validate(tag, tagRequest);
         TagEntity tagEntity = mapToEntity(tagRequest);
+        tagEntity.setCompany(company);
         tagRepository.save(tagEntity);
         return mapToResponse(tagEntity);
     }
 
-    public TagResponse update(TagRequest tagRequest, long id) {
+    public TagResponse update(TagRequest tagRequest, long id,CompanyEntity company) {
         Optional<TagEntity> tag = tagRepository.findById(id);
         if (tag.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
         mapToUpdate(tag.get(), tagRequest);
+        tag.get().setCompany(company);
         return mapToResponse(tagRepository.save(tag.get()));
     }
 
@@ -52,14 +55,14 @@ public class TagService {
                 tagRepository.findById(id).get());
     }
 
-    public List<TagResponse> getAllTags(){
-        return map(tagRepository.findAll());
+    public List<TagResponse> getAllTags(Long companyId){
+        return map(tagRepository.findAllByCompany(companyId));
     }
-    public List<TagResponse> getAll() {
-        return map(tagRepository.getAll());
+    public List<TagResponse> getAll(Long companyId) {
+        return map(tagRepository.getAll(companyId));
     }
-    public List<TagResponse> searchByName(String tagName){
-        return map(tagRepository.searchAllByNameTag(tagName));
+    public List<TagResponse> searchByName(String tagName,Long companyId){
+        return map(tagRepository.searchAllByNameTag(tagName,companyId));
     }
     //Request tag
     public TagEntity mapToEntity(TagRequest tagRequest) {

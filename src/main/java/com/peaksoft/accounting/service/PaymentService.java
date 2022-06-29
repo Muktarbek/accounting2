@@ -1,10 +1,7 @@
 package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.*;
-import com.peaksoft.accounting.db.entity.BankAccountEntity;
-import com.peaksoft.accounting.db.entity.InvoiceEntity;
-import com.peaksoft.accounting.db.entity.PaymentEntity;
-import com.peaksoft.accounting.db.entity.ProductEntity;
+import com.peaksoft.accounting.db.entity.*;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
 import com.peaksoft.accounting.db.repository.InvoiceRepository;
 import com.peaksoft.accounting.db.repository.PaymentRepository;;
@@ -34,14 +31,15 @@ public class PaymentService {
     private final ClientService clientService;
     private final ProductService productService;
 
-    public PaymentResponse createForProduct(PaymentRequest request,Boolean isIncome) {
+    public PaymentResponse createForProduct(PaymentRequest request, Boolean isIncome, CompanyEntity company) {
         ProductEntity product = productRepository.findById(request.getProductId()).orElseThrow(()->new ValidationException("not found product  "+request.getProductId()));
         InvoiceEntity invoice = new InvoiceEntity();
         invoice.setSum(product.getPrice());
         invoice.addProduct(product);
-        PaymentEntity payment = paymentRepository.save(mapToEntity(request));
+        PaymentEntity payment = paymentRepository.save(mapToEntity(request,company));
         invoice.setLastDateOfPayment(payment.getPaymentDate());
         invoice.setStatus(InvoiceStatus.PAID);
+        invoice.setCompany(company);
         if(product.getPrice()!= request.getAmountOfMoney()){
             throw new ValidationException(ValidationExceptionType.EXCEEDS_THE_AMOUNT_PER_PRODUCT);
         }
@@ -55,8 +53,8 @@ public class PaymentService {
         invoiceRepository.save(invoice);
         return mapToResponse(payment);
     }
-    public PaymentResponse create(long invoiceId, PaymentRequest paymentRequest) {
-        PaymentEntity payment = mapToEntity(paymentRequest);
+    public PaymentResponse create(long invoiceId, PaymentRequest paymentRequest,CompanyEntity company) {
+        PaymentEntity payment = mapToEntity(paymentRequest,company);
         InvoiceEntity invoice = invoiceRepository.findById(invoiceId).get();
         double productPrice = invoice.getRestAmount();
         double paymentSum = paymentRequest.getAmountOfMoney();
@@ -79,12 +77,12 @@ public class PaymentService {
         return mapToResponse(paymentRepository.save(payment));
     }
 
-    public PaymentResponse update(long id, PaymentRequest paymentRequest) {
+    public PaymentResponse update(long id, PaymentRequest paymentRequest,CompanyEntity company) {
         Optional<PaymentEntity> payment = paymentRepository.findById(id);
         if (payment.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.NOT_FOUND);
         }
-        mapToUpdate(payment.get(), paymentRequest);
+        mapToUpdate(payment.get(), paymentRequest, company);
         return mapToResponse(paymentRepository.save(payment.get()));
     }
 
@@ -102,25 +100,26 @@ public class PaymentService {
         return mapToResponse(paymentRepository.findById(id).get());
     }
 
-    public List<PaymentResponse> gelAllPayments() {
-        return map(paymentRepository.findAll());
+    public List<PaymentResponse> gelAllPayments(Long companyId) {
+        return map(paymentRepository.findAllByCompany(companyId));
     }
     public PagedResponse<PaymentResponse, Integer> transaction(String start,
                                                                String end,
                                                                Boolean status,
                                                                TypeOfPay typeOfPay,
                                                                Long categoryId,
-                                                               int size, int page) {
+                                                               int size, int page,
+                                                               Long companyId) {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        List<PaymentResponse> payments = map(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size)).getContent());
+        List<PaymentResponse> payments = map(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size),companyId).getContent());
         PagedResponse<PaymentResponse,Integer> response = new PagedResponse();
         response.setResponses(payments);
-        response.setTotalPage(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size)).getTotalPages());
+        response.setTotalPage(paymentRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,InvoiceStatus.PARTIALLY,typeOfPay, PageRequest.of(page-1,size),companyId).getTotalPages());
         return response;
     }
 
-    private PaymentEntity mapToEntity(PaymentRequest paymentRequest) {
+    private PaymentEntity mapToEntity(PaymentRequest paymentRequest,CompanyEntity company) {
         PaymentEntity payment = new PaymentEntity();
         payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         payment.setPaymentFile(paymentRequest.getPaymentFile());
@@ -131,10 +130,11 @@ public class PaymentService {
         payment.setTypeOfPay(paymentRequest.getTypeOfPay());
         payment.setComment(paymentRequest.getComment());
         payment.setCreated(LocalDateTime.now());
+        payment.setCompany(company);
         return payment;
     }
 
-    private PaymentEntity mapToUpdate(PaymentEntity payment, PaymentRequest paymentRequest) {
+    private PaymentEntity mapToUpdate(PaymentEntity payment, PaymentRequest paymentRequest,CompanyEntity company) {
         payment.setPaymentDate(LocalDateTime.parse(paymentRequest.getPaymentDate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         payment.setPaymentFile(paymentRequest.getPaymentFile());
         payment.setAmountOfMoney(paymentRequest.getAmountOfMoney());
@@ -142,6 +142,7 @@ public class PaymentService {
         BankAccountEntity bankAccount = bankAccountRepository.findById(paymentRequest.getBankAccount()).get();
         payment.setBankAccount(bankAccount);
         payment.setComment(paymentRequest.getComment());
+        payment.setCompany(company);
         return payment;
     }
 
