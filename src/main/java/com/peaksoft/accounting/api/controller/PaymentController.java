@@ -2,10 +2,13 @@ package com.peaksoft.accounting.api.controller;
 
 import com.peaksoft.accounting.api.payload.PaymentRequest;
 import com.peaksoft.accounting.api.payload.PaymentResponse;
+import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,24 +24,31 @@ public class PaymentController {
     private final PaymentService paymentService;
     @PostMapping("/payment-for-product")
     @Operation(summary = "Create payment with product",description = "Creating a new payment")
-    public PaymentResponse create(@RequestBody PaymentRequest request){
-       return paymentService.createForProduct(request,true);
+    public PaymentResponse create(@AuthenticationPrincipal UserEntity user, @RequestBody PaymentRequest request){
+       return paymentService.createForProduct(request,true,user.getCompanyName());
     }
+
     @PostMapping("/expense/payment-for-product")
     @Operation(summary = "Create payment with product",description = "Creating a new payment")
-    public PaymentResponse createExpense(@RequestBody PaymentRequest request){
-        return paymentService.createForProduct(request,false);
+    public PaymentResponse createExpense(@AuthenticationPrincipal UserEntity user,
+                                         @RequestBody PaymentRequest request){
+        return paymentService.createForProduct(request,false,user.getCompanyName());
     }
+
     @PostMapping()
     @Operation(summary = "Create payment", description = "Creating a new payment")
-    public PaymentResponse create(@RequestParam(required = false) long invoiceId, @RequestBody @Valid PaymentRequest request) {
-        return paymentService.create(invoiceId, request);
+    public PaymentResponse create(@AuthenticationPrincipal UserEntity user,
+                                  @RequestParam(required = false) long invoiceId,
+                                  @RequestBody @Valid PaymentRequest request) {
+        return paymentService.create(invoiceId, request,user.getCompanyName());
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Update payment", description = "Update a new payment by \"id\" in application ")
-    public PaymentResponse update(@PathVariable long id, PaymentRequest request) {
-        return paymentService.update(id, request);
+    public PaymentResponse update(@AuthenticationPrincipal UserEntity user,
+                                  @PathVariable long id,
+                                  @RequestBody PaymentRequest request) {
+        return paymentService.update(id, request,user.getCompanyName());
     }
 
     @GetMapping("{id}")
@@ -55,8 +65,8 @@ public class PaymentController {
 
     @GetMapping
     @Operation(summary = "Get all payments", description = "Getting all existing payments ")
-    public List<PaymentResponse> getAllPayments() {
-        return paymentService.gelAllPayments();
+    public List<PaymentResponse> getAllPayments(@AuthenticationPrincipal UserEntity user) {
+        return paymentService.gelAllPayments(user.getCompanyName().getCompany_id());
     }
 
 }

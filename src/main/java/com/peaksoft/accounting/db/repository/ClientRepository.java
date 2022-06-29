@@ -32,15 +32,15 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
 
     @Query("select c from ClientEntity c inner join c.tags t where (upper( c.clientName) LIKE CONCAT('%',:name,'%') " +
             "or upper(c.companyName) like concat ('%',:name,'%')or upper(c.email) like concat ('%',:name,'%')or upper(t.nameTag) like concat('%',:name,'%'))" +
-            "and (t.tag_id =:tagId or :tagId is null)")
-    List<ClientEntity> search(@Param("name") String name, Long tagId, Pageable pageable);
+            "and (t.tag_id =:tagId or :tagId is null) and c.company.company_id=:companyId")
+    List<ClientEntity> search(@Param("name") String name, Long tagId, Pageable pageable,Long companyId);
 
-    @Query("select s from ClientEntity s where s.isIncome =:flag")
-    Page<ClientEntity> findAllByPagination(Pageable pageable,Boolean flag);
+    @Query("select s from ClientEntity s where s.isIncome =:flag and s.company.company_id=:companyId")
+    Page<ClientEntity> findAllByPagination(Pageable pageable,Boolean flag,Long companyId);
 
     @Query("select s from  ClientEntity  s where s.clientName like concat(:sellerName,'%') and s.isIncome =:flag")
     List<ClientEntity> searchByName(String sellerName,Boolean flag);
 
-    @Query("select c from ClientEntity c where c.isIncome=:flag")
-    List<ClientEntity> findAll(Boolean flag);
+    @Query("select c from ClientEntity c where c.isIncome=:flag and c.company.company_id=:companyId")
+    List<ClientEntity> findAll(Boolean flag,Long companyId);
 }

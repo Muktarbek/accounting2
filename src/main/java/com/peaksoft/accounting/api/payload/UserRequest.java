@@ -18,4 +18,5 @@ public class UserRequest {
     private Long businessAreaId;
     private String companyName;
     private String address;
+    private String phoneNumber;
 }

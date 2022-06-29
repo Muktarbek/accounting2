@@ -92,6 +92,7 @@ public class UserService {
         user.setPassword(userRequest.getPassword());
         user.setCompanyName(company);
         user.addRole(roleRepository.getById(2L));
+        user.setPhoneNumber(userRequest.getPhoneNumber());
         return user;
     }
     public UserEntity mapToEntity(UserRequest userRequest) {

@@ -37,10 +37,11 @@ public class InvoiceService {
     private final TagRepository tagRepository;
     private final PaymentRepository paymentRepository;
 
-    public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice,Boolean isIncome) {
+    public InvoiceResponse create(InvoiceRequest request, InvoiceEntity invoice,Boolean isIncome,CompanyEntity company) {
         invoiceRequestValidator.validate(invoice, request);
         InvoiceEntity invoiceEntity = mapToEntity(request, invoice,null);
         invoiceEntity.setIsIncome(isIncome);
+        invoiceEntity.setCompany(company);
         invoiceRepository.save(invoiceEntity);
         return mapToResponse(invoiceEntity);
     }
@@ -72,19 +73,20 @@ public class InvoiceService {
         return response;
     }
 
-    public InvoiceResponse update(InvoiceRequest request, Long id) {
+    public InvoiceResponse update(InvoiceRequest request, Long id,CompanyEntity company) {
         Optional<InvoiceEntity> invoice = invoiceRepository.findById(id);
         if (invoice.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.INVOICE_NOT_FOUND);
-        }
-        return mapToResponse(invoiceRepository.save(mapToEntity(request,invoice.get(), id)));
+        }InvoiceEntity invoiceEntity = mapToEntity(request,invoice.get(), id);
+         invoice.get().setCompany(company);
+        return mapToResponse(invoiceRepository.save(invoiceEntity));
     }
 
-    public PagedResponse<InvoiceResponse, Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber, Boolean isIncome) {
+    public PagedResponse<InvoiceResponse, Integer> findAll(int page, int size, Long clientId, String status, String start, String end, Long invoiceNumber, Boolean isIncome,Long companyId) {
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<InvoiceResponse> responses = new ArrayList<>();
-        Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size),InvoiceStatus.PAID, isIncome);
+        Page<InvoiceEntity> pageAble = invoiceRepository.findAllByPagination(clientId, status.toUpperCase(), startDate, endDate, invoiceNumber, PageRequest.of(page - 1, size),InvoiceStatus.PAID, isIncome,companyId);
         List<InvoiceEntity> invoices = pageAble.getContent();
         for (InvoiceEntity invoice : invoices) {
             responses.add(mapToResponse(invoice));
@@ -92,12 +94,12 @@ public class InvoiceService {
         LocalDateTime starDate = LocalDateTime.now().minusDays(30);
         PagedResponse<InvoiceResponse, Integer> response = new PagedResponse<>();
         response.setResponses(responses);
-        response.setPaymentAmountOverdue(invoiceRepository.getSumDays(LocalDateTime.now().minusYears(100),LocalDateTime.now(),InvoiceStatus.EXPIRED,isIncome));
-        response.setPaymentAmountDays(invoiceRepository.getSumDays(starDate,LocalDateTime.now(),InvoiceStatus.PARTIALLY,isIncome));
+        response.setPaymentAmountOverdue(invoiceRepository.getSumDays(LocalDateTime.now().minusYears(100),LocalDateTime.now(),InvoiceStatus.EXPIRED,isIncome,companyId));
+        response.setPaymentAmountDays(invoiceRepository.getSumDays(starDate,LocalDateTime.now(),InvoiceStatus.PARTIALLY,isIncome,companyId));
         response.setTotalPage(pageAble.getTotalPages());
         return response;
     }
-    public InvoiceResponse sendByTags(InvoiceRequest request, Long tagId) {
+    public InvoiceResponse sendByTags(InvoiceRequest request, Long tagId,CompanyEntity company) {
         InvoiceEntity invoice = new InvoiceEntity();
         Optional<TagEntity> tag = tagRepository.findById(tagId);
         if (tag.isEmpty()) {
@@ -106,36 +108,37 @@ public class InvoiceService {
         TagEntity tagEntity = tag.get();
         for (ClientEntity client : tagEntity.getClients()) {
             InvoiceEntity invoiceEntity = mapToEntity(request, invoice,null);
+            invoiceEntity.setCompany(company);
             invoiceEntity.addClient(client);
             invoiceRepository.save(invoiceEntity);
         }
         return mapToResponse(mapToEntity(request, invoice,null));
     }
-    public PagedResponse<InvoiceResponse,Integer>transaction(String start,
-                                             String end,
-                                             Boolean status,
-                                             TypeOfPay typeOfPay,
-                                             Long categoryId,
-                                             int size,int page) {
-        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        List<InvoiceResponse> invoices = mapToResponse(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getContent());
-        for(int i = 0; i < invoices.size(); i++) {
-            if(typeOfPay!=null){
-            invoices.get(i).setTypeOfPay(typeOfPay.toString());}
-            invoices.get(i).setClient(null);
-        }
-        PagedResponse<InvoiceResponse,Integer> pages= new PagedResponse<>();
-        pages.setResponses(invoices);
-        pages.setTotalPage(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getTotalPages());
-        return pages;
-    }
+//    public PagedResponse<InvoiceResponse,Integer>transaction(String start,
+//                                             String end,
+//                                             Boolean status,
+//                                             TypeOfPay typeOfPay,
+//                                             Long categoryId,
+//                                             int size,int page) {
+//        LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//        LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//        List<InvoiceResponse> invoices = mapToResponse(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getContent());
+//        for(int i = 0; i < invoices.size(); i++) {
+//            if(typeOfPay!=null){
+//            invoices.get(i).setTypeOfPay(typeOfPay.toString());}
+//            invoices.get(i).setClient(null);
+//        }
+//        PagedResponse<InvoiceResponse,Integer> pages= new PagedResponse<>();
+//        pages.setResponses(invoices);
+//        pages.setTotalPage(invoiceRepository.findAllTransaction(startDate,endDate,status,categoryId,InvoiceStatus.PAID,typeOfPay,PageRequest.of(page-1,size)).getTotalPages());
+//        return pages;
+//    }
 
-    public ClientInvoicesResponse getAllByClientId(Long clientId, String start, String end, InvoiceStatus status) {
+    public ClientInvoicesResponse getAllByClientId(Long clientId, String start, String end, InvoiceStatus status,Long companyId) {
         ClientInvoicesResponse response = new ClientInvoicesResponse();
         LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        response.setInvoices(mapToResponse(invoiceRepository.getAllByClientId(clientId,startDate,endDate,status)));
+        response.setInvoices(mapToResponse(invoiceRepository.getAllByClientId(clientId,startDate,endDate,status,companyId)));
         return response;
     }
 

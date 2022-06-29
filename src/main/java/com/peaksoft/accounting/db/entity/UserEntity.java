@@ -35,8 +35,9 @@ public class UserEntity  implements UserDetails {
     private boolean isActive = true;
     private boolean enabled = true;
     private boolean deleted = false;
+    private String phoneNumber;
 
-    @OneToOne(cascade = ALL)
+    @ManyToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "company_name_id")
     private CompanyEntity companyName;
 

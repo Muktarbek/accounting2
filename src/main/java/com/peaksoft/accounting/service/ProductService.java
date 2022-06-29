@@ -1,6 +1,7 @@
 package com.peaksoft.accounting.service;
 
 import com.peaksoft.accounting.api.payload.*;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.ProductEntity;
 import com.peaksoft.accounting.db.entity.ServiceTypeEntity;
 import com.peaksoft.accounting.db.repository.CategoryRepository;
@@ -33,25 +34,25 @@ public class ProductService {
     private final InvoiceRepository invoiceRepository;
     private final ReminderService reminderService;
 
-    public PagedResponse<ProductResponse, Integer> getAllProducts(int page, int size, boolean flag) {
-        Page<ProductEntity> pages = productRepository.findAllByPagination(PageRequest.of(page - 1, size), flag);
+    public PagedResponse<ProductResponse, Integer> getAllProducts(int page, int size, boolean flag,Long companyId) {
+        Page<ProductEntity> pages = productRepository.findAllByPagination(PageRequest.of(page - 1, size), flag,companyId);
         PagedResponse<ProductResponse, Integer> response = new PagedResponse<>();
         response.setResponses(mapToResponse(pages.getContent()));
         response.setTotalPage(pages.getTotalPages());
         return response;
     }
 
-    public List<ProductResponse> getAllProducts(boolean flag) {
-        List<ProductEntity> product = productRepository.findAllByPagination(flag);
+    public List<ProductResponse> getAllProducts(boolean flag,Long companyId) {
+        List<ProductEntity> product = productRepository.findAllByPagination(flag,companyId);
         return mapToResponse(product);
     }
 
-    public ProductResponse save(ProductRequest request, boolean flag) {
-        return mapToResponse(productRepository.save(mapToEntity(request, null, flag)));
+    public ProductResponse save(ProductRequest request, boolean flag, CompanyEntity company) {
+        return mapToResponse(productRepository.save(mapToEntity(request, null, flag,company)));
     }
 
-    public ProductResponse update(ProductRequest request, Long id, boolean flag) {
-        return mapToResponse(productRepository.save(mapToEntity(request, id, flag)));
+    public ProductResponse update(ProductRequest request, Long id, boolean flag,CompanyEntity company) {
+        return mapToResponse(productRepository.save(mapToEntity(request, id, flag,company)));
     }
 
     public ProductResponse getById(Long id) {
@@ -73,13 +74,13 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public List<ProductResponse> searchByName(String title,Boolean flag ) {
-        return mapToResponse(productRepository.searchAllByTitle(title,flag));
+    public List<ProductResponse> searchByName(String title,Boolean flag,Long companyId ) {
+        return mapToResponse(productRepository.searchAllByTitle(title,flag,companyId));
     }
-    public List<ProductResponse> getAll(Boolean  flag) {
-        return mapToResponse(productRepository.getAll(flag));
+    public List<ProductResponse> getAll(Boolean  flag,Long companyId) {
+        return mapToResponse(productRepository.getAll(flag,companyId));
     }
-    public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag) {
+    public ProductEntity mapToEntity(ProductRequest request, Long id, boolean flag,CompanyEntity company) {
         return ProductEntity.builder()
                 .id(id)
                 .title(request.getProductTitle())
@@ -88,6 +89,7 @@ public class ProductService {
                 .serviceType(serviceTypeRepository.findById(request.getServiceTypeId()).get())
                 .category(categoryRepository.findById(request.getCategoryId()).get())
                 .isIncome(flag)
+                .company(company)
                 .build();
     }
 
@@ -121,15 +123,15 @@ public class ProductService {
                 .build();
     }
 
-    public List<ProductResponse> getNotification() {
-        List<ProductResponse> getNotification = new ArrayList<>();
-        for (ProductEntity p : productRepository.findAllByIsIncome(false)) {
-            if (p.getReminder() != null) {
-                if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED) {
-                    getNotification.add(mapToResponse(p));
-                }
-            }
-        }
-        return getNotification;
-    }
+//    public List<ProductResponse> getNotification() {
+//        List<ProductResponse> getNotification = new ArrayList<>();
+//        for (ProductEntity p : productRepository.findAllByIsIncome(false)) {
+//            if (p.getReminder() != null) {
+//                if (p.getReminderType() == ReminderType.PAY_FOR || p.getReminderType() == ReminderType.EXPIRED) {
+//                    getNotification.add(mapToResponse(p));
+//                }
+//            }
+//        }
+//        return getNotification;
+//    }
 }
