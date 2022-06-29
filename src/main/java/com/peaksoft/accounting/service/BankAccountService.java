@@ -3,13 +3,17 @@ package com.peaksoft.accounting.service;
 import com.peaksoft.accounting.api.payload.BankAccountRequest;
 import com.peaksoft.accounting.api.payload.BankAccountResponse;
 import com.peaksoft.accounting.db.entity.BankAccountEntity;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
+import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.BankAccountRepository;
+import com.peaksoft.accounting.db.repository.CompanyRepository;
 import com.peaksoft.accounting.enums.TypeOfPay;
 import com.peaksoft.accounting.validation.exception.ValidationException;
 import com.peaksoft.accounting.validation.exception.ValidationExceptionType;
 import com.peaksoft.accounting.validation.validator.BankAccountRequestValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +25,14 @@ public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepo;
     private final BankAccountRequestValidator accountValidator;
+    private final CompanyRepository companyRepository;
 
-    public BankAccountResponse create(BankAccountEntity bankAccount, BankAccountRequest accountRequest) {
+    public BankAccountResponse create(UserEntity user,BankAccountEntity bankAccount, BankAccountRequest accountRequest) {
+        CompanyEntity company = companyRepository.findById(user.getCompanyName().getCompany_id()).orElseThrow(()->
+                new NotFoundException("not found company "+user.getCompanyName().getCompany_id()));
         accountValidator.validate(bankAccount, accountRequest,null);
         BankAccountEntity bankAccountEntity = mapToEntity(accountRequest);
+        bankAccountEntity.setCompany(company);
         bankAccountRepo.save(bankAccountEntity);
         return mapToResponse(bankAccountEntity);
     }
@@ -52,8 +60,8 @@ public class BankAccountService {
         return mapToResponse(bankAccountRepo.findById(id).get());
     }
 
-    public List<BankAccountResponse> getAllBankAccount(TypeOfPay typeOfPay) {
-        return map(bankAccountRepo.findAll(typeOfPay));
+    public List<BankAccountResponse> getAllBankAccount(UserEntity user,TypeOfPay typeOfPay) {
+        return map(bankAccountRepo.findAll(typeOfPay,user.getCompanyName().getCompany_id()));
     }
 
 

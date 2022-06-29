@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "bank_account")
 @NoArgsConstructor
@@ -22,4 +24,7 @@ public class BankAccountEntity {
     private String description;
     @Enumerated(EnumType.STRING)
     private TypeOfPay typeOfPay;
+    @OneToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "company_name_id")
+    private CompanyEntity company;
 }

@@ -25,4 +25,8 @@ public class CategoryEntity {
             fetch = FetchType.LAZY,
             mappedBy = "category")
     private List<ProductEntity> products;
+
+    @OneToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "company_name_id")
+    private CompanyEntity company;
 }

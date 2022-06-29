@@ -14,7 +14,8 @@ public interface BankAccountRepository
         extends JpaRepository<BankAccountEntity, Long> {
 
     Optional<BankAccountEntity> findByBankAccountName(String bankAccountName);
-    @Query("select b from BankAccountEntity b where b.typeOfPay =:typeOfPay or :typeOfPay is null")
-    List<BankAccountEntity> findAll(TypeOfPay typeOfPay);
+    @Query("select b from BankAccountEntity b where (b.typeOfPay =:typeOfPay or :typeOfPay is null) and" +
+            " b.company.company_id=:companyId")
+    List<BankAccountEntity> findAll(TypeOfPay typeOfPay,Long companyId);
 
 }
