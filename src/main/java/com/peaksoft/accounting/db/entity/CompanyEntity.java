@@ -24,6 +24,9 @@ public class CompanyEntity {
     private List<UserEntity> user;
 
     @OneToMany(mappedBy = "company")
+    private List<BankAccountEntity> bankAccounts;
+
+    @OneToMany(mappedBy = "company")
     private List<CategoryEntity> categories;
 
     @OneToMany(mappedBy = "company")
