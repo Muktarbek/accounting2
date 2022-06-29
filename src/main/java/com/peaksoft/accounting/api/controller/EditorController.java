@@ -32,12 +32,12 @@ public class EditorController {
        return userService.getAllByCompany(user.getCompanyName().getCompany_id());
     }
     @GetMapping("{id}")
-    public UserResponse getById(@PathVariable Long userId){
-        return userService.getById(userId);
+    public UserResponse getById(@PathVariable Long id){
+        return userService.getById(id);
     }
     @DeleteMapping("{id}")
-    public UserResponse deleteById(@PathVariable Long userId){
-        return userService.deleteById(userId);
+    public UserResponse deleteById(@PathVariable Long id){
+        return userService.deleteById(id);
     }
 
     @PutMapping()
