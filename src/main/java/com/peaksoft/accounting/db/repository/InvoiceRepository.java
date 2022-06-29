@@ -21,7 +21,7 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
             "and upper(i.status) like concat ('%',:status,'%')" +
             "and(i.id =:invoiceNumber or :invoiceNumber is null)" +
             "and (i.isIncome =:isIncome) " +
-            "and i.status !=:paid")
+            "and i.status !=:paid ")
     Page<InvoiceEntity> findAllByPagination(Long clientId, @Param("status") String status, LocalDateTime startDate, LocalDateTime endDate, Long invoiceNumber, Pageable pageable,InvoiceStatus paid, Boolean isIncome,Long companyId);
 
     @Query("select i from InvoiceEntity i where i.status = :status and i.endDate < :date ")

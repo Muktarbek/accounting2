@@ -19,15 +19,15 @@ public class AccountingApplication {
     public static void main(String[] args) {
         SpringApplication.run(AccountingApplication.class, args);
     }
-    @PostConstruct
+    //@PostConstruct
     private void saveRole(){
         RoleEntity role = new RoleEntity();
         role.setRole_id(1L);
         role.setName("MY_ACCOUNT_ADMIN");
         roleRepository.save(role);
         RoleEntity role2 = new RoleEntity();
-        role.setRole_id(2L);
-        role.setName("MY_ACCOUNT_EDITOR");
+        role2.setRole_id(2L);
+        role2.setName("MY_ACCOUNT_EDITOR");
         roleRepository.save(role2);
     }
 }
