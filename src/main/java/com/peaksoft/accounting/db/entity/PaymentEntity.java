@@ -52,7 +52,7 @@ public class PaymentEntity {
     @JsonIgnore
     private InvoiceEntity invoice;
 
-    @ManyToOne(cascade ={CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne(cascade ={CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "company_name_id")
     private CompanyEntity company;
 }
