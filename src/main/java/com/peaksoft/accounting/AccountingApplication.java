@@ -25,5 +25,9 @@ public class AccountingApplication {
         role.setRole_id(1L);
         role.setName("MY_ACCOUNT_ADMIN");
         roleRepository.save(role);
+        RoleEntity role2 = new RoleEntity();
+        role.setRole_id(2L);
+        role.setName("MY_ACCOUNT_EDITOR");
+        roleRepository.save(role2);
     }
 }
