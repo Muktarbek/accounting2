@@ -19,7 +19,7 @@ public class AccountingApplication {
     public static void main(String[] args) {
         SpringApplication.run(AccountingApplication.class, args);
     }
-   // @PostConstruct
+    @PostConstruct
     private void saveRole(){
         RoleEntity role = new RoleEntity();
         role.setRole_id(1L);
