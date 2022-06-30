@@ -6,6 +6,7 @@ import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.service.UserService;
 import com.peaksoft.accounting.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,9 @@ public class EditorController {
     public UserResponse updateEditor(@PathVariable Long id,@RequestBody UserRequest request){
         return userService.update(id,request);
     }
-
+    @GetMapping("/get/profile")
+    public UserResponse getProfile(@AuthenticationPrincipal UserEntity user){
+        return userService.getById(user.getUser_id());
+    }
 
 }
