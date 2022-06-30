@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @Builder
 public class PaymentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_seq")
-    @SequenceGenerator(name = "payment_seq", sequenceName = "payment_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_gen")
+    @SequenceGenerator(name = "payment_gen", sequenceName = "payment_seq", allocationSize = 1)
     private Long payment_id;
     private LocalDateTime paymentDate;
     private String paymentFile;

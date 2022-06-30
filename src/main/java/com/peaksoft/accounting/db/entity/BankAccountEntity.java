@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.ALL;
 public class BankAccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_account_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_account_gen")
     @SequenceGenerator(name = "bank_account_gen", sequenceName = "bank_account_seq", allocationSize = 1)
     private Long id;
     private String bankAccountName;

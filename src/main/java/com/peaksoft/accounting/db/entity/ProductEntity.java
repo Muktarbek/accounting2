@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "products_gen")
     @SequenceGenerator(name = "products_gen", sequenceName = "products_seq", allocationSize = 1)
     private Long id;
     private String title;

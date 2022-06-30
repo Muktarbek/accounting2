@@ -23,7 +23,7 @@ import static javax.persistence.CascadeType.ALL;
 @Setter
 public class UserEntity  implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_gen")
     @SequenceGenerator(name = "users_gen", sequenceName = "users_seq", allocationSize = 1)
     private Long user_id;
     private String firstName;

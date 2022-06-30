@@ -21,7 +21,7 @@ import java.util.List;
 //@Builder
 public class InvoiceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoices_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoices_gen")
     @SequenceGenerator(name = "invoices_gen", sequenceName = "invoices_seq", allocationSize = 1)
     private Long id;
     private String title;

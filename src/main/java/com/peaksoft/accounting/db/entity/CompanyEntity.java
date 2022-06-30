@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 public class CompanyEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companies_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companies_gen")
     @SequenceGenerator(name = "companies_gen", sequenceName = "companies_seq", allocationSize = 1)
     private Long company_id;
     private String companyName;
