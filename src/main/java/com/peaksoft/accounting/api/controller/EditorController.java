@@ -44,6 +44,10 @@ public class EditorController {
     public UserResponse update(@AuthenticationPrincipal UserEntity user,@RequestBody UserRequest request){
         return userService.update(user.getUser_id(),request);
     }
+    @PutMapping("{id}")
+    public UserResponse updateEditor(@PathVariable Long id,@RequestBody UserRequest request){
+        return userService.update(id,request);
+    }
 
 
 }
