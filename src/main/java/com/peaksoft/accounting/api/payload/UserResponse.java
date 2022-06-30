@@ -25,5 +25,6 @@ public class UserResponse {
     private LocalDateTime created;
     private boolean isActive;
     private LoginResponse login;
+    private String phoneNumber;
 
 }

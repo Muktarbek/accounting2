@@ -153,6 +153,7 @@ public class UserService {
         userResponse.setEnabled(user.isEnabled());
         userResponse.setActive(user.isActive());
         userResponse.setCreated(LocalDateTime.now());
+        userResponse.setPhoneNumber(user.getPhoneNumber());
         return userResponse;
     }
 
