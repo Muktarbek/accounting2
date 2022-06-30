@@ -77,7 +77,7 @@ public class SellerService {
         return map(sellerRepo.findAll(false, companyId));
     }
     public List<SellerResponse> searchByName(String sellerName,Long companyId) {
-        return map(sellerRepo.searchByName(sellerName,false));
+        return map(sellerRepo.searchByName(sellerName,false,companyId));
     }
     public ClientEntity mapToEntity(SellerRequest sellerRequest) {
         ClientEntity client = new ClientEntity();
