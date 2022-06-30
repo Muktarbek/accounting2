@@ -27,14 +27,14 @@ public class SellerController {
 
     @PostMapping
     @Operation(summary = "Create seller", description = "Creating a new seller")
-    public SellerResponse create(@RequestBody @Valid SellerRequest sellerRequest, ClientEntity seller) {
-        return sellerService.create(seller, sellerRequest);
+    public SellerResponse create(@AuthenticationPrincipal UserEntity user ,@RequestBody @Valid SellerRequest sellerRequest, ClientEntity seller) {
+        return sellerService.create(seller, sellerRequest,user.getCompanyName());
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Update seller", description = "Update a new seller by \"id\" in application ")
-    public SellerResponse update(@PathVariable long id, @RequestBody SellerRequest sellerRequest) {
-        return sellerService.update(id, sellerRequest);
+    public SellerResponse update(@AuthenticationPrincipal UserEntity user,@PathVariable long id, @RequestBody SellerRequest sellerRequest) {
+        return sellerService.update(id, sellerRequest,user.getCompanyName());
     }
 
     @DeleteMapping("{id}")
@@ -55,8 +55,8 @@ public class SellerController {
         return sellerService.findAll(page,size,user.getCompanyName().getCompany_id());
     }
     @GetMapping("/search-by-name")
-    public List<SellerResponse> getByName(@RequestParam String sellerName){
-        return sellerService.searchByName(sellerName);
+    public List<SellerResponse> getByName(@AuthenticationPrincipal UserEntity user,@RequestParam String sellerName){
+        return sellerService.searchByName(sellerName,user.getCompanyName().getCompany_id());
     }
     @GetMapping("/find/all")
     public List<SellerResponse> findAll(@AuthenticationPrincipal UserEntity user){

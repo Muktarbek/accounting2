@@ -5,6 +5,7 @@ import com.peaksoft.accounting.api.payload.PagedResponse;
 import com.peaksoft.accounting.api.payload.SellerRequest;
 import com.peaksoft.accounting.api.payload.SellerResponse;
 import com.peaksoft.accounting.db.entity.ClientEntity;
+import com.peaksoft.accounting.db.entity.CompanyEntity;
 import com.peaksoft.accounting.db.entity.UserEntity;
 import com.peaksoft.accounting.db.repository.ClientRepository;
 import com.peaksoft.accounting.validation.exception.ValidationException;
@@ -28,20 +29,22 @@ public class SellerService {
     private final ClientRepository sellerRepo;
     private final SellerAndClientRequestValidator validator;
 
-    public SellerResponse create(ClientEntity seller, SellerRequest sellerRequest) {
+    public SellerResponse create(ClientEntity seller, SellerRequest sellerRequest, CompanyEntity company) {
         validator.validate(seller, sellerRequest);
         ClientEntity sellers = mapToEntity(sellerRequest);
         sellers.setIsIncome(false);
+        sellers.setCompany(company);
         sellerRepo.save(sellers);
         return mapToResponse(sellers);
     }
 
-    public SellerResponse update(long id, SellerRequest sellerRequest) {
+    public SellerResponse update(long id, SellerRequest sellerRequest,CompanyEntity company) {
         Optional<ClientEntity> sellers = sellerRepo.findById(id);
         if (sellers.isEmpty()) {
             throw new ValidationException(ValidationExceptionType.BAD_REQUEST);
         }
         mapToUpdate(sellers.get(), sellerRequest);
+        sellers.get().setCompany(company);
         return mapToResponse(sellerRepo.save(sellers.get()));
     }
 
@@ -73,7 +76,7 @@ public class SellerService {
     public List<SellerResponse> getAll(Long companyId) {
         return map(sellerRepo.findAll(false, companyId));
     }
-    public List<SellerResponse> searchByName(String sellerName) {
+    public List<SellerResponse> searchByName(String sellerName,Long companyId) {
         return map(sellerRepo.searchByName(sellerName,false));
     }
     public ClientEntity mapToEntity(SellerRequest sellerRequest) {
